@@ -6,6 +6,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
-alias cdquery='cd ~/Algorithm/ShopOptimize/scripts/'
+alias cdshop='cd ~/Algorithm/ShopOptimize/scripts/'
+alias cdquery='cd ~/Algorithm/QueryAll/queryall'
 export PATH=$PATH:~/miniprog/tools
 export PS1="\u@\H \W$ "
