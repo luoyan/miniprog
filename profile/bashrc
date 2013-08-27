@@ -7,3 +7,4 @@ fi
 
 # User specific aliases and functions
 alias cdquery='cd ~/Algorithm/ShopOptimize/scripts/'
+export PATH=$PATH:~/miniprog/tools
