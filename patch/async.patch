@@ -1,0 +1,176 @@
+diff --git a/ShopOptimize/scripts/celery_sender.py b/ShopOptimize/scripts/celery_sender.py
+index 90e15c1..59437dd 100644
+--- a/ShopOptimize/scripts/celery_sender.py
++++ b/ShopOptimize/scripts/celery_sender.py
+@@ -124,6 +124,9 @@ class CelerySender(object):
+             else:
+                 shop_status['order_list'] = order_dict[nick]
+ 
++    def async_get_info(shop_status):
++        pass
++
+     def send_one_job(self, shop_status):
+         if self.mode == self.NORMAL_MODE or self.mode == self.DEBUG_MODE_CELERY:
+             self.send_to_celery(shop_status);
+@@ -156,6 +159,7 @@ class CelerySender(object):
+             logger.info("generate list[" + str(i) + "] nick = " + str(shop_status_list[i]['nick']) + " priority = " + str(shop_status_list[i]['priority']))
+         for i in xrange(total_shops):
+             logger.info("sending list[" + str(i) + "] nick = " + str(shop_status_list[i]['nick']))
++            self.async_get_info(shop_status_list[i])
+             self.send_one_job(shop_status_list[i])
+         return True
+ 
+diff --git a/ShopOptimize/scripts/syb_auto_creative_optimize_job.py b/ShopOptimize/scripts/syb_auto_creative_optimize_job.py
+index 4a0ebbc..c9825b1 100644
+--- a/ShopOptimize/scripts/syb_auto_creative_optimize_job.py
++++ b/ShopOptimize/scripts/syb_auto_creative_optimize_job.py
+@@ -51,7 +51,8 @@ from tao_models.common.exceptions import AppCallLimitedAllDayException,ImgNotBel
+ from tao_models.itemcats_get import ItemcatsGet
+ from tao_models.simba_keywords_qscore_get import SimbaKeywordsQscoreGet 
+ from tao_models.simba_keywordsbykeywordids_get import SimbaKeywordsbykeywordidsGet
+-
++from tao_models.topats_simba_campkeywordbase_get import TopatsSimbaCampkeywordbaseGet
++from tao_models.topats_simba_campkeywordeffect_get import TopatsSimbaCampkeywordeffectGet
+ 
+ def if_keyword_base_report_ok(keyword):
+     if keyword['base'] and not keyword['base'].has_key('failed_msg'):
+@@ -135,7 +136,7 @@ def get_keywords_rpt(sid, wid_list, days, search_info):
+                                                       keyword['effect']['favitemcount']
+     return keywords_report_dict
+ 
+-def get_creative_title(shop_info, adgroup):
++def get_creative_title(shop_info, adgroup, async_dict):
+     """返回 创意标题"""
+ 
+     items_service_obj = ItemsService(shop_info['access_token'], shop_info['nick'], shop_info['_id'])
+@@ -158,7 +159,10 @@ def get_creative_title(shop_info, adgroup):
+     search_info['campaign_id'] = adgroup['campaign_id']
+     search_info['sid'] = int(shop_info['_id'])
+     keyword_report_days = 7
++    #async_dict
+     keywords_report_dict = get_keywords_rpt(shop_info['_id'], wid_list, keyword_report_days, search_info)
++    import pdb
++    pdb.set_trace()
+     
+     smart_creative_obj = SmartCreative(keywords, keywords_report_dict, item_dict)
+     return_dict = smart_creative_obj.get_creative_title()
+@@ -197,7 +201,7 @@ def is_adgroup_creative_audit_fail(adgroup_service_obj, adgroup):
+             return True
+     return False 
+ 
+-def shop_creative_optimize(sid,campaign_id):
++def shop_creative_optimize(sid,campaign_id, async_dict):
+     """店铺创意标题"""
+ 
+     shop_status = ShopService.get_shop_status_by_sid(sid)
+@@ -214,7 +218,7 @@ def shop_creative_optimize(sid,campaign_id):
+             logger.info('campaign:%(campaign_id)d, num_id:%(num_iid)d, adgroup:%(adgroup_id)d', adgroup)
+             adgroup_service_obj.get_adgroup_by_adgroup_id(adgroup['adgroup_id'])
+             creatives = adgroup_service_obj.get_creatives_by_adgroup_id(adgroup['adgroup_id'])
+-            return_dict = get_creative_title(shop_info, adgroup)
++            return_dict = get_creative_title(shop_info, adgroup, async_dict)
+             if not return_dict:
+                 continue
+             adgroup_creative_update(creatives, return_dict['creative_title'], adgroup, return_dict['img_url'], adgroup_service_obj) 
+@@ -230,6 +234,71 @@ def usage():
+     print "Usage:%s [-h|-d] [--help|--debug=0:nodebug 1:use debug nick to celery 2:use debug nick to local] args...."% sys.argv[0] 
+ import celery
+ import celery.utils
++def auto_creative_optimize_async_get_info(shop_status):
++    try:
++        shop_info = ShopService.get_shop_info_by_nick(shop_status['nick'])
++        SyncService.sync_shop(shop_info['_id'],'auto',False)
++        sid = shop_info['_id']
++        access_token = shop_info['access_token']
++        nick = shop_info['nick']
++        campaign_service_obj = CampaignService(shop_info['access_token'],shop_info['nick'],shop_info['_id'])
++        auto_campaign_ids = campaign_service_obj.get_auto_campaign_ids()
++        logger.info('aysnc nick:[%s] ids %s ', shop_status['nick'], str(auto_campaign_ids))
++        shop_status['rpt_base_task_list'] = {}
++        shop_status['rpt_effect_task_list'] = {}
++        for campaign_id in auto_campaign_ids:
++            taskid = TopatsSimbaCampkeywordbaseGet.get_camp_keywordbase_task(shop_status['nick'], campaign_id, '7DAY', access_token)
++            shop_status['rpt_base_task_list'][campaign_id] = taskid
++            taskid = TopatsSimbaCampkeywordeffectGet.get_camp_keywordeffect_task(shop_status['nick'], campaign_id, '7DAY', access_token)
++            shop_status['rpt_effect_task_list'][campaign_id] = taskid
++    except Exception:
++        logger.exception('nick:[%s] auto_creative_optimize_async_get_info error', shop_status['nick'])
++        sleep(10)
++    logger.info('aysnc nick:[%s] ', shop_status['nick'])
++
++def get_valid_task(task_id, access_token, nick):
++    try:
++        while True:
++            task = TopatsResultGet.get_task_result(task_id, access_token)
++            if task.state != 'done':
++                time.sleep(60)
++                continue
++            return task
++    except Exception:
++        logger.exception('nick:[%s] auto_creative_optimize_async_get_info error', nick)
++        return None
++    logger.info('get task')
++
++from report_db.rpt_grab.camp_keywords_rpt_get import TopatsShopKeywordsRptGet
++def auto_creative_optimize_async_get_rpt(shop_status, shop_info):
++    sid = shop_info['_id']
++    async_rpt_dict = {}
++    async_rpt_dict["base"] = {}
++    async_rpt_dict["effect"] = {}
++    try:
++        access_token = shop_info['access_token']
++        subway_token = shop_info['subway_token']
++        start_date = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=7)
++        end_date = datetime.datetime.combine(datetime.date.today(), datetime.time()) - datetime.timedelta(days=1)
++        for campaign_id in shop_status['rpt_base_task_list']:
++            async_rpt_dict['base'][campaign_id] = {}
++            task_id = shop_status['rpt_base_task_list'][campaign_id]
++            base_rpt_task = get_valid_task(task_id, access_token, shop_status['nick'])
++            if not base_rpt_task :
++                continue
++            async_rpt_dict['base'][campaign_id] = TopatsShopKeywordsRptGet.camp_keyword_base_rpt_get(shop_status['nick'], sid, campaign_id, base_rpt_task, start_date, end_date, access_token, subway_token)
++            async_rpt_dict['effect'][campaign_id] = {}
++            task_id = shop_status['rpt_effect_task_list'][campaign_id]
++            base_rpt_task = get_valid_task(task_id, access_token)
++            if not base_rpt_task :
++                continue
++            async_rpt_dict['effect'][campaign_id] = TopatsShopKeywordsRptGet.camp_keyword_effect_rpt_get(shop_status['nick'], sid, campaign_id, base_rpt_task, start_date, end_date, access_token, subway_token)
++    except Exception:
++        logger.exception('nick:[%s] auto_creative_optimize_async_get_info error', shop_status['nick'])
++        sleep(10)
++    logger.info('aysnc nick:[%s] ', shop_status['nick'])
++    return async_rpt_dict
++    
+ def auto_creative_optimize_worker(shop_status):
+     starttime = datetime.datetime.now()
+     logger.info('nick:[%s] get_shop_creative_optimize_shops ok', shop_status['nick'])
+@@ -237,8 +306,9 @@ def auto_creative_optimize_worker(shop_status):
+     ShopService.update_shop_status(shop_status['_id']
+         , {'auto_campaign_creative_optimize_time':datetime.datetime.now()})
+     profile_used_time(starttime, "auto_creative_optimize_update")
+-    code = ''
++    code = -1
+     try:
++        async_dict = auto_creative_optimize_async_get_rpt(shop_status, shop_info)
+         SyncService.sync_shop(shop_info['_id'],'auto',False)
+         sid = shop_info['_id']
+         access_token = shop_info['access_token']
+@@ -274,7 +344,7 @@ def auto_creative_optimize_worker(shop_status):
+         profile_used_time(starttime, "auto_creative_optimize_update_sync")
+         logger.info('nick:[%s] data_sync ok', shop_status['nick'])
+         for auto_campaign_id in auto_campaign_ids:
+-            code = shop_creative_optimize(shop_info['_id'],auto_campaign_id)
++            code = shop_creative_optimize(shop_info['_id'],auto_campaign_id, async_dict)
+         profile_used_time(starttime, "auto_creative_optimize_update_sync_optimize")
+          
+     except Exception:
+@@ -307,6 +377,9 @@ class SybAutoCreativeCelerySender(CelerySender):
+         profile_used_time(starttime)
+         return shop_status_list
+ 
++    def async_get_info(self, shop_status):
++        auto_creative_optimize_async_get_info(shop_status)        
++
+     def get_priority(self, shop_status):
+         article_code = 'ts-1796606'
+         is_vip, is_new = self.get_order_info(shop_status, article_code)

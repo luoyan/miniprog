@@ -86,3 +86,6 @@ query2=query.encode('UTF-8')
 import ast
 dict = ast.literal_eval("{'muffin' : 'lolz', 'foo' : 'kitty'}")
 print str(dict)
+import mypackage
+import time
+time.sleep(60)
