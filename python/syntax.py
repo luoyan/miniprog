@@ -78,7 +78,7 @@ for i in xrange(len(list) - 5 + 1):
 #    print str(i)+" "+ query_list[i]
 #    print query_list[i]
 query=u'\u535a\u4e16'
-print query
+print query.encode("utf8")
 #for c in query:
 #    print c
 query2=query.encode('UTF-8')
@@ -86,6 +86,8 @@ query2=query.encode('UTF-8')
 import ast
 dict = ast.literal_eval("{'muffin' : 'lolz', 'foo' : 'kitty'}")
 print str(dict)
-import mypackage
-import time
-time.sleep(60)
+#import mypackage
+#import time
+#time.sleep(60)
+con_str=u'\u4e1d\u7eb7'
+print con_str.encode("utf8")
