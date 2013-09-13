@@ -4,11 +4,15 @@ function usage()
     echo "$0 create site"
     echo "$0 start site"
 }
-if [ $# -ne 2 ] ; then
+if [ $# -lt 2 ] ; then
     usage $0
     exit -1
 fi
 site=$2
+app=jobs
+if [ $# -eq 3 ] ; then
+    app=$3
+fi
 function create()
 {
     django-admin.py startproject $site
@@ -22,7 +26,13 @@ function start()
 function sql()
 {
     cd $site
-    python manage.py sql jobs
+    python manage.py sql $app
+    cd -
+}
+function startapp()
+{
+    cd $site
+    python manage.py startapp $app
     cd -
 }
 $@
