@@ -38,3 +38,4 @@ lex
 yacc
 commlisp
 scheme
+sqlite

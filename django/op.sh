@@ -1,3 +1,4 @@
+#!/bin/bash
 function usage()
 {
     echo "$0 create site"
@@ -8,13 +9,20 @@ if [ $# -ne 2 ] ; then
     exit -1
 fi
 site=$2
-create()
+function create()
 {
     django-admin.py startproject $site
 }
-start()
+function start()
 {
     cd $site
     python manage.py runserver 0.0.0.0:8080
+    cd -
+}
+function sql()
+{
+    cd $site
+    python manage.py sql jobs
+    cd -
 }
 $@
