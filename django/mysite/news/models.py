@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Report(models.Model):
+class Reporter(models.Model):
     full_name = models.CharField(max_length=70)
 
     def __unicode__(self):
