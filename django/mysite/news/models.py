@@ -13,5 +13,11 @@ class Article(models.Model):
     content = models.TextField()
     report = models.ForeignKey(Reporter)
 
+#    def __init__(self, pub_date, headline, content, reporter):
+#        self.pub_date=pub_date
+#        self.headline = headline
+#        self.content = content
+#        self.report = reporter
+
     def __unicode__(self):
         return self.headline

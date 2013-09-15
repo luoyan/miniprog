@@ -91,3 +91,6 @@ print str(dict)
 #time.sleep(60)
 con_str=u'\u4e1d\u7eb7'
 print con_str.encode("utf8")
+dict={'a':1, 'b':2}
+dict.update({'c':3})
+print str(dict)
