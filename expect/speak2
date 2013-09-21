@@ -1,0 +1,7 @@
+expect "hi" {
+send "You said hi\n"
+} "hello" {
+send "Hello yourself\n"
+} "bye" {
+send "That was unexpected\n"
+}

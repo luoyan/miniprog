@@ -1,0 +1,8 @@
+spawn ssh -o StrictHostKeyChecking=no debug@223.5.20.253 
+#expect "debug@223.5.20.253's password: "
+expect "password: "
+#expect "Password: "
+#send "mysmngzd_253\r"
+send "mysmngzd_253\r"
+#send "aa\r"
+interact

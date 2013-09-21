@@ -1,0 +1,4 @@
+expect "hi\n"
+#send "hello there!\n"
+send "you typed <$expect_out(buffer)>"
+send "but I only expected <$expect_out(0,string)>"

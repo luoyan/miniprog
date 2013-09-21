@@ -1,0 +1,3 @@
+spawn ssh ops@223.5.20.245 "ls"
+expect "ops@223.5.20.245's password: "
+send "wmsyjr_wy2\r"

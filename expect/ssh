@@ -1,0 +1,3 @@
+spawn ssh luoyan@121.52.232.219 "ls"
+expect "luoyan@121.52.232.219's password: "
+send "62717038\r"

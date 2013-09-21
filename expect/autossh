@@ -1,0 +1,9 @@
+#!/usr/bin/expect
+set timeout 60
+set username [lindex $argv 0]
+set passwd [lindex $argv 1]
+set servername [lindex $argv 2]
+spawn ssh -o StrictHostKeyChecking=no $username@$servername
+expect "password: "
+send "$passwd\r"
+interact
