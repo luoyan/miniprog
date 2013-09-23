@@ -94,3 +94,6 @@ print con_str.encode("utf8")
 dict={'a':1, 'b':2}
 dict.update({'c':3})
 print str(dict)
+
+import decimal
+print str(decimal.Decimal(str(round(345.2345, 2))))
