@@ -28,7 +28,7 @@ def get_num(string):
         if elem != "":
             return int(elem)
     return None
-debug = True
+debug = False
 class DoubanSearchSpider(BaseSpider):
     name = "doubansearch"
     allowed_domains = ["douban.com"]
@@ -60,13 +60,13 @@ class DoubanSearchSpider(BaseSpider):
             rating = float(rating_str)
             diguest = get_one_string(h_li.select('div[@class="info"]/p/text()').extract()).strip()
             prod = DoubansearchItem()
-            print "url " + url
-            print "img_url " + img_url
-            print "title " + title
-            print "author " + author
-            print "price " + price_str
-            print "rating " + rating_str
-            print "diguest " + diguest
+            print "url " + url.encode('utf8')
+            print "img_url " + img_url.encode('utf8')
+            print "title " + title.encode('utf8')
+            print "author " + author.encode('utf8')
+            print "price " + price_str.encode('utf8')
+            print "rating " + rating_str.encode('utf8')
+            print "diguest " + diguest.encode('utf8')
             prod['id'] = hashlib.md5(url).hexdigest().upper()
             prod['url'] = url
             prod['img_url'] = img_url
@@ -76,6 +76,12 @@ class DoubanSearchSpider(BaseSpider):
             prod['rating'] = rating
             prod['diguest'] = diguest
             ret_items.append(prod)
+        next_url = get_one(hxs.select('//body/div[@id="wrapper"]/div[@id="content"]/div[@class="grid-16-8 clearfix"]/div[@class="article"]/div[@id="subject_list"]/div[@class="paginator"]/span[@class="next"]/a/@href').extract())
+        if next_url:
+            if next_url[0] == '/':
+                next_url = u'http://book.douban.com' + next_url
+            print 'next_url ' + next_url.encode('utf8')
+            ret_items.append(Request(url = next_url, callback = self.parse_tag))
         return ret_items
 
     def parse(self, response):
@@ -86,7 +92,7 @@ class DoubanSearchSpider(BaseSpider):
             url = get_one(h_a.select('@href').extract())
             tag = get_one(h_a.select('text()').extract())
             if tag != u'更多':
-                print "tag " + tag + " url " + url
+                print "tag " + tag.encode('utf8') + " url " + url.encode('utf8')
             yield Request(url, callback = self.parse_tag)
             if debug :
                 break
