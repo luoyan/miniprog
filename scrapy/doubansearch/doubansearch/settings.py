@@ -19,3 +19,12 @@ USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 #import os
 #os.environ["DISPLAY"] = ":3"
 
+ITEM_PIPELINES=['doubansearch.pipelines.DoubansearchPipeline']
+#mongodb set
+MONGODB_SERVER = 'localhost'
+MONGODB_PORT = 10000
+MONGODB_DB = 'douban'
+MONGODB_COLLECTION = 'book_info'
+MONGODB_UNIQ_KEY = 'id'
+MONGODB_ITEM_ID_FIELD = '_id'
+MONGODB_SAFE = True

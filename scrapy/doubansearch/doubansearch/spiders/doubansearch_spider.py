@@ -7,6 +7,9 @@ from scrapy import log
 from scrapy.http import FormRequest
 import json as simplejson
 import httplib, urllib
+import decimal
+import re
+import hashlib
 from doubansearch.items import DoubansearchItem
 
 def get_one(list):
@@ -18,6 +21,13 @@ def get_one_string(list):
     if len(list) > 0:
         return list[0]
     return ""
+
+def get_num(string):
+    list_str = re.findall('[0-9]*', string)
+    for elem in list_str:
+        if elem != "":
+            return int(elem)
+    return None
 debug = True
 class DoubanSearchSpider(BaseSpider):
     name = "doubansearch"
@@ -36,6 +46,7 @@ class DoubanSearchSpider(BaseSpider):
         #file.write(response._body)
         #file.close()
         print "h_li_array len " + str(len(h_li_array))
+        ret_items = []
         for h_li in h_li_array:
             url = get_one(h_li.select('div[@class="pic"]/a[@class="nbg"]/@href').extract())
             img_url = get_one(h_li.select('div[@class="pic"]/a[@class="nbg"]/img/@src').extract())
@@ -44,15 +55,28 @@ class DoubanSearchSpider(BaseSpider):
             book_info_array = book_info.split('/')
             author = book_info_array[0].strip()
             price_str = book_info_array[-1].strip()
-            rating = get_one(h_li.select('div[@class="info"]/div[@class="star clearfix"]/span[@class="rating_nums"]/text()').extract())
+            price = get_num(price_str)
+            rating_str = get_one(h_li.select('div[@class="info"]/div[@class="star clearfix"]/span[@class="rating_nums"]/text()').extract())
+            rating = float(rating_str)
             diguest = get_one_string(h_li.select('div[@class="info"]/p/text()').extract()).strip()
+            prod = DoubansearchItem()
             print "url " + url
             print "img_url " + img_url
             print "title " + title
             print "author " + author
             print "price " + price_str
-            print "rating " + rating
-            print "diguest " + diguest 
+            print "rating " + rating_str
+            print "diguest " + diguest
+            prod['id'] = hashlib.md5(url).hexdigest().upper()
+            prod['url'] = url
+            prod['img_url'] = img_url
+            prod['title'] = title
+            prod['author'] = author
+            prod['price'] = price
+            prod['rating'] = rating
+            prod['diguest'] = diguest
+            ret_items.append(prod)
+        return ret_items
 
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
