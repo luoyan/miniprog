@@ -108,3 +108,10 @@ def get_num(string):
     return None
 
 print 'get_num ' + str(get_num('ab2N3cd'))
+url='http://ju.taobao.com/tg/home.htm?spm=608.2214381.2.1.jZJLR5&item_id=21330584078&id=10000000640496'
+import re
+L=re.findall(r'(?<=item_id=)\w+',url)
+#L=re.findall(r'(?<=spm=)\w+',url)
+if len(L) > 0:
+    print L[0]
+print '21330584078'

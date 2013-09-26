@@ -55,7 +55,8 @@ op = OpenTaobao('12651461','80a15051c411f9ca52d664ebde46a9da')
 
 params = {
     'method':'taobao.item.get',
-    'fields':'iid,title,pic_url',
+#    'fields':'iid,title,pic_url',
+    'fields':'pic_url',
 #    'num_iid':'7765596787', 
     'num_iid':'21330584078',
 }
@@ -71,4 +72,7 @@ import ast
 #print dict_str
 ret_dict = ast.literal_eval(dict_str)
 print str(ret_dict)
-print ret_dict['item_get_response']["item"]["pic_url"]
+print ret_dict['item_get_response']["item"]["pic_url"].decode('string-escape')
+string='http:\/\/img03.taobaocdn.com\/bao\/uploaded\/i3\/T1pzZjXdJbXXXhUys8_100755.jpg'
+print string.decode('string-escape')
+print string.replace('\/', '/')
