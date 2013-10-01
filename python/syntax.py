@@ -97,3 +97,21 @@ print str(dict)
 
 import decimal
 print str(decimal.Decimal(str(round(345.2345, 2))))
+list2=[1,3, 5]
+print str(list2[-1])
+import re
+def get_num(string):
+    list_str = re.findall('[0-9\.]*', string)
+    for elem in list_str:
+        if elem != "":
+            return float(elem)
+    return None
+
+print 'get_num ' + str(get_num('ab2N3cd'))
+url='http://ju.taobao.com/tg/home.htm?spm=608.2214381.2.1.jZJLR5&item_id=21330584078&id=10000000640496'
+import re
+L=re.findall(r'(?<=item_id=)\w+',url)
+#L=re.findall(r'(?<=spm=)\w+',url)
+if len(L) > 0:
+    print L[0]
+print '21330584078'
