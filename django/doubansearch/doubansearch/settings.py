@@ -6,7 +6,9 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
-
+import os,sys
+curr_path = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.normpath(os.path.join(curr_path,os.path.pardir))
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -97,6 +99,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'djangomako.middleware.MakoMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -107,6 +110,7 @@ ROOT_URLCONF = 'doubansearch.urls'
 WSGI_APPLICATION = 'doubansearch.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(PROJECT_ROOT,'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
