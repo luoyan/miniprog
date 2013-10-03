@@ -24,3 +24,22 @@ a
 (format t "~a~%" (cons '4 '(1 2 3)))
 (format t "~a~%" (list '4 '(1 2 3)))
 (format t "~a~%" (append '(4) '(1 2 3)))
+
+(defun my_second (lst)
+    (first (rest lst))
+)
+(format t "~a~%" (my_second '(1 2 3)))
+
+(defun my_max (x y)
+    (if (> x y) x y)
+)
+
+(format t "~a~%" (my_max 3 5))
+(defun total (x)
+    (if (null x)
+    0
+    (+ (first x) (total (rest x)))
+    )
+)
+
+(format t "~a~%" (total '(3 5 8)))
