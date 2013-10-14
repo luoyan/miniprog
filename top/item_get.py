@@ -43,7 +43,7 @@ op = OpenTaobao('12651461','80a15051c411f9ca52d664ebde46a9da')
 
 params = {
     'method':'taobao.item.get',
-    'fields':'iid,title,pic_url',
+    'fields':'iid,title,pic_url, post_fee, express_fee, ems_fee, freight_payer',
 #    'num_iid':'7765596787', 
     'num_iid':'21330584078',
 }
@@ -164,7 +164,7 @@ def async_get_result(taskid):
     print dict_str
     ret_dict = ast.literal_eval(dict_str)
     return ret_dict
-
+'''
 async_get_cats_info()
 #ret_dict = async_get_result(202689529)
 ret_dict = async_get_result(202692393)
@@ -176,3 +176,96 @@ if ret_dict['topats_result_get_response']['task']['status'] == 'done':
     file = open('download_cat.txt', 'w')
     file.write(buffer)
     file.close()
+'''
+print 'start read cat_info2/99'
+file = open('cat_info2/99', 'r')
+dict_str = file.read()
+#ret_dict = ast.literal_eval(dict_str)
+#print str(ret_dict)
+import simplejson as json
+ret_dict = json.loads(dict_str)
+print ret_dict.keys()
+def show_values(show_list, show_dict, level = 0):
+    string = ""
+    print 'level ' + str(level)
+    for i in xrange(level):
+        string = string + '    '
+    for key in show_list:
+        #print key + ' ' + show_dict[key].__class__.__name__
+        if show_dict[key].__class__.__name__ == 'unicode':
+            string2 = string + key + ' ' + show_dict[key].encode('utf8')
+            print string2
+        elif show_dict[key].__class__.__name__ == 'list':
+            string2 = string + key + ' ' + str(len(show_dict[key]))
+            print string2
+            if len(show_dict[key]) > 0:
+                #string2 = string + key + ' ' + str(show_dict[key][0].keys())
+                #print string2
+                show_values(show_dict[key][0].keys(), show_dict[key][0], level + 1)
+        else:
+            string2 = string + key + ' ' + str(show_dict[key])
+            print string2
+#show_list=['sortOrder', 'name', 'cid', 'parentCid', 'isParent']
+show_list=['sortOrder', 'name', 'cid', 'categoryPropList', 'parentCid', 'isParent', 'featureList', 'childCategoryList']
+show_values(show_list, ret_dict)
+print show_list.__class__.__name__
+def build_root_leave_dict(origin_cat_dict, root_leave_dict):
+
+    cid = origin_cat_dict['cid']
+    if not root_leave_dict.has_key(cid):
+        root_leave_dict[cid] = {}
+
+    if not origin_cat_dict.has_key('childCategoryList'):
+        return
+    if not origin_cat_dict['childCategoryList']:
+        return
+    print origin_cat_dict.__class__.__name__
+    try:
+        for item in origin_cat_dict['childCategoryList']:
+            sub_cid = item['cid']
+            root_leave_dict[cid][sub_cid] = {}
+            build_root_leave_dict(item, root_leave_dict[cid])
+    except:
+        return 
+
+import os
+def build_cat_tree(dir):
+    files = os.listdir(dir)
+    print str(files)
+    root_leave_dict = {}
+    i = 0
+    for file in files:
+        path=dir + file
+        f = open(path, 'r')
+        print 'open ' + path
+        buffer = f.read()
+        ret_dict = json.loads(dict_str)
+        build_root_leave_dict(ret_dict, root_leave_dict)
+        i = i + 1
+        if i > 2:
+            break
+
+    print str(root_leave_dict)
+    return root_leave_dict
+
+def build_cat_map(root_leave_dict, root_cid, map_dict):
+
+    for cid in root_leave_dict:
+        if len(root_leave_dict[cid]) == 0:
+            map_dict[cid] = root_cid
+        else:
+            build_cat_map(root_leave_dict[cid], root_cid, map_dict)
+
+def build_cat_total_map(root_leave_dict):
+    map_dict = {}
+    for cid in root_leave_dict:
+        build_cat_map(root_leave_dict[cid], cid, map_dict)
+
+    return map_dict
+
+
+root_leave_dict = build_cat_tree('cat_info2/')
+
+map_dict = build_cat_total_map(root_leave_dict)
+for key in map_dict:
+    print str(key) + ' -> ' + str(map_dict[key])
