@@ -115,3 +115,45 @@ L=re.findall(r'(?<=item_id=)\w+',url)
 if len(L) > 0:
     print L[0]
 print '21330584078'
+#print str(datetime.datetime.now().timestamp()) #.__class__.__name__
+import time
+print 'start'
+print str(int(time.time()))
+import traceback
+def function_test():
+    return 1/0
+
+def function_test2():
+    try:
+        return 1/0
+    except :
+        exstr = traceback.format_exc()
+        print 'ERROR to divide ' + exstr
+        return 0
+function_test2()
+url='http://img02.taobaocdn.com/imgextra/i2/18584028032756907/T1hleZFidgXXXXXXXX_!!25008584-0-tejia.jpg_210x210.jpg'
+index = url.find('_210x210.jpg')
+print url[0:index]
+class C(object):
+    def __init__(self):
+        self._x = None
+
+    @property
+    def x(self):
+        """I'm the 'x' property."""
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+list3=[1,3,5]
+print str(list3[-2:])
+url='http://s5.tuanimg.com/upload/deal/image/84921/normal_0490b745bbdf0fe1934015c1e819b1d4.jpg'
+print url[-4:]
+
+def get_item_id(url):
+    L=re.findall(r'(?<=detail.etao.com/)\w+',url)
+    if len(L) > 0:
+        return int(L[0])
+    return None
+print 'item id  = ' + str(get_item_id('http://detail.etao.com/23155240712.htm?rebatepartner=1890'))
