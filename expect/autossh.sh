@@ -10,6 +10,7 @@ ops_mm245 ops 223.5.20.245 wmsyjr_wy2
 debug_mm245 debug 223.5.20.245 chrdw_245
 prd_2C prd2c 121.52.232.219 ztmhsprd
 ly_2C luoyan 121.52.232.219 62717038
+ops_2C ops 121.52.232.219 wmsyjr_wy1
 ly_dev luoy app.maimiaotech.com 62717038
 EOF
 usage()

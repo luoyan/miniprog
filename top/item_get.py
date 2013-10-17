@@ -45,12 +45,14 @@ params = {
     'method':'taobao.item.get',
     'fields':'iid,title,pic_url, post_fee, express_fee, ems_fee, freight_payer',
 #    'num_iid':'7765596787', 
-    'num_iid':'21330584078',
+#    'num_iid':'21330584078',
+    'num_iid':'18531954271',
 }
 
 #print op.get_result(params)
 dict_str = op.get_result(params)
 print dict_str
+exit(0)
 op = OpenTaobao('12651461','80a15051c411f9ca52d664ebde46a9da')
 
 params = {
@@ -179,15 +181,14 @@ if ret_dict['topats_result_get_response']['task']['status'] == 'done':
 '''
 print 'start read cat_info2/99'
 file = open('cat_info2/99', 'r')
-dict_str = file.read()
-#ret_dict = ast.literal_eval(dict_str)
-#print str(ret_dict)
+#file = open('cat_info2/50019780', 'r')
+#file = open('cat_info2/50006843', 'r')
+g_dict_str = file.read()
 import simplejson as json
-ret_dict = json.loads(dict_str)
-print ret_dict.keys()
+g_ret_dict = json.loads(g_dict_str)
+print g_ret_dict.keys()
 def show_values(show_list, show_dict, level = 0):
-    string = ""
-    print 'level ' + str(level)
+    string = "" + 'level ' + str(level) + ' '
     for i in xrange(level):
         string = string + '    '
     for key in show_list:
@@ -201,16 +202,22 @@ def show_values(show_list, show_dict, level = 0):
             if len(show_dict[key]) > 0:
                 #string2 = string + key + ' ' + str(show_dict[key][0].keys())
                 #print string2
-                show_values(show_dict[key][0].keys(), show_dict[key][0], level + 1)
+                for item in show_dict[key]:
+                    if not item:
+                        continue
+                    show_values(item.keys(), item, level + 1)
         else:
             string2 = string + key + ' ' + str(show_dict[key])
             print string2
 #show_list=['sortOrder', 'name', 'cid', 'parentCid', 'isParent']
 show_list=['sortOrder', 'name', 'cid', 'categoryPropList', 'parentCid', 'isParent', 'featureList', 'childCategoryList']
-show_values(show_list, ret_dict)
-print show_list.__class__.__name__
-def build_root_leave_dict(origin_cat_dict, root_leave_dict):
-
+#show_values(show_list, g_ret_dict)
+print 'show_list.__class__.__name__ ' + show_list.__class__.__name__
+def build_root_leave_dict(origin_cat_dict, root_leave_dict, level = 0):
+    if not origin_cat_dict.has_key('cid'):
+        return
+    if not origin_cat_dict['cid']:
+        return
     cid = origin_cat_dict['cid']
     if not root_leave_dict.has_key(cid):
         root_leave_dict[cid] = {}
@@ -219,33 +226,37 @@ def build_root_leave_dict(origin_cat_dict, root_leave_dict):
         return
     if not origin_cat_dict['childCategoryList']:
         return
-    print origin_cat_dict.__class__.__name__
+    print 'origin_cat_dict.__class__.__name__ ' + origin_cat_dict.__class__.__name__ + " " + str(root_leave_dict)
     try:
+        print 'level ' + str(level) + ' ' + str(len(origin_cat_dict['childCategoryList']))
         for item in origin_cat_dict['childCategoryList']:
             sub_cid = item['cid']
             root_leave_dict[cid][sub_cid] = {}
-            build_root_leave_dict(item, root_leave_dict[cid])
+            build_root_leave_dict(item, root_leave_dict[cid], level + 1)
     except:
         return 
 
 import os
 def build_cat_tree(dir):
     files = os.listdir(dir)
-    print str(files)
+    print 'files : ' + str(files)
     root_leave_dict = {}
     i = 0
     for file in files:
+        #if file != '99':
+        #    continue
         path=dir + file
         f = open(path, 'r')
         print 'open ' + path
         buffer = f.read()
-        ret_dict = json.loads(dict_str)
+        ret_dict = json.loads(buffer)
+        #print 'ret_dict ' + str(ret_dict)
         build_root_leave_dict(ret_dict, root_leave_dict)
         i = i + 1
-        if i > 2:
-            break
+        #if i > 2:
+        #    break
 
-    print str(root_leave_dict)
+    print 'root_leave_dict ' + str(root_leave_dict)
     return root_leave_dict
 
 def build_cat_map(root_leave_dict, root_cid, map_dict):
@@ -264,8 +275,8 @@ def build_cat_total_map(root_leave_dict):
     return map_dict
 
 
-root_leave_dict = build_cat_tree('cat_info2/')
+root_dict = build_cat_tree('cat_info2/')
 
-map_dict = build_cat_total_map(root_leave_dict)
+map_dict = build_cat_total_map(root_dict)
 for key in map_dict:
     print str(key) + ' -> ' + str(map_dict[key])
