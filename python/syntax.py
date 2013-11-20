@@ -157,3 +157,38 @@ def get_item_id(url):
         return int(L[0])
     return None
 print 'item id  = ' + str(get_item_id('http://detail.etao.com/23155240712.htm?rebatepartner=1890'))
+print Base.__name__
+def compare_pv(dict1, dict2):
+    if dict1['uv'] < dict2['uv']:
+        return -1
+    elif dict1['uv'] > dict2['uv']:
+        return 1
+    return dict1['pv'] - dict2['pv']
+key_dict_list = []
+key_dict_list.append({'pv':100, 'uv':20})
+key_dict_list.append({'pv':50, 'uv':70})
+key_dict_list.append({'pv':70, 'uv':30})
+key_dict_list.append({'pv':50, 'uv':30})
+res = sorted(key_dict_list, cmp=compare_pv)
+print str(key_dict_list)
+print str(res)
+string=u'生娃AbC'
+print string.lower().encode('utf8')
+print string.encode('utf8').lower()
+print str(datetime.date.today().year)
+d1={1:1}
+def get_dict(d):
+    d[2] = 2
+get_dict(d1)
+print str(d1)
+end_time = int(datetime.datetime.strptime('发布2013-11-11 10:00:00', "发布%Y-%m-%d %H:%M:%S").strftime("%s"))
+print 'end_time ' + str(end_time)
+string='abcde'
+print string[-2:]
+print string[:-1]
+print string[:]
+#print str(datetime.datetime.date().strftime("%Y-%m-%d %H:%M:%S"))
+print str(datetime.datetime.now())[:-7]
+print str(datetime.datetime.now() - datetime.timedelta(minutes=10))[:-7]
+print str(datetime.datetime.now() - datetime.timedelta(hours=10))[:-7]
+print str(datetime.datetime.now() - datetime.timedelta(days=10))[:-7]
