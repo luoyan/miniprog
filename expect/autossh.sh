@@ -12,6 +12,7 @@ prd_2C prd2c 121.52.232.219 ztmhsprd
 ly_2C luoyan 121.52.232.219 62717038
 ops_2C ops 121.52.232.219 wmsyjr_wy1
 ly_dev luoy app.maimiaotech.com 62717038
+ly_2Cdev luoy 192.168.38.226 62717038
 EOF
 usage()
 {
