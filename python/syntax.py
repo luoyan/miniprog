@@ -192,3 +192,21 @@ print str(datetime.datetime.now())[:-7]
 print str(datetime.datetime.now() - datetime.timedelta(minutes=10))[:-7]
 print str(datetime.datetime.now() - datetime.timedelta(hours=10))[:-7]
 print str(datetime.datetime.now() - datetime.timedelta(days=10))[:-7]
+import urllib
+import urllib2
+import time
+def download_url(url):
+    try:
+        a = urllib2.urlopen(url)
+        return a.read()
+    except:
+        exstr = traceback.format_exc()
+        print('failed to download url code ' + str(exstr))
+        return None
+url='http://j.zdmimg.com/201311/14/5284ede469e40.jpg_n2.jpg'
+if not download_url(url):
+    print 'download failed'
+else:
+    print 'download success'
+
+print url[0:len('http')]
