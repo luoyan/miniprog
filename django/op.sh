@@ -38,3 +38,6 @@ function startapp()
     cd -
 }
 $@
+#django-amdin.py startproject booksearch
+#python manage.py startapp search
+#python runserver 0.0.0.0:3389
