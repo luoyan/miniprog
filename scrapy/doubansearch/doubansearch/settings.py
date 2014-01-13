@@ -22,7 +22,7 @@ USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 ITEM_PIPELINES=['doubansearch.pipelines.DoubansearchPipeline']
 #mongodb set
 MONGODB_SERVER = 'localhost'
-MONGODB_PORT = 10000
+MONGODB_PORT = 27017
 MONGODB_DB = 'douban'
 MONGODB_COLLECTION = 'book_info'
 MONGODB_UNIQ_KEY = 'id'

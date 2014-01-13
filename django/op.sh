@@ -20,7 +20,9 @@ function create()
 function start()
 {
     cd $site
-    python manage.py runserver 0.0.0.0:8080
+    #python manage.py runserver 0.0.0.0:8080
+    #python manage.py runserver 0.0.0.0:80
+    python manage.py runserver 0.0.0.0:3389
     cd -
 }
 function sql()
