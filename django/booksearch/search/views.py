@@ -26,10 +26,11 @@ def home(request):
     return response
 
 def index(request):
-    t = get_template('index.html')
+    t = get_template('booksearch.html')
     html = t.render(RequestContext(request))
-    #response = render_to_response("index.html",{}, context_instance=RequestContext(request))
-    return html
+    return HttpResponse(html)
+    #response = render_to_response("booksearch.html",{}, context_instance=RequestContext(request))
+    #return response
 
 def hello(request):
     response = HttpResponse("Hello world")
