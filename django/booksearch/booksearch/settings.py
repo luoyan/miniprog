@@ -6,7 +6,9 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
-
+import os
+curr_path = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.normpath(os.path.join(curr_path,os.path.pardir))
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -107,6 +109,7 @@ ROOT_URLCONF = 'booksearch.urls'
 WSGI_APPLICATION = 'booksearch.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(PROJECT_ROOT,'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
