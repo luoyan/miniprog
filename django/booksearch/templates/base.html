@@ -1,0 +1,136 @@
+## -*- coding: utf-8 -*-
+<!DOCTYPE HTML>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+	<title>真划算</title>
+	<meta property="qc:admins" content="25771616566245036375" />
+	<meta property="wb:webmaster" content="c17225391c0d5658" />
+	<meta name="description" content="真划算 - “真划算”是最专业的第三方推销平台，客观，实时，优惠的为您提供全网高性价比商品。告别虚假的价格，虚假的卖家，每天来“真划算”逛逛就够了。">
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css?20131118">
+	<link rel="stylesheet" type="text/css" href="/static/css/tips.css?20131101">
+	<script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=21667696"></script>
+	<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+	<!--[if lte IE 6]>
+		<script src="/static/js/lib/DD_belatedPNG_0.0.8a.js?e48ebf2a4f0f1f1f10503d4780c47798" type="text/javascript"></script>
+	    <script type="text/javascript">
+	        DD_belatedPNG.fix('div, ul, img, li, input , a');
+	    </script>
+	<![endif]-->
+	% if hasattr(self.attr, 'load_module'):
+    <script src="/static/seajs/2.1.1/sea.js?7e060169c1fdcef260258da925c064f2"></script>
+    <script src="/static/seajs-config.js?34024d291c9df2e7fba16e772f1d4c70"></script>
+    <script>
+        seajs.use('js/page/${self.attr.load_module}', function(m) {
+            $(function(){m.init()})
+        })
+    </script>
+    % endif
+</head>
+<body>
+	<div id="top_bar">
+		<div class="header wrapper">
+			<div class="follow">
+				<span class="title">关注我们:</span>
+				<div class="weixin">
+					<div class="icon">
+					</div>
+					<div class="detail">
+					</div>
+				</div>
+				<div class="sina">
+					<wb:follow-button uid="3858816890" type="gray_1" width="67" height="24" ></wb:follow-button>
+				</div>
+				<div class="qqzone">
+					<iframe src="http://open.qzone.qq.com/like?url=http%3A%2F%2Fuser.qzone.qq.com%2F2937396129&type=button&width=95&height=30&style=2" allowtransparency="true" scrolling="no" border="0" frameborder="0" style="width:95px;height:30px;border:none;overflow:hidden;"></iframe>
+				</div>
+			</div>
+			<div class="login">
+				% if userinfo != None:
+					##<img src="${userinfo["info"]["figureurl"]}" />
+					<span class="username">您好，${userinfo["info"]["nickname"]}</span>
+					<a id="logout" href="/auth/logout">退出</a>
+				% else:
+					<a id="qq_login" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=100523811&redirect_uri=http://ztmhs.maimiaotech.com/auth/login&scope=all"><img class="qq-logo" src="/static/images/qq.png" />登录QQ</a>
+				% endif
+			</div>
+		</div>
+	</div>
+	<div id="search_bar">
+		<div class="search-bar-wrapper">
+			<div class="logo">
+				<a href="/" title="“真™划算”是最智能的网络购物推荐引擎，汇集全互联网所有购物资讯，为您提供最高性价比的商品以及最及时的购物资讯。要购物先真划算！"><img src="/static/images/logo.png?2013111" /></a>
+			</div>
+			<div class="search-ctn">
+				<div class="form">
+					<label id="default_value">${hotquery[0]}</label>
+					<input id="search_text" type="text" />
+					<button id="search_btn"></button>
+				</div>
+				<div id="hotwords">
+					<strong>大家正在搜：</strong>
+					% for query in hotquery:
+						% if loop.index > 0 and loop.index < 5:
+							<a href="/search?q=${query}">${query}</a>
+						% endif
+					% endfor	
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<%block name="navigation"/>
+
+	<div class="wrapper"><%block name="content"/></div>
+
+	<div id="side_bar_tools">
+		<a id="to_top" title="回到顶部">
+			<i><div class="tip-green"><div class="tip-inner tip-bg-image">回到顶部</div><div class="tip-arrow tip-arrow-right"></div></div></i>
+		</a>
+		<a id="feedback" title="意见反馈" target="_blank" href="http://sighttp.qq.com/authd?IDKEY=28b07e48a7dc597b73510a305f7064fdd50fe2026aeb8245">
+			<i><div class="tip-green"><div class="tip-inner tip-bg-image">意见反馈</div><div class="tip-arrow tip-arrow-right"></div></div></i>
+		</a>
+		<a id="addQQ" target="_blank" href="http://wp.qq.com/wpa/qunwpa?idkey=d455aa310cb20ef6f839cc8ee38b7299414b409104684aae819d9f2a64a8faba" title="加QQ群">
+			<i><div class="tip-green"><div class="tip-inner tip-bg-image">加QQ群</div><div class="tip-arrow tip-arrow-right"></div></div></i>
+		</a>
+	</div>
+
+	<div id="footer_bar">
+		<div class="footer wrapper">
+			<div class="logo"></div>
+			<div class="content">
+				<div class="small">"真™划算"是最智能的网络购物推荐引擎，汇集全互联网所有购物资讯，为您提供最高性价比的商品以及最及时的购物资讯。</div>
+				<div class="big">要购物先真划算！</div>
+				##<div class="contact">
+				##	<span>联系方式：<strong>support@maimiaotech.com</strong></span>
+				##	<span>微信：<strong>zhentmhs</strong></span>
+				##</div>
+				<div class="copyright">
+					<span>©</span> copyright 2013 maimiaotech.com All rights reserved. 
+					 浙ICP备12016677号
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="hide">
+		<div id="changeDomain">
+			<h1>尊敬的用户：</h1>
+			<p>为了您更方便的使用我们的网站，我们将真划算的域名迁移到 www.ztmhs.com（真特么划算点康姆）域名更好记，给您带来不便我们表示诚挚的歉意。</p>
+			<p>迁移将在<span>11月24日</span>完成，届时将<span>下线</span>金币商城功能并<span>清空</span>金币商城的数据，如果您有金币未兑换，请将您金币商城的金币数量截图，并附带您的<span>支付宝账号</span>发送给我们，我们会直接给您的支付宝账号进行充值进行补偿。</p>
+			<p>
+				补偿金额：1金币=0.01元<br />
+				补偿联系邮箱：chenlifen@maimiaotech.com
+			</p>
+
+			<div class="team">真划算运营团队</div>
+		</div>
+	</div>
+
+	##百度统计代码
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fcdf011a9ef990ca0279ffdab9ccb5605' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</body>
+</html>

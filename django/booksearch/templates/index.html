@@ -1,0 +1,238 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+
+<%def name="setHotTitle(title, flush)">
+	<%
+		for hot in flush:
+			title = title.replace(hot.strip(),'<strong>' + hot.strip() + '</strong>')
+	%>
+	${title}
+</%def>
+
+<%def name="getCatName(our_cat)">
+	<%
+		cat_name = ""
+		if our_cat == 1:
+			cat_name = u"白菜价"
+		elif our_cat == 2:
+			cat_name = u"强烈值得买"
+		elif our_cat == 3:
+			cat_name = u"促销活动"
+		else:
+			cat_name = u"全部"
+	%>
+	${cat_name}
+</%def>
+
+<%def name="makeProductLink(desc, desc_link)">
+	<%
+		detail_content = ""
+		for des in desc:
+			detail_content = detail_content + "<p>" + des + "</p>"
+		for link in desc_link:
+			detail_content = detail_content.replace(link[0],'<a target="_blank" href="/redirect/?' + link[1] + '">'+ link[0] + '</a>')
+	%>
+	${detail_content}
+</%def>
+
+<%def name="getDesc(desc)">
+	<%
+		descContent = ""
+		for des in desc:
+			descContent = descContent + des
+		descContent = descContent[0:100] + "..."
+	%>${descContent}
+</%def>
+
+<%def name="makeItem(item)">
+    <div class="item">
+		<ul>
+		% if item["stat"] == 4:
+			<li class="left-info expired">
+			##<h4><a href="javascript:void(0);" onclick="javascript:MM.open('http://qq.ztmhs.com/redirect/${item["id"]}');return false;">${setHotTitle(item["title"], item["flush"])}</a></h4>
+				<h4><span class="expired-icon"></span><a target="_blank" href="/redirect/?${item["title_link_id"]}">${item["title"]}</a></h4>
+				<div class="metas">
+					<span class="time">${item["pub_time"]}</span><a href="#" class="type">${getCatName(item["our_cat"])}</a><span>来源：${item["crawl_source"]}</span>
+				</div>
+			</li>
+		% else:
+			<li class="left-info">
+			##<h4><a href="javascript:void(0);" onclick="javascript:MM.open('http://qq.ztmhs.com/redirect/${item["id"]}');return false;">${setHotTitle(item["title"], item["flush"])}</a></h4>
+				<h4><a target="_blank" href="/redirect/?${item["title_link_id"]}">${setHotTitle(item["title"], item["flush"])}</a></h4>
+				<div class="metas">
+					<span class="time">${item["pub_time"]}</span><a href="#" class="type">${getCatName(item["our_cat"])}</a><span>来源：${item["crawl_source"]}</span>
+				</div>
+				<div class="content">
+					<div class="desc-ctn">${makeProductLink(item["desc"], item["desc_link"])}</div>
+					<div class="toggle-ctn">
+						<span class="toggle">展开全文</span>
+					</div>
+				</div>
+				<div class="ctrl">
+					<div class="left" id="${item["id"]}">
+						值：<span class="deserve-no">${item["worth"]}</span><span class="deserve-icon"></span>
+						不值：<span class="undeserve-no">${item["bad"]}</span><span class="undeserve-icon"></span>
+						##<span class="box no-product">没货啦!</span>
+						##<span class="box price-changed">改价啦!</span>
+					</div>
+					<div class="right" data='{"url":"http://ztmhs.maimiaotech.com/redirect/?${item["img_link_id"]}", "pic":"http://ztmhs.maimiaotech.com${item["img"]}" ,"title":"${item["title"]}", "text":"${item["desc"][0]}", "desc":"全网性价比商品哪里找？秒杀宝贝时时有？还有金币换现金？真划算帮你实现，传送门：http://ztmhs.maimiaotech.com"}'>
+						分享到：<a href="#" class="share-qqzone"><span class="qqzone-icon"></span>QQ空间</a>
+						## <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" data='{"url":"http://www.ztmhs.com/redirect/?${item["img_link_id"]}", "pic":"http://www.ztmhs.com${item["img"]}" ,"title":"${item["title"]}", "text":"${item["title"]}", "desc":"${item["desc"][0]}",
+						## 	"comment": "${item["desc"][0]}"}'>
+						## 	<a class="bds_tsina"></a>
+						## 	<a class="bds_qzone"></a>
+						## 	<a class="bds_tqq"></a>
+						## 	<span class="bds_more">更多</span>
+						## </div>
+						
+					</div>
+				</div>
+			</li>
+			<li class="right-info">
+				##<a href="javascript:void(0);" onclick="javascript:MM.open('http://qq.ztmhs.com/redirect/${item["id"]}');return false;">
+				<a  target="_blank" href="/redirect/?${item["img_link_id"]}">
+				<div class="desc-img">
+					<img width="180px" height="180px" src="${item["img"]}" onError="this.src='/static/images/badimg.png'" />
+				</div>
+				</a>
+				<a  target="_blank" href="/redirect/?${item["go_link_id"]}">
+				<div class="buy"></div>
+				</a>
+				<div class="from-tip"></div>
+			</li>
+		% endif
+		<div class="clear"></div>
+		</ul>
+		<div class="separate"></div>
+	</div>
+</%def>
+
+<%block name="navigation">
+	<div id="nav_bar">
+		<div class="wrapper">
+			<ul class="nav-bd">
+				<li><a  class="on" href="/">优惠精选</a></li>
+				<li><a href="/seckill">限时秒杀</a></li>
+				<li><a href="/goldmall">金币商城<i class="top-tip"></i></a></li>
+			</ul>
+			<ul class="nav-ft">
+				<li><a id="set_qqwarn" class="set-qqwarn" target="_blank" href="#">提醒我明天过来签到</a></li>
+				<li><a href="#" id="sign_in">签到领金币</a></li>
+			</ul>
+		</div>
+	</div>
+</%block>
+
+<%block name="content">
+	<div class="tops-feeds-ctn">
+		<div class="left">
+			<h3>今日最热门</h3>
+			<ul class="feed-img-ctn">
+				% for feed in main_top_feeds:
+					% if loop.index == 0:
+						<li class="big"><a target="_blank" href="/redirect/?${feed["go_link_id"]}"><img width="330" height="261" src="${feed["img"]}" /><i class="icon">${loop.index + 1}</i><i class="mask"></i></a></li>
+					% else:
+						<li><a target="_blank" href="/redirect/?${feed["go_link_id"]}"><img width="160" height="130" src="${feed["img"]}" /><i class="icon">${loop.index + 1}</i><i class="mask"></i></a></li>
+					% endif
+				% endfor
+			</ul>
+		</div>
+		<div class="right">
+			<h4>TOP5</h4>
+			<ul class="feed-title-ctn">
+				% for feed in main_top_feeds:
+					% if loop.index == 0:
+						<li class="first">
+							<i class="i${loop.index + 1}">${loop.index + 1}</i><h5><a target="_blank" href="/redirect/?${feed["go_link_id"]}">${feed["title"]}</a></h5>
+						</li>
+					% else:
+						<li>
+							<i class="i${loop.index + 1}">${loop.index + 1}</i><h5><a target="_blank" href="/redirect/?${feed["go_link_id"]}">${feed["title"]}</a></h5>
+						</li>
+					% endif
+				% endfor
+			</ul>
+		</div>
+	</div>
+	<div class="feeds-main">
+		<ul class="labels">
+			<li><a id="lowest" class="type" href="javascript:void(0);">强烈值得买</a></li>
+			<li><a id="cheap" class="type" href="javascript:void(0);">白菜价</a></li>
+			<li><a id="salespromotion" class="type" href="javascript:void(0);">促销活动</a></li>
+			<li><a id="all" class="on type" href="javascript:void(0);">查看全部</a></li>
+		</ul>
+		<div class="clear"></div>
+		<div class="feeds-ctn">
+			% for item in top_feeds:
+			 ${makeItem(item)}
+			% endfor
+
+			% for item in common_feeds:
+			    ${makeItem(item)}
+			% endfor
+		</div>
+	</div>
+	<div id="pagination" class="wrapper"></div>
+	<script id="feedItemTmpl" type="text/x-jquery-tmpl">
+		<div class="item">
+			<ul>
+			{{if stat == 4}}
+				<li class="left-info expired">
+					##<h4><a href="javascript:void(0);" onclick="javascript:MM.open('/redirect/${'$'}{id}');return false;">{{html title}}</a></h4>
+					<h4><span class="expired-icon"></span><a target="_blank" href="/redirect/?${'$'}{title_link_id}">{{html title}}</a></h4>
+					<div class="metas">
+						<span class="time">${'$'}{pub_time}</span><a href="#" class="type">${'$'}{our_cat}</a><span>来源：${'$'}{crawl_source}</span>
+					</div>
+				</li>
+			{{else}}
+				<li class="left-info">
+					##<h4><a href="javascript:void(0);" onclick="javascript:MM.open('/redirect/${'$'}{id}');return false;">{{html title}}</a></h4>
+					<h4><a target="_blank" href="/redirect/?${'$'}{title_link_id}">{{html title}}</a></h4>
+					<div class="metas">
+						<span class="time">${'$'}{pub_time}</span><a href="#" class="type">${'$'}{our_cat}</a><span>来源：${'$'}{crawl_source}</span>
+					</div>
+					<div class="content">
+						<div class="desc-ctn">{{html desc}}</div>
+						<div class="toggle-ctn">
+							<span class="toggle">展开全文</span>
+						</div>
+					</div>
+					<div class="ctrl">
+						<div class="left" id="${'$'}{id}">
+							值：<span class="deserve-no">${'$'}{worth}</span><span class="deserve-icon"></span>
+							不值：<span class="undeserve-no">${'$'}{bad}</span><span class="undeserve-icon"></span>
+							##<span class="box no-product">没货啦!</span>
+							##<span class="box price-changed">改价啦!</span>
+						</div>
+						<div class="right" data="${'$'}{descData}">
+							分享到：<a href="#" class="share-qqzone"><span class="qqzone-icon"></span>QQ空间</a>
+							## <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" data="${'$'}{descData}">
+							## <a class="bds_tsina"></a>
+							## <a class="bds_qzone"></a>
+							## <a class="bds_tqq"></a>
+							## <span class="bds_more">更多</span>
+							## </div>
+						</div>
+					</div>
+				</li>
+				<li class="right-info">
+					##<a href="javascript:void(0);" onclick="javascript:MM.open('/redirect/${'$'}{id}');return false;">
+					<a target="_blank" href="/redirect/?${'$'}{img_link_id}">
+					<div class="desc-img">
+						<img width="180px" height="180px" src="${'$'}{img}" onError="this.src='/static/images/badimg.png'"/>
+					</div>
+					</a>
+					<a target="_blank" href="/redirect/?${'$'}{go_link_id}">
+					<div class="buy"></div>
+					</a>
+					<div class="from-tip"></div>
+				</li>
+			{{/if}}
+			<div class="clear"></div>
+			</ul>
+			<div class="separate"></div>
+		</div>
+	</script>
+</%block>
+
+<%! load_module = "index" %>

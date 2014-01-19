@@ -17,10 +17,19 @@ from django.http import HttpResponseRedirect
 from djangomako.shortcuts import render_to_response
 import datetime
 from django.template import Template, Context
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
 # Create your views here.
 def home(request):
     response = render_to_response("index.html",{}, context_instance=RequestContext(request))
     return response
+
+def index(request):
+    t = get_template('index.html')
+    html = t.render(RequestContext(request))
+    #response = render_to_response("index.html",{}, context_instance=RequestContext(request))
+    return html
 
 def hello(request):
     response = HttpResponse("Hello world")

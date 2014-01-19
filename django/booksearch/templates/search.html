@@ -1,0 +1,210 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.html"/>
+
+<%block name="content">
+	<input type="hidden" id="query_key" value="${query}" />
+	<div class="search-results-main">
+		## <div class="search-channel">
+		## 	<label>正在搜索：</label>
+		## 	<span id="search_channel">京东</span>
+		## </div>
+		<div class="search-choice">
+			<div class="results-kinds">
+				<label>信息类型：</label>
+				<a href="#" class="on">查看全部</a>
+				<a href="#">优惠精选</a>
+				<a href="#">限时秒杀</a>
+			</div>
+			<div class="price-choice">
+				<label>选价位：</label>
+				<a href="#">0-10元</a>
+				<a href="#">10-50元</a>
+				<a href="#">50-100元</a>
+				<a href="#">100元以上</a>
+				<div class="price-input">
+					<input id="start_price" type="text" /> -
+					<input id="end_price" type="text" />
+					<br />
+					<button id="price_confirm">确定</button>
+				</div>
+			</div>
+		</div>
+		<div id="no_result_ctn" class="hide">
+			<div class="no-result">
+				<div class="no-result-img"></div>
+				<div class="no-result-content">
+					<p>对不起，没有搜索到您需要的宝贝，划算搜索只会搜索到最划算的商品哦！</p>
+					<p>换个关键词试试？</p>
+				</div>
+			</div>
+		</div>
+		<div id="seckill_ctn" class="result-item-ctn">
+			<div class="title-ctn">
+				<h2>限时秒杀<span>真划算为您找到相关结果约<strong id="seckill_no"></strong>个</span></h2>
+				<a class="more">查看全部 ></a>
+			</div>
+			<div class="sec-kill-items">
+
+			</div>
+			<div class="clear"></div>
+			<div class="paging">
+				<span class="page-prev">上一页</span>
+				<span class="page-next">下一页</span>
+			</div>
+		</div>
+		<div id="feeds_ctn" class="result-item-ctn feeds second">
+			<div class="title-ctn">
+				<h2>优惠精选<span>真划算为您找到相关结果约<strong id="feeds_no"></strong>个</span></h2>
+				<a class="more">查看全部 ></a>
+			</div>
+			<div class="feeds-ctn">
+
+			</div>
+			<div class="clear"></div>
+			<div class="paging">
+				<span class="page-prev">上一页</span>
+				<span class="page-next">下一页</span>
+			</div>
+		</div>
+		<div id="top_ctn" class="result-item-ctn">
+			<div class="title-ctn">
+				<h2>大家正在看</h2>
+				##<a class="more">查看全部 ></a>
+			</div>
+			<div class="sec-kill-items">
+
+			</div>
+			<div class="clear"></div>
+			##<div class="paging">
+			##	<span>上一页</span>
+			##	<span>下一页</span>
+			##</div>
+		</div>
+	</div>
+
+	<script id="feedItemTmpl" type="text/x-jquery-tmpl">
+		<div class="item">
+			<ul>
+			{{if stat == 4}}
+				<li class="left-info expired">
+					##<h4><a href="javascript:void(0);" onclick="javascript:MM.open('/redirect/${'$'}{id}');return false;">{{html title}}</a></h4>
+					<h4><span class="expired-icon"></span><a target="_blank" href="/redirect/?${'$'}{title_link_id}">{{html title}}</a></h4>
+					<div class="metas">
+						<span class="time">${'$'}{pub_time}</span><a href="#" class="type">${'$'}{our_cat}</a><span>来源：${'$'}{crawl_source}</span>
+					</div>
+				</li>
+			{{else}}
+				<li class="left-info">
+					##<h4><a href="javascript:void(0);" onclick="javascript:MM.open('/redirect/${'$'}{id}');return false;">{{html title}}</a></h4>
+					<h4><a target="_blank" href="/redirect/?${'$'}{title_link_id}">{{html title}}</a></h4>
+					<div class="metas">
+						<span class="time">${'$'}{pub_time}</span><a href="#" class="type">${'$'}{our_cat}</a><span>来源：${'$'}{crawl_source}</span>
+					</div>
+					<div class="content">
+						<div class="desc-ctn">{{html desc}}</div>
+						<div class="toggle-ctn">
+							<span class="toggle">展开全文</span>
+						</div>
+					</div>
+					<div class="ctrl">
+						<div class="left" id="${'$'}{id}">
+							值：<span class="deserve-no">${'$'}{worth}</span><span class="deserve-icon"></span>
+							不值：<span class="undeserve-no">${'$'}{bad}</span><span class="undeserve-icon"></span>
+							##<span class="box no-product">没货啦!</span>
+							##<span class="box price-changed">改价啦!</span>
+						</div>
+						<div class="right" data="${'$'}{descData}">
+							分享到：<a href="#" class="share-qqzone"><span class="qqzone-icon"></span>QQ空间</a>
+							## <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" data="${'$'}{descData}">
+							## <a class="bds_tsina"></a>
+							## <a class="bds_qzone"></a>
+							## <a class="bds_tqq"></a>
+							## <span class="bds_more">更多</span>
+							## </div>
+						</div>
+					</div>
+				</li>
+				<li class="right-info">
+					##<a href="javascript:void(0);" onclick="javascript:MM.open('/redirect/${'$'}{id}');return false;">
+					<a target="_blank" href="/redirect/?${'$'}{img_link_id}">
+					<div class="desc-img">
+						<img src="${'$'}{img}" onload="if(this.width > this.height){this.width=180}else if(this.width < this.height){this.width=this.width*180/this.height;this.height=180;}else{this.width=this.height=180}this.style.marginTop = (180-this.height)/2 + 'px';" onError="this.src='/static/images/badimg.png'" />
+					</div>
+					</a>
+					<a target="_blank" href="/redirect/?${'$'}{go_link_id}">
+					<div class="buy"></div>
+					</a>
+					<div class="from-tip"></div>
+				</li>
+			{{/if}}
+			<div class="clear"></div>
+			</ul>
+			<div class="separate"></div>
+		</div>
+	</script>
+
+	<script id="seckillItemTmpl" type="text/x-jquery-tmpl">
+		<div id="${'$'}{id}" class="item {{if stat == 1}}upcoming{{else stat == 2}}normal{{else stat == 3}}sellout{{/if}}">
+			<div class="img-ctn">
+			<a href="/redirect/?${'$'}{link_id}" target="_blank"><img class="img" src="${'$'}{img}" onload="if(this.width > this.height){this.width=222}else if(this.width < this.height){this.width=this.width*222/this.height;this.height=222;}else{this.width=this.height=222}this.style.marginTop = (222-this.height)/2 + 'px';" onError="this.src='/static/images/badimg.png'" /></a>
+			</div>
+			<p class="desc"><a href="/redirect/?${'$'}{link_id}" target="_blank">{{html title}}</a></p>
+			<div class="extra-info">
+				<p class="price-ctn">
+					{{if cur_price != -1}} <span class="money-tips">￥</span><span class="curr-price">${'$'}{cur_price}</span>{{/if}}
+					{{if ori_price != -1}}<span class="old-price">￥${'$'}{ori_price}</span>{{/if}}
+					{{if discount != -1}}<span class="discont">(${'$'}{discount}折)</span>{{/if}}
+					{{if source == "Z秒杀"}}
+						<a target="_blank" href="http://www.amazon.cn/%E4%BF%83%E9%94%80-%E7%89%B9%E4%BB%B7/b/ref=cs_top_nav_gb27?ie=UTF8&node=42450071&camp=536&creative=3132&linkCode=ur2&tag=zhenhuasuan-23"><span class="source">${'$'}{source}</span></a>
+					{{else}}
+						<span class="source">${'$'}{source}</span>
+					{{/if}}
+				</p>
+				<p class="time-ctn">
+					{{if stat == 1}}
+						<span class="time-type">离开始:</span>
+						<span class="timer" start_time_stamp="${'$'}{display_time_begin}" end_time_stamp="${'$'}{display_time_end}"></span>
+					{{else stat == 2}}
+						<span class="time-type">离结束:</span>
+						<span class="timer" start_time_stamp="${'$'}{display_time_begin}" end_time_stamp="${'$'}{display_time_end}"></span>
+					{{else}}
+						<span class="time-type">已经结束</span>
+					{{/if}}
+					{{if sale_percent == -1}}
+						<span class="unlimited">不限量</span>
+					{{else}}
+						<div class="selled-percent">
+							<span>已售</span>
+							<span class="percent-bar-back">
+								<span class="percent-bar" style="width: ${'$'}{sale_percent}%"></span>
+							</span>
+							<span>${'$'}{sale_percent}%</span>
+						</div>
+					{{/if}}
+					<span class="upcoming-text">即将开始</span>
+				</p>
+			</div>
+			<div class="upcoming-icon">
+			</div>
+			<div class="sellout-icon"></div>
+			<div class="item-mask item-mask-back">
+			</div>
+			<div class="item-mask item-mask-content">
+				{{if stat == 1}}
+					<h3>产品将于<span class="starttime"></span>开售</h3>
+					<div class="qqwarn"><a target="_blank" href="http://qzs.qq.com/snsapp/app/bee/widget/open.htm#content=”${'$'}{title}“还有5分钟就要开始秒杀啦！GO！&time=${'$'}{warn_time}&advance=5&url=http://ztmhs.maimiaotech.com/seckill?req_type=1">点击设置QQ提醒</a></div>
+					<h4>商品在开始前<span class="warn">5</span>分钟可点</h4>
+				{{else stat == 3}}
+					<h3>该产品已结束售完</h3>
+					<div class="qqwarn"><a target="_blank" href="http://qzs.qq.com/snsapp/app/bee/widget/open.htm#content=今天的秒杀已经开始了，要知道好价格的商品可是稍纵即逝哦！&time=${'$'}{tomorrow_warn_time}&advance=0&url=http://ztmhs.maimiaotech.com/seckill">点击设置明天提醒我</a></div>
+				{{/if}}
+			</div>
+			{{if source == "Z秒杀"}}
+				<div class="zsec-tips">Z秒杀部分商品点击过去后无法享受秒杀价格，请点击本产品下方"Z秒杀"按钮，通过选择分类，查找商品。
+				</div>
+			{{/if}}
+		</div>
+	</script>
+</%block>
+
+<%! load_module = "search" %>
