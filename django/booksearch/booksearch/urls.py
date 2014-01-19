@@ -6,6 +6,9 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^$', 'search.views.home', name='home'),
+    url(r'^hello/$', 'search.views.hello', name='hello'),
+    url(r'^time/$', 'search.views.current_datetime', name='current_datetime'),
+    url(r'^render_template$', 'search.views.render_template', name='render_template'),
     # Examples:
     # url(r'^$', 'booksearch.views.home', name='home'),
     # url(r'^booksearch/', include('booksearch.foo.urls')),
