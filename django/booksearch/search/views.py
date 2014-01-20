@@ -32,6 +32,16 @@ def index(request):
     #response = render_to_response("booksearch.html",{}, context_instance=RequestContext(request))
     #return response
 
+def images_files(request):
+    path = request.get_full_path()
+    file_name = path[len('/images/'):]
+    file = open('/home/ubuntu/miniprog/django/booksearch/static/' + file_name)
+    buffer = file.read()
+    #return HttpResponse(request.get_full_path())
+    return HttpResponse(buffer)
+    #response = render_to_response("booksearch.html",{}, context_instance=RequestContext(request))
+    #return response
+
 def hello(request):
     response = HttpResponse("Hello world")
     return response

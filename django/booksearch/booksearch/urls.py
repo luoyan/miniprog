@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^time/$', 'search.views.current_datetime', name='current_datetime'),
     url(r'^render_template$', 'search.views.render_template', name='render_template'),
     url(r'^index/$', 'search.views.index', name='index'),
+    url(r'^images/', 'search.views.images_files', name='images_files'),
     # Examples:
     # url(r'^$', 'booksearch.views.home', name='home'),
     # url(r'^booksearch/', include('booksearch.foo.urls')),
@@ -19,4 +20,4 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-)
+) #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
