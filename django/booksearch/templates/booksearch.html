@@ -1,17 +1,68 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:wb="http://open.weibo.com/wb">
+    <head>
     <title>
         这里的书应有尽有
     </title>
+    </head>
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css?20131118">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/seajs/2.1.1/sea.js?7e060169c1fdcef260258da925c064f2"></script>
+    <script src="/static/seajs-config.js?d4e3ded8a05b049ba191c79bcfce8eb3"></script>
+    <!--{% if hasattr(self.attr, 'load_module'): -->
+    <script>
+        seajs.use('js/page/${self.attr.load_module}', function(m) {
+            $(function(){m.init()})
+        })
+    </script>
+    <!--% endif} -->
     <body>
-        <div class="wrapper">
-            <img src="/static/logo.jpg">
-        <div>
-            <form id="form1">
-                <input type="text" name="wd">
-                <input type="submit" value="搜索一下">
-            </form>
+		<div class="search-bar-wrapper">
+            <div class="logo">
+                <img src="/static/logo.jpg">
+            </div>
+			<div class="search-ctn">
+                <div class="form">
+                    <form id="form1" action="/search/" method="get">
+                        <input type="text" name="wd">
+                        <input type="submit" value="搜索一下">
+                    </form>
+				</div>
         </div>
+        <div class="feeds-main">
+            <div class="feeds-ctn">
+                <div class="item">
+                    <ul>
+                        <li class="left-info">
+                            <h4>
+                                <!--<div class="desc-img">
+                                </div> -->
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <img src="http://img5.douban.com/mpic/s8460999.jpg">    
+                                        </td>
+                                        <td>
+                                <a target="_blank" href="http://book.douban.com/subject/3987275/">
+                                    你在我的左手边
+                                </a>
+                                <div>
+                                <p>作者：叶萱</p>
+                                <p>价格：22.00</p>
+                                <p>分数：7.6</p></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </h4>
+                            <div class="content">
+                                <div class="desc-ctn">
+                                    《你在我的左手边》内容简介：隐约，还是可以记起一张脸，那样白皙的皮肤、清秀的面容，目光里有深深的冷。伴随着那样鄙弃、不屑的声音，响彻我的记忆：“陶滢，你不漂...
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </body>
 </html>

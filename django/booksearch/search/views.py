@@ -72,3 +72,11 @@ def render_template(request):
         'ordered_warranty': False})
     html = t.render(c)
     return HttpResponse(html)
+
+def search(request):
+    if 'wd' in request.GET:
+        wd = request.GET['wd']
+        html = wd
+    else:
+        html = 'NONE'
+    return HttpResponse(html)
