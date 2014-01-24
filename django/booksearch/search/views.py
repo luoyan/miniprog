@@ -21,6 +21,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
 from django import template
+from booksearch import settings
 # Create your views here.
 def home(request):
     response = render_to_response("index.html",{}, context_instance=RequestContext(request))
@@ -41,7 +42,12 @@ def index(request):
     item['title'] = u'你在我的左手边'
     item['url'] = 'http://book.douban.com/subject/3987275/'
     book_items = []
-    book_items.append(item)
+    #book_items.append(item)
+    _conn = settings.mongoConn
+    book_info = _conn['douban']['book_info']
+    cursor = book_info.find()
+    for item in cursor:
+        book_items.append(item)
     c = template.Context({'book_items': book_items})
     html = t.render(c)
     return HttpResponse(html)

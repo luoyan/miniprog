@@ -5,11 +5,11 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'search.views.home', name='home'),
+    url(r'^$', 'search.views.index', name='index'),
     url(r'^hello/$', 'search.views.hello', name='hello'),
     url(r'^time/$', 'search.views.current_datetime', name='current_datetime'),
     url(r'^render_template$', 'search.views.render_template', name='render_template'),
-    url(r'^index/$', 'search.views.index', name='index'),
+    #url(r'^index/$', 'search.views.index', name='index'),
     url(r'^images/', 'search.views.images_files', name='images_files'),
     url(r'^search/$', 'search.views.search', name='search'),
     # Examples:

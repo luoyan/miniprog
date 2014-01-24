@@ -1,3 +1,4 @@
+#encoding=utf8
 # Django settings for booksearch project.
 
 DEBUG = True
@@ -159,3 +160,18 @@ LOGGING = {
         },
     }
 }
+MGDBS = {
+    'HOST':'localhost',
+    'PORT':27017,
+    'USER':'',
+    'PASSWORD':''
+}
+
+#利用mongodb 自带的connection poll 来管理数据库连接
+from pymongo import Connection
+from pymongo.errors import AutoReconnect
+try:
+    mongoConn = Connection(host=MGDBS['HOST'],port=MGDBS['PORT'])
+except AutoReconnect,e:
+    print "init mongo connection failed.... "
+    mongoConn = None
