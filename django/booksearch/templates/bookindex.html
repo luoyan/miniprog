@@ -1,0 +1,42 @@
+<%inherit file="bookbase.html"/>
+<%def name="makeItem(item)">
+                        <li class="left-info">
+                            <h4>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <img src="${item["img_url"]}">    
+                                        </td>
+                                        <td>
+                                <a target="_blank" href="${item["url"]}">
+                                    你在我的左手边
+                                </a>
+                                <div>
+                                <p>作者：${item["author"]}</p>
+                                <p>价格：${item["price"]}元</p>
+                                <p>分数：${item["rating"]}</p></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </h4>
+                            <div class="content">
+                                <div class="desc-ctn">
+                                    ${item["diguest"]}
+                                </div>
+                            </div>
+                        </li>
+</%def>
+<%block name="content">
+        <div class="feeds-main">
+            <div class="feeds-ctn">
+                <div class="item">
+                    <ul>
+                        % for item in book_items:
+                        ${makeItem(item)}
+                        % endfor
+                    </ul>
+                </div>
+            </div>
+        </div>
+</%block>
+<%! load_module = "bookindex" %>
