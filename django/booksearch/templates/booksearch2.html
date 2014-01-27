@@ -21,6 +21,7 @@
             <div class="logo">
                 <img src="/static/logo.jpg">
             </div>
+            <!--
 			<div class="search-ctn">
                 <div class="form">
                     <form id="form1" action="/search/" method="get">
@@ -28,6 +29,7 @@
                         <input type="submit" value="搜索一下">
                     </form>
 				</div>
+            </div>-->
         </div>
         <div class="feeds-main">
             <div class="feeds-ctn">
@@ -61,6 +63,18 @@
                         </li>
                         {% endfor %}
                     </ul>
+                </div>
+                <div>
+                    {% if page_num == 1 %}
+                    上一页
+                    {% else %}
+                    <a href="?page={{prev}}">上一页</a>
+                    {% endif %}
+                    {% if end %}
+                    下一页
+                    {% else %}
+                    <a href="?page={{next}}">下一页</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

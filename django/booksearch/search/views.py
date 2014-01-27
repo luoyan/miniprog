@@ -28,27 +28,29 @@ def home(request):
     return response
 
 def index(request):
-    #t = get_template('bookindex.html')
     t = get_template('booksearch2.html')
-    #t = get_template('booksearch.html')
-    #html = t.render(RequestContext(request))
-    #return HttpResponse(html)
-    item = {}
-    item['author'] = u'叶萱'
-    item['diguest'] = u'《你在我的左手边》内容简介：隐约，还是可以记起一张脸，那样白皙的皮肤、清秀的面容，目光里有深深的冷。伴随着那样鄙弃、不屑的声音，响彻我的记忆：“陶滢，你不漂...'
-    item['img_url'] = 'http://img5.douban.com/mpic/s8460999.jpg'
-    item['price'] = 22
-    item['rating'] = 7.6
-    item['title'] = u'你在我的左手边'
-    item['url'] = 'http://book.douban.com/subject/3987275/'
     book_items = []
-    #book_items.append(item)
     _conn = settings.mongoConn
     book_info = _conn['douban']['book_info']
     cursor = book_info.find()
+    page_size = 8
+    if request.GET.has_key('page'):
+        page_num = int(request.GET['page'])
+    else:
+        page_num = 1
+    count = 0
+    end = True
     for item in cursor:
-        book_items.append(item)
-    c = template.Context({'book_items': book_items})
+        count += 1
+        if count > page_size * page_num:
+            end = False
+            break
+        if count >= (page_size) * (page_num - 1) + 1:
+            book_items.append(item)
+    prev = page_num - 1
+    next = page_num + 1
+    c = template.Context({'book_items': book_items, 'end': end, 'page_num':page_num, 'prev':prev, 'next':next})
+    #c = template.Context({'book_items': book_items})
     html = t.render(c)
     return HttpResponse(html)
     #response = render_to_response("bookindex.html",{'book_items':book_items}, context_instance=RequestContext(request))
