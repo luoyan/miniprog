@@ -153,3 +153,14 @@ LOGGING = {
         },
     }
 }
+
+import sys
+import pymongo
+if pymongo.version.startswith("2.5"):
+    import bson.code
+    pymongo.code = bson.code
+    sys.modules['pymongo.code'] = bson.code
+MONGODB_HOST = 'localhost'
+MONGODB_PORT = 27017
+from pymongo import Connection
+mongoConn = Connection(host = MONGODB_HOST, port = MONGODB_PORT)
