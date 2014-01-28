@@ -20,6 +20,7 @@ def save(table):
             'couple' : u'我奶奶unknown',
             'gender' : 0,
             'children' : [u'罗微娟', u'罗信华', u'罗建华', u'罗国华', u'罗爱华', u'罗建平unknown', u'罗眯华unknown'],
+            'level' : 0,
             },
             {
             'name' : u'余冬强',
@@ -164,6 +165,8 @@ class TreeNode:
         self.child_nodes = []
         self.siblings = []
         self.parents = [None, None]
+        self.level = None
+        self.siblings_index = None
 
 def build_tree(table):
     cursor = table.scan()
@@ -173,10 +176,12 @@ def build_tree(table):
 
     person_info = {}
     tree_node_dict = {}
+    root_node = None
     for item in items:
         person_info[item['name']] = item
         node = TreeNode(item)
         tree_node_dict[item['name']] = node
+
         if item.has_key('couple'):
             item2 = {}
             item2['name'] = item['couple']
@@ -185,17 +190,25 @@ def build_tree(table):
             item2['children'] = item['children']
             node2 = TreeNode(item2)
             tree_node_dict[item2['name']] = node2
+        if item.has_key('level'):
+            root_node = node
+        
+        if item2.has_key('level'):
+            root_node = node2
+
 
     for name in tree_node_dict:
         node = tree_node_dict[name]
         if len(node.child_nodes) == 0:
-            for child in node.children:
+            for i in xrange(len(node.children)):
+                child = node.children[i]
                 if tree_node_dict.has_key(child):
                     node.child_nodes.append(tree_node_dict[child])
                     print ('name ' + node.name + ' gender ' + str(node.gender) + ' child append ' + child).encode('utf8')
                     if not tree_node_dict[child].parents[node.gender]:
                         tree_node_dict[child].parents[node.gender] = node
                     child_node = tree_node_dict[child]
+                    child_node.siblings_index = i
                     if len(child_node.siblings) == 0:
                         for child in node.children:
                             if child != child_node.name:
@@ -203,7 +216,24 @@ def build_tree(table):
                                     child_node.siblings.append(tree_node_dict[child])
                 else:
                     print ('error no child info ' + child).encode('utf8')
+    root_node.level = 0
+    get_level(root_node)
     return tree_node_dict
+
+def get_level(node):
+    level = node.level
+    for i in xrange(2):
+        if node.parents[i] and not node.parents[i].level:
+            node.parents[i].level = level - 1
+            get_level(node.parents[i])
+    for i in xrange(len(node.siblings)):
+        if not node.siblings[i].level:
+            node.parents[i].level = level
+            get_level(node.siblings[i])
+    for i in xrange(len(node.child_nodes)):
+        if not node.child_nodes[i].level:
+            node.child_nodes[i].level = level + 1
+            get_level(node.child_nodes[i])
 
 def show_tree(table):
     tree_node_dict = build_tree(table)
@@ -243,10 +273,114 @@ def show_tree(table):
             print (u'父亲 ' + node.parents[0].name).encode('utf8')
         if node.parents[1]:
             print (u'母亲 ' + node.parents[1].name).encode('utf8')
+        if node.level:
+            print (u'辈份 ' + str(node.level)).encode('utf8')
+
+def get_direct_paths(src_node, dest_node):
+    if src_node.name == dest_node.name:
+        return {'x':0, 'y':0}
+    for i in xrange(2):
+        if src_node.parents[i].name == dest_node.name:
+            return {'x':0, 'y':1, 'dest_gender':dest_node.gender}
+    for i in xrange(len(src_node.siblings)):
+        if src_node.siblings[i].name == dest_node.name:
+            if src_node.siblings[i].siblings_index and dest_node.siblings[i].siblings_index:
+                if src_node.siblings[i].siblings_index < dest_node.siblings[i].siblings_index:
+                    return {'x':1, 'y':0, 'dest_gender':dest_node.gender}
+                else:
+                    return {'x':-1, 'y':0, 'dest_gender':dest_node.gender}
+    for i in xrange(len(src_node.child_nodes)):
+        if src_node.child_nodes[i].name == dest_node.name:
+            return {'x':0, 'y':-1, 'dest_gender':dest_node.gender}
+    return None
+
+relation_ship_map = [
+            {
+            'path' : [
+                {'x':0, 'y':0},
+                ],
+            'name' : u'本人',
+            },
+            {
+            'path' : [
+                {'x':0, 'y':1, 'dest_gender':0},
+                ],
+            'name' : u'父亲',
+            },
+            {
+            'path' : [
+                {'x':0, 'y':1, 'dest_gender':1},
+                ],
+            'name' : u'母亲',
+            },
+            {
+            'path' : [
+                {'x':-1, 'y':0, 'dest_gender':0},
+                ],
+            'name' : u'哥哥',
+            },
+            {
+            'path' : [
+                {'x':-1, 'y':0, 'dest_gender':1},
+                ],
+            'name' : u'姐姐',
+            },
+            {
+            'path' : [
+                {'x':1, 'y':0, 'dest_gender':0},
+                ],
+            'name' : u'弟弟',
+            },
+            {
+            'path' : [
+                {'x':1, 'y':0, 'dest_gender':1},
+                ],
+            'name' : u'妹妹',
+            },
+        ]
+
+def same_path(path1, path2):
+    if len(path1) != len(path2):
+        return False
+    for i in xrange(len(path1)):
+        if path1[i]['x'] != path2[i]['x']:
+            return False
+        if path1[i]['y'] != path2[i]['y']:
+            return False
+        if path1[i].has_key('dest_gender') != path2[i].has_key('dest_gender'):
+            return False
+        if path1[i].has_key('dest_gender') and path1[i]['dest_gender'] != path2[i]['dest_gender']:
+            return False
+    return True
+
+def get_shortest_paths(tree_node_dict, src, dest):
+    if not tree_node_dict.has_key(src):
+        return None
+    if not tree_node_dict.has_key(dest):
+        return None
+    src_node = tree_node_dict[src]
+    dest_node = tree_node_dict[dest]
+    path = get_direct_paths(src_node, dest_node)
+    if not path:
+        return None
+    path = [path]
+    for item in relation_ship_map:
+        if same_path(path, item['path']):
+            return item['name']
+    return None
+
+def get_relationship(table, src, dest):
+    tree_node_dict = build_tree(table)
+    name = get_shortest_paths(tree_node_dict, src, dest)
+    if not name:
+        print 'unknown relation ship'
+    else:
+        print (dest + u'是' + src + name).encode('utf8')
 
 def usage(argv0):
     print argv0 + ' ' + ' save '
     print argv0 + ' ' + ' show_tree '
+    print argv0 + ' ' + ' get_relationship '
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         usage(sys.argv[0])
@@ -256,4 +390,9 @@ if __name__ == '__main__':
         save(table)
     elif sys.argv[1] == 'show_tree':
         show_tree(table)
+    elif sys.argv[1] == 'get_relationship':
+        get_relationship(table, sys.argv[2].decode('utf8'), sys.argv[3].decode('utf8'))
+    else:
+        usage(sys.argv[0])
+        sys.exit(-1)
     sys.exit(-1)
