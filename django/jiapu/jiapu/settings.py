@@ -3,6 +3,9 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+import os
+curr_path = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.normpath(os.path.join(curr_path,os.path.pardir))
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -68,6 +71,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT,'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -107,6 +111,7 @@ ROOT_URLCONF = 'jiapu.urls'
 WSGI_APPLICATION = 'jiapu.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(PROJECT_ROOT,'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
