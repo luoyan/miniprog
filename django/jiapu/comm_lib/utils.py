@@ -407,12 +407,142 @@ relationship_define = [
             'define' : u'母亲的姐妹的丈夫',
             'name' : [u'叔叔', u'姨父']
         },
+        {
+            'define' : u'父亲的哥哥',
+            'name' : [u'伯父']
+        },
+        {
+            'define' : u'父亲的哥哥的妻子',
+            'name' : [u'伯母']
+        },
+        {
+            'define' : u'父亲的弟弟',
+            'name' : [u'叔父']
+        },
+        {
+            'define' : u'父亲的弟弟的妻子',
+            'name' : [u'婶母']
+        },
+        {
+            'define' : u'父亲的姐妹',
+            'name' : [u'姑母']
+        },
+        {
+            'define' : u'父亲的姐妹的丈夫',
+            'name' : [u'姑丈']
+        },
+        {
+            'define' : u'父亲的父亲',
+            'name' : [u'祖父', u'爷爷']
+        },
+        {
+            'define' : u'父亲的母亲',
+            'name' : [u'祖母', u'奶奶']
+        },
+        {
+            'define' : u'母亲的父亲',
+            'name' : [u'外祖父', u'外公']
+        },
+        {
+            'define' : u'母亲的母亲',
+            'name' : [u'外祖母', u'外婆']
+        },
+        {
+            'define' : u'儿子的儿子',
+            'name' : [u'孙子']
+        },
+        {
+            'define' : u'儿子的女儿',
+            'name' : [u'孙女']
+        },
+        {
+            'define' : u'女儿的儿子',
+            'name' : [u'外孙']
+        },
+        {
+            'define' : u'女儿的女儿',
+            'name' : [u'外孙女']
+        },
+        {
+            'define' : u'姐妹的儿子',
+            'name' : [u'外甥']
+        },
+        {
+            'define' : u'姐妹的女儿',
+            'name' : [u'外甥女']
+        },
+        {
+            'define' : u'兄弟的儿子',
+            'name' : [u'侄子']
+        },
+        {
+            'define' : u'兄弟的女儿',
+            'name' : [u'侄女']
+        },
+        {
+            'define' : u'父亲的兄弟的儿子',
+            'name' : [u'堂兄弟']
+        },
+        {
+            'define' : u'父亲的兄弟的女儿',
+            'name' : [u'堂姐妹']
+        },
+        {
+            'define' : u'父亲的姐妹的儿子',
+            'name' : [u'表兄弟']
+        },
+        {
+            'define' : u'父亲的姐妹的女儿',
+            'name' : [u'表姐妹']
+        },
+        {
+            'define' : u'母亲的兄弟的儿子',
+            'name' : [u'表兄弟']
+        },
+        {
+            'define' : u'母亲的兄弟的女儿',
+            'name' : [u'表姐妹']
+        },
+        {
+            'define' : u'母亲的姐妹的儿子',
+            'name' : [u'表兄弟']
+        },
+        {
+            'define' : u'母亲的姐妹的女儿',
+            'name' : [u'表姐妹']
+        },
+        {
+            'define' : u'母亲的表兄弟',
+            'name' : [u'表舅']
+        },
+        {
+            'define' : u'表姐妹的女儿',
+            'name' : [u'表侄女']
+        },
+        {
+            'define' : u'表姐妹的儿子',
+            'name' : [u'表侄子']
+        },
         ]
+'''
+def pre_process_relationship_define(relationship_define):
+    atom_define_dict = {}
+    name_to_define_dict = {}
+    for item in relationship_define:
+        if item.has_key('name'):
+            for name in item['name']:
+                if not name_to_define_dict.has_key(name):
+                    name_to_define_dict[name] = []
+                name_to_define_dict[name].append(item['name'])
+    for item in relationship_define:
+        if 
+        name_to_define_dict.has
+'''
 def get_relationship_next_node_list(tree_node_dict, atom_define, gender, node_list):
     next_node_list = []
     for node in node_list:
         if atom_define == u'本人':
-            pass
+            next_node_list.append(node)
         elif atom_define == u'妻子' or atom_define == u'丈夫':
             if node.couple :
                 next_node = tree_node_dict[node.couple]
