@@ -37,9 +37,11 @@ def home(request):
     for item in cursor:
         person_list.append(item)
         name = item['name']
-        relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
-        relationship_dict[item['name']] = relationship_str
-        item['relationship'] = relationship_str
+        #relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
+        #relationship_dict[item['name']] = relationship_str
+        name_list = utils.get_relationship_name(tree_node_dict, u'罗琰', name)
+        info = utils.name_list_to_info(name_list)
+        item['relationship'] = info
     c = template.Context({'person_list' : person_list, 'relationship_dict' : relationship_dict})
     #c = template.Context({})
     html = t.render(c)
@@ -51,10 +53,12 @@ def get_relationship(request):
         print 'name = ' + name
         table = Table('family', 'person')
         tree_node_dict = utils.build_tree(table)
-        relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
+        #relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
         dest = name
         src = u'罗琰'
-        html = dest + u'是' + src + u'的' + relationship_str
+        name_list = utils.get_relationship_name(tree_node_dict, src, dest)
+        info = utils.name_list_to_info(name_list)
+        html = dest + u'是' + src + u'的' + info
     else:
         html = ''
     return HttpResponse(html)

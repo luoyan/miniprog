@@ -339,6 +339,158 @@ relation_ship_map = [
             },
         ]
 
+relationship_define = [
+        {
+            'define' : u'本人',
+        },
+        {
+            'define' : u'妻子',
+            'gender' : 1,
+        },
+        {
+            'define' : u'丈夫',
+            'gender' : 0,
+        },
+        {
+            'define' : u'父亲',
+            'gender' : 0,
+        },
+        {
+            'define' : u'母亲',
+            'gender' : 1,
+        },
+        {
+            'define' : u'儿子',
+            'gender' : 0,
+        },
+        {
+            'define' : u'女儿',
+            'gender' : 1,
+        },
+        {
+            'define' : u'哥哥',
+            'gender' : 0,
+        },
+        {
+            'define' : u'姐姐',
+            'gender' : 1,
+        },
+        {
+            'define' : u'弟弟',
+            'gender' : 0,
+        },
+        {
+            'define' : u'妹妹',
+            'gender' : 1,
+        },
+        {
+            'define' : u'兄弟',
+            'gender' : 0,
+        },
+        {
+            'define' : u'姐妹',
+            'gender' : 1,
+        },
+        {
+            'define' : u'母亲的兄弟',
+            'name' : [u'舅舅', u'舅父']
+        },
+        {
+            'define' : u'母亲的兄弟的妻子',
+            'name' : [u'舅妈', u'舅母']
+        },
+        {
+            'define' : u'母亲的姐妹',
+            'name' : [u'阿姨', u'姨母']
+        },
+        {
+            'define' : u'母亲的姐妹的丈夫',
+            'name' : [u'叔叔', u'姨父']
+        },
+        ]
+def get_relationship_next_node_list(tree_node_dict, atom_define, gender, node_list):
+    next_node_list = []
+    for node in node_list:
+        if atom_define == u'本人':
+            pass
+        elif atom_define == u'妻子' or atom_define == u'丈夫':
+            if node.couple :
+                next_node = tree_node_dict[node.couple]
+                if next_node.gender != gender:
+                    continue
+                next_node_list.append(next_node)
+            else:
+                continue
+        elif atom_define == u'父亲' or atom_define == u'母亲':
+            if node.parents[gender] :
+                next_node = tree_node_dict[node.parents[gender].name]
+                if next_node.gender != gender:
+                    continue
+                next_node_list.append(next_node)
+            else:
+                continue
+        elif atom_define == u'儿子' or atom_define == u'女儿':
+            for child_node in node.child_nodes:
+                if child_node.gender != gender:
+                    continue
+                next_node_list.append(child_node)
+        elif atom_define == u'哥哥' or atom_define == u'姐姐':
+            for next_node in node.siblings:
+                if next_node.siblings_index >= node.siblings_index or next_node.gender != gender:
+                    continue
+                next_node_list.append(next_node)
+        elif atom_define == u'弟弟' or atom_define == u'妹妹':
+            for next_node in node.siblings:
+                if next_node.siblings_index <= node.siblings_index or next_node.gender != gender:
+                    continue
+                next_node_list.append(next_node)
+        elif atom_define == u'兄弟' or atom_define == u'姐妹':
+            for next_node in node.siblings:
+                if next_node.gender != gender:
+                    continue
+                next_node_list.append(next_node)
+    return next_node_list
+
+def get_relationship_node_list_by_define(tree_node_dict, name, define, gender, src_node_list, atom_define_dict):
+    atom_define_array = define.split(u'的')
+    node_list = src_node_list
+    next_node_list = []
+    for atom_define in atom_define_array:
+        if not atom_define_dict.has_key(atom_define):
+            gender = None
+        else:
+            gender = atom_define_dict[atom_define]
+        next_node_list = get_relationship_next_node_list(tree_node_dict, atom_define, gender, node_list)
+        node_list = next_node_list
+
+    return next_node_list
+def get_relationship_name(tree_node_dict, src, dest):
+    src_node = tree_node_dict[src]
+    node = src_node
+    dest_node = tree_node_dict[dest]
+    atom_define_dict = {}
+    for item in relationship_define:
+        if item.has_key('gender'):
+            gender = item['gender']
+            define = item['define']
+            atom_define_dict[define] = gender
+
+    for item in relationship_define:
+        define = item['define']
+        if item.has_key('name'):
+            name = item['name']
+        else:
+            name = [define]
+        if item.has_key('gender'):
+            gender = item['gender']
+        else:
+            gender = None
+        dest_node_list = get_relationship_node_list_by_define(tree_node_dict, name, define, gender, [src_node], atom_define_dict)
+        for node in dest_node_list:
+            if node.name == dest_node.name:
+                return name
+    return None
+
 def same_path(path1, path2):
     if len(path1) != len(path2):
         return False
@@ -353,7 +505,7 @@ def same_path(path1, path2):
             return False
     return True
 
-def get_shortest_paths(tree_node_dict, src, dest):
+def get_shortest_path(tree_node_dict, src, dest):
     if not tree_node_dict.has_key(src):
         return None
     if not tree_node_dict.has_key(dest):
@@ -375,3 +527,15 @@ def get_relationship(table, tree_node_dict, src, dest):
         return u'未知关系'
     else:
         return name
+
+def name_list_to_info(name_list):
+    if not name_list:
+        info = u'未知关系'
+    else:
+        info = ''
+        for i in xrange(len(name_list)):
+            if i == 0:
+                info = name_list[i]
+            else:
+                info = info + u'或' + name_list[i]
+    return info
