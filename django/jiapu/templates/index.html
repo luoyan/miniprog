@@ -39,15 +39,15 @@
                         <li class="left-info">
                             <table>
                                 <tr>
-                                    <td><a href="get_relationship?name={{item.name}}">{{item.name}}</a></td>
+                                        <td><a href="get_relationship?name={{item.name}}">{{item.name}}</a>({{item.relationship}})</td>
                                 </tr>
                                 <tr>
-                                    <td>配偶</td><td>{{item.couple}}</td>
+                                    <td>配偶</td><td><a href="get_relationship?name={{item.couple}}">{{item.couple}}</a></td>
                                 </tr>
                                 <tr>
-                                        <td>子女</td>
+                                    <td>子女</td>
                                     {% for child in item.children %} 
-                                    <td>{{child}}</td>
+                                    <td><a href="get_relationship?name={{child}}">{{child}}</a></td>
                                     {% endfor %}
                                 </tr>
                             </table>
