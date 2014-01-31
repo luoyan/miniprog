@@ -49,6 +49,15 @@ def home(request):
     html = t.render(c)
     return HttpResponse(html)
 
+def simple_home(request):
+    t = get_template('simple_home.html')
+    table = Table('family', 'person')
+    tree_node_dict = utils.build_tree(table)
+    person_list = utils.get_all_person_info(tree_node_dict, u'罗琰')
+    c = template.Context({'person_list' : person_list})
+    html = t.render(c)
+    return HttpResponse(html)
+
 def get_relationship(request):
     if request.GET.has_key('name'):
         name = request.GET['name']

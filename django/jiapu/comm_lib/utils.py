@@ -19,7 +19,7 @@ def save(table):
             'name' : u'罗连庆',
             'couple' : u'我奶奶unknown',
             'gender' : 0,
-            'children' : [u'罗微娟', u'罗信华', u'罗建华', u'罗国华', u'罗爱华', u'罗建平unknown', u'罗眯华unknown'],
+            'children' : [u'罗微娟', u'罗新华', u'罗建华', u'罗国华', u'罗爱华', u'罗建平', u'罗建强'],
             'level' : 0,
             },
             {
@@ -49,6 +49,7 @@ def save(table):
             {
             'name' : u'罗怡',
             'gender' : 1,
+            'couple' : u'何漪'
             },
             {
             'name' : u'朱锋',
@@ -71,7 +72,7 @@ def save(table):
             'gender' : 1,
             },
             {
-            'name' : u'王莎女儿unknown',
+            'name' : u'鲁泽歆',
             'gender' : 1,
             },
             {
@@ -93,7 +94,7 @@ def save(table):
             'children' : [u'钱余美'],
             },
             {
-            'name' : u'罗信华',
+            'name' : u'罗新华',
             'gender' : 0,
             'couple' : u'罗怡妈妈',
             'children' : [u'罗怡'],
@@ -117,15 +118,15 @@ def save(table):
             'children' : [u'王莎'],
             },
             {
-            'name' : u'罗建平unknown',
+            'name' : u'罗建平',
             'gender' : 0,
             'couple' : u'三姨unknown',
             'children' : [u'罗琦'],
             },
             {
-            'name' : u'罗眯华unknown',
+            'name' : u'罗建强',
             'gender' : 0,
-            'couple' : u'四姨unknown',
+            'couple' : u'邵新华',
             'children' : [u'罗晨'],
             },
             {
@@ -137,8 +138,8 @@ def save(table):
             {
             'name' : u'王莎',
             'gender' : 1,
-            'couple' : u'王莎丈夫unknown',
-            'children' : [u'王莎女儿unknown'],
+            'couple' : u'鲁杰冲',
+            'children' : [u'鲁泽歆'],
             },
             {
             'name' : u'余金金',
@@ -187,7 +188,8 @@ def build_tree(table):
             item2['name'] = item['couple']
             item2['gender'] = 1 - item['gender']
             item2['couple'] = item['name']
-            item2['children'] = item['children']
+            if item.has_key('children'):
+                item2['children'] = item['children']
             node2 = TreeNode(item2)
             tree_node_dict[item2['name']] = node2
         if item.has_key('level'):
@@ -569,6 +571,26 @@ g_relationship_define = [
             'level' : 2,
             'name' : [u'表侄子']
         },
+        {
+            'define' : u'表姐妹的丈夫',
+            'level' : 2,
+            'name' : [u'表姐夫', u'表妹夫']
+        },
+        {
+            'define' : u'堂姐妹的丈夫',
+            'level' : 2,
+            'name' : [u'堂姐夫', u'堂妹夫']
+        },
+        {
+            'define' : u'堂兄弟的妻子',
+            'level' : 2,
+            'name' : [u'堂嫂', u'堂弟妹']
+        },
+        {
+            'define' : u'表兄弟的妻子',
+            'level' : 2,
+            'name' : [u'表嫂', u'表弟妹']
+        },
         ]
 def get_relationship_next_node_list(tree_node_dict, atom_define, gender, node_list):
     next_node_list = []
@@ -691,6 +713,17 @@ def get_relationship_name(tree_node_dict, src, dest):
             if node.name == dest_node.name:
                 return name
     return None
+
+def get_all_person_info(tree_node_dict, src):
+    item_list = []
+    for name in tree_node_dict:
+        relationship_name_list = get_relationship_name(tree_node_dict, src, name)
+        info = name_list_to_info(relationship_name_list)
+        item = {}
+        item['name'] = name
+        item['relationship'] = info
+        item_list.append(item)
+    return sorted(item_list, key = lambda x:x['name'])
 
 def same_path(path1, path2):
     if len(path1) != len(path2):
