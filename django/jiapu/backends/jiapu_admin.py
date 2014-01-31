@@ -10,6 +10,8 @@ import logging
 import logging.config
 import traceback
 from comm_lib import utils
+logging.config.fileConfig('conf/consolelogger_jiapu.conf')
+logger = logging.getLogger(__name__)
 def usage(argv0):
     print argv0 + ' ' + ' save '
     print argv0 + ' ' + ' show_tree '

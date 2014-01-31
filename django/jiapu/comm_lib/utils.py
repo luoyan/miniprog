@@ -11,7 +11,7 @@ import logging.config
 import traceback
 #if __name__ == '__main__':
     #logging.config.fileConfig('../conf/consolelogger_jiapu.conf')
-logging.config.fileConfig('conf/consolelogger_jiapu.conf')
+#logging.config.fileConfig('conf/consolelogger_jiapu.conf')
 logger = logging.getLogger(__name__)
 def save(table):
     items = [
@@ -339,205 +339,237 @@ relation_ship_map = [
             },
         ]
 
-relationship_define = [
+g_relationship_define = [
         {
             'define' : u'本人',
+            'level' : 0,
         },
         {
             'define' : u'妻子',
             'gender' : 1,
+            'level' : 0,
         },
         {
             'define' : u'丈夫',
             'gender' : 0,
+            'level' : 0,
         },
         {
             'define' : u'父亲',
             'gender' : 0,
+            'level' : 0,
         },
         {
             'define' : u'母亲',
             'gender' : 1,
+            'level' : 0,
         },
         {
             'define' : u'儿子',
             'gender' : 0,
+            'level' : 0,
         },
         {
             'define' : u'女儿',
             'gender' : 1,
+            'level' : 0,
         },
         {
             'define' : u'哥哥',
             'gender' : 0,
+            'level' : 0,
         },
         {
             'define' : u'姐姐',
             'gender' : 1,
+            'level' : 0,
         },
         {
             'define' : u'弟弟',
             'gender' : 0,
+            'level' : 0,
         },
         {
             'define' : u'妹妹',
             'gender' : 1,
+            'level' : 0,
         },
         {
             'define' : u'兄弟',
             'gender' : 0,
+            'level' : 0,
         },
         {
             'define' : u'姐妹',
             'gender' : 1,
+            'level' : 0,
         },
         {
             'define' : u'母亲的兄弟',
+            'level' : 1,
             'name' : [u'舅舅', u'舅父']
         },
         {
             'define' : u'母亲的兄弟的妻子',
+            'level' : 1,
             'name' : [u'舅妈', u'舅母']
         },
         {
             'define' : u'母亲的姐妹',
+            'level' : 1,
             'name' : [u'阿姨', u'姨母']
         },
         {
             'define' : u'母亲的姐妹的丈夫',
+            'level' : 1,
             'name' : [u'叔叔', u'姨父']
         },
         {
             'define' : u'父亲的哥哥',
+            'level' : 1,
             'name' : [u'伯父']
         },
         {
             'define' : u'父亲的哥哥的妻子',
+            'level' : 1,
             'name' : [u'伯母']
         },
         {
             'define' : u'父亲的弟弟',
+            'level' : 1,
             'name' : [u'叔父']
         },
         {
             'define' : u'父亲的弟弟的妻子',
+            'level' : 1,
             'name' : [u'婶母']
         },
         {
             'define' : u'父亲的姐妹',
+            'level' : 1,
             'name' : [u'姑母']
         },
         {
             'define' : u'父亲的姐妹的丈夫',
+            'level' : 1,
             'name' : [u'姑丈']
         },
         {
             'define' : u'父亲的父亲',
+            'level' : 1,
             'name' : [u'祖父', u'爷爷']
         },
         {
             'define' : u'父亲的母亲',
+            'level' : 1,
             'name' : [u'祖母', u'奶奶']
         },
         {
             'define' : u'母亲的父亲',
+            'level' : 1,
             'name' : [u'外祖父', u'外公']
         },
         {
             'define' : u'母亲的母亲',
+            'level' : 1,
             'name' : [u'外祖母', u'外婆']
         },
         {
             'define' : u'儿子的儿子',
+            'level' : 1,
             'name' : [u'孙子']
         },
         {
             'define' : u'儿子的女儿',
+            'level' : 1,
             'name' : [u'孙女']
         },
         {
             'define' : u'女儿的儿子',
+            'level' : 1,
             'name' : [u'外孙']
         },
         {
             'define' : u'女儿的女儿',
+            'level' : 1,
             'name' : [u'外孙女']
         },
         {
             'define' : u'姐妹的儿子',
+            'level' : 1,
             'name' : [u'外甥']
         },
         {
             'define' : u'姐妹的女儿',
+            'level' : 1,
             'name' : [u'外甥女']
         },
         {
             'define' : u'兄弟的儿子',
+            'level' : 1,
             'name' : [u'侄子']
         },
         {
             'define' : u'兄弟的女儿',
+            'level' : 1,
             'name' : [u'侄女']
         },
         {
             'define' : u'父亲的兄弟的儿子',
+            'level' : 1,
             'name' : [u'堂兄弟']
         },
         {
             'define' : u'父亲的兄弟的女儿',
+            'level' : 1,
             'name' : [u'堂姐妹']
         },
         {
             'define' : u'父亲的姐妹的儿子',
+            'level' : 1,
             'name' : [u'表兄弟']
         },
         {
             'define' : u'父亲的姐妹的女儿',
+            'level' : 1,
             'name' : [u'表姐妹']
         },
         {
             'define' : u'母亲的兄弟的儿子',
+            'level' : 1,
             'name' : [u'表兄弟']
         },
         {
             'define' : u'母亲的兄弟的女儿',
+            'level' : 1,
             'name' : [u'表姐妹']
         },
         {
             'define' : u'母亲的姐妹的儿子',
+            'level' : 1,
             'name' : [u'表兄弟']
         },
         {
             'define' : u'母亲的姐妹的女儿',
+            'level' : 1,
             'name' : [u'表姐妹']
         },
         {
             'define' : u'母亲的表兄弟',
+            'level' : 2,
             'name' : [u'表舅']
         },
         {
             'define' : u'表姐妹的女儿',
+            'level' : 2,
             'name' : [u'表侄女']
         },
         {
             'define' : u'表姐妹的儿子',
+            'level' : 2,
             'name' : [u'表侄子']
         },
         ]
-'''
-def pre_process_relationship_define(relationship_define):
-    atom_define_dict = {}
-    name_to_define_dict = {}
-    for item in relationship_define:
-        if item.has_key('name'):
-            for name in item['name']:
-                if not name_to_define_dict.has_key(name):
-                    name_to_define_dict[name] = []
-                name_to_define_dict[name].append(item['name'])
-    for item in relationship_define:
-        if 
-        name_to_define_dict.has
-'''
 def get_relationship_next_node_list(tree_node_dict, atom_define, gender, node_list):
     next_node_list = []
     for node in node_list:
@@ -594,17 +626,56 @@ def get_relationship_node_list_by_define(tree_node_dict, name, define, gender, s
         node_list = next_node_list
 
     return next_node_list
+
+def prehandle_relationship_define(relationship_define):
+    name_to_define_dict = {}
+    for item in relationship_define:
+        define = item['define']
+        if not item.has_key('name'):
+            name = [define]
+        else:
+            name = item['name']
+        for sub_name in name:
+            if not name_to_define_dict.has_key(sub_name):
+                name_to_define_dict[sub_name] = []
+            name_to_define_dict[sub_name].append(item)
+
+    new_relationship_define = []
+    for item in relationship_define:
+        if item['level'] < 2:
+            new_relationship_define.append(item)
+        elif item['level'] == 2:
+            define = item['define']
+            name = item['define']
+            atom_define_array = define.split(u'的')
+            for atom_define in atom_define_array:
+                if not name_to_define_dict.has_key(atom_define):
+                    print ('unknown define ' + define).encode('utf8')
+                    return
+                if name_to_define_dict[atom_define][0]['level'] == 1:
+                    for item2 in name_to_define_dict[atom_define]:
+                        new_define = define.replace(atom_define, item2['define'])
+                        item3 = {'define' : new_define, 'level' : 1, 'name': item['name']}
+                        new_relationship_define.append(item3)
+    for item in new_relationship_define:
+        print ('define ' + item['define'] + ' level ' + str(item['level'])).encode('utf8')
+        if item.has_key('name'):
+            for name in item['name']:
+                print ('name ' + name).encode('utf8')
+    return new_relationship_define
+
 def get_relationship_name(tree_node_dict, src, dest):
     src_node = tree_node_dict[src]
     node = src_node
     dest_node = tree_node_dict[dest]
     atom_define_dict = {}
+    relationship_define = prehandle_relationship_define(g_relationship_define)
     for item in relationship_define:
         if item.has_key('gender'):
             gender = item['gender']
             define = item['define']
             atom_define_dict[define] = gender
-
+    
     for item in relationship_define:
         define = item['define']
         if item.has_key('name'):

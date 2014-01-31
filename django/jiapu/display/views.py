@@ -26,6 +26,8 @@ curr_path = os.path.dirname(__file__)
 sys.path.append(os.path.join(curr_path,'../'))
 from comm_lib.table import Table
 from comm_lib import utils
+logging.config.fileConfig('/home/ubuntu/miniprog/django/jiapu/conf/consolelogger_jiapu.conf')
+logger = logging.getLogger(__name__)
 # Create your views here.
 def home(request):
     t = get_template('index.html')
@@ -50,7 +52,7 @@ def home(request):
 def get_relationship(request):
     if request.GET.has_key('name'):
         name = request.GET['name']
-        print 'name = ' + name
+        #print ('name = ' + name)
         table = Table('family', 'person')
         tree_node_dict = utils.build_tree(table)
         #relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
