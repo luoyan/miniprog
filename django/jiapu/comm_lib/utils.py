@@ -215,6 +215,7 @@ def build_tree(table):
                         for child in node.children:
                             if child != child_node.name:
                                 if tree_node_dict.has_key(child):
+                                    print ('append sibling ' + child).encode('utf8')
                                     child_node.siblings.append(tree_node_dict[child])
                 else:
                     print ('error no child info ' + child).encode('utf8')

@@ -16,6 +16,7 @@ def usage(argv0):
     print argv0 + ' ' + ' save '
     print argv0 + ' ' + ' show_tree '
     print argv0 + ' ' + ' get_relationship '
+    print argv0 + ' ' + ' get_person_info '
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         usage(sys.argv[0])
@@ -27,13 +28,17 @@ if __name__ == '__main__':
         utils.show_tree(table)
     elif sys.argv[1] == 'get_relationship':
         tree_node_dict = utils.build_tree(table)
-        #info = utils.get_relationship(table, tree_node_dict, sys.argv[2].decode('utf8'), sys.argv[3].decode('utf8'))
-        #print (dest + u'是' + src + u'的' + info).encode('utf8')
         dest = sys.argv[3].decode('utf8')
         src = sys.argv[2].decode('utf8')
         name_list = utils.get_relationship_name(tree_node_dict, src, dest)
         info = utils.name_list_to_info(name_list)
         print (dest + u'是' + src + u'的' + info).encode('utf8')
+    elif sys.argv[1] == 'get_person_info':
+        tree_node_dict = utils.build_tree(table)
+        name = sys.argv[2].decode('utf8')
+        item = utils.get_person_info(tree_node_dict, name)
+        for sibling in item['siblings']:
+            print ('sibling ' + sibling).encode('utf8')
     else:
         usage(sys.argv[0])
         sys.exit(-1)
