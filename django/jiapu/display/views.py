@@ -61,15 +61,27 @@ def simple_home(request):
 def get_relationship(request):
     if request.GET.has_key('name'):
         name = request.GET['name']
-        #print ('name = ' + name)
         table = Table('family', 'person')
         tree_node_dict = utils.build_tree(table)
-        #relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
         dest = name
         src = u'罗琰'
         name_list = utils.get_relationship_name(tree_node_dict, src, dest)
         info = utils.name_list_to_info(name_list)
         html = dest + u'是' + src + u'的' + info
+    else:
+        html = ''
+    return HttpResponse(html)
+
+def get_person_info(request):
+    if request.GET.has_key('name'):
+        name = request.GET['name']
+        table = Table('family', 'person')
+        tree_node_dict = utils.build_tree(table)
+        person_info = utils.get_person_info(tree_node_dict, name)
+        t = get_template('person.html')
+        c = template.Context({'item' : person_info})
+        html = t.render(c)
+        return HttpResponse(html)
     else:
         html = ''
     return HttpResponse(html)

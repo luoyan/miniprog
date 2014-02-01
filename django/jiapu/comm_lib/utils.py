@@ -773,3 +773,23 @@ def name_list_to_info(name_list):
             else:
                 info = info + u'或' + name_list[i]
     return info
+
+def get_person_info(tree_node_dict, name):
+    item = {}
+    item['name'] = name
+    if not tree_node_dict.has_key(name):
+        return item
+    node = tree_node_dict[name]
+    if node.parents[0]:
+        item['father'] = node.parents[0].name
+    if node.parents[1]:
+        item['mother'] = node.parents[1].name
+    item['siblings'] = []
+    for sibling in node.siblings:
+        item['siblings'].append(sibling.name)
+    item['children'] = []
+    for child in node.child_nodes:
+        item['children'].append(child.name)
+    if node.couple:
+        item['couple'] = node.couple
+    return item
