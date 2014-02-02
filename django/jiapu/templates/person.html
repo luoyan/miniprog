@@ -15,38 +15,65 @@
             $(function(){m.init()})
         })
     </script>
+    <style type="text/css"> 
+        .bigfont{font-size:400%;} 
+    </style>
     <!--% endif} -->
     <body>
-		<div class="search-bar-wrapper">
-        </div>
-        <div class="feeds-main">
-            <div class="feeds-ctn">
-                <div class="item">
+        <div>
+            <div>
+                <div class="bigfont">
                     <ul>
                             <table>
                                 <tr>
-                                    <td>父亲</td><td><a href="get_person_info?name={{item.father}}">{{item.father}}</a></td>
+                                    <td>父亲</td>
+                                    <td>
+                                            {% if item.father.name %}
+                                            {{item.father.relationship}}<a href="get_person_info?name={{item.father.name}}">({{item.father.name}})</a>
+                                            {% endif %}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>母亲</td><td><a href="get_person_info?name={{item.mother}}">{{item.mother}}</a></td>
+                                    <td>母亲</td>
+                                    <td>
+                                            {% if item.mother.name %}
+                                            {{item.mother.relationship}}<a href="get_person_info?name={{item.mother.name}}">({{item.mother.name}})</a>
+                                            {% endif %}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>姓名</td><td><a href="get_person_info?name={{item.name}}">{{item.name}}</a></td>
+                                    <td>姓名</td>
+                                    <td>
+                                            {% if item.name.name %}
+                                            {{item.name.relationship}}<a href="get_person_info?name={{item.name.name}}">({{item.name.name}})</a>
+                                            {% endif %}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>兄弟姐妹</td>
+                                    <td>
                                     {% for sibling in item.siblings %} 
-                                    <td><a href="get_person_info?name={{sibling}}">{{sibling}}</a></td>
+                                            {{sibling.relationship}}<a href="get_person_info?name={{sibling.name}}">({{sibling.name}})</a>&nbsp
                                     {% endfor %}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>配偶</td><td><a href="get_person_info?name={{item.couple}}">{{item.couple}}</a></td>
+                                        <td>配偶</td>
+                                        <td>
+                                            {{item.couple.relationship}}<a href="get_person_info?name={{item.couple.name}}">({{item.couple.name}})</a>
+                                        </td>
                                 </tr>
                                 <tr>
                                     <td>子女</td>
+                                    <td>
                                     {% for child in item.children %} 
-                                    <td><a href="get_person_info?name={{child}}">{{child}}</a></td>
+                                            {{child.relationship}}<a href="get_person_info?name={{child.name}}">({{child.name}})</a>&nbsp
                                     {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="/">首页</a></td>
+                                    <!--<td><a href="/static/csstest.html">测试</a></td>-->
                                 </tr>
                             </table>
                     </ul>

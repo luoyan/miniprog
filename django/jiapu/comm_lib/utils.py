@@ -775,22 +775,33 @@ def name_list_to_info(name_list):
                 info = info + u'或' + name_list[i]
     return info
 
+def get_relationship_dict(tree_node_dict, name, src):
+    d = {}
+    d['name'] = name
+    name_list = get_relationship_name(tree_node_dict, src, name)
+    info = name_list_to_info(name_list)
+    d['relationship'] = info
+    return d
+
 def get_person_info(tree_node_dict, name):
     item = {}
-    item['name'] = name
+    src = u'罗琰'
     if not tree_node_dict.has_key(name):
         return item
+    item['name'] = get_relationship_dict(tree_node_dict, name, src)
     node = tree_node_dict[name]
     if node.parents[0]:
-        item['father'] = node.parents[0].name
+        item['father'] = get_relationship_dict(tree_node_dict, node.parents[0].name, src)
     if node.parents[1]:
-        item['mother'] = node.parents[1].name
+        item['mother'] = get_relationship_dict(tree_node_dict, node.parents[1].name, src)
     item['siblings'] = []
     for sibling in node.siblings:
-        item['siblings'].append(sibling.name)
+        d = get_relationship_dict(tree_node_dict, sibling.name, src)
+        item['siblings'].append(d)
     item['children'] = []
     for child in node.child_nodes:
-        item['children'].append(child.name)
+        d = get_relationship_dict(tree_node_dict, child.name, src)
+        item['children'].append(d)
     if node.couple:
-        item['couple'] = node.couple
+        item['couple'] = get_relationship_dict(tree_node_dict, node.couple, src)
     return item
