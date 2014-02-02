@@ -53,7 +53,11 @@ def simple_home(request):
     t = get_template('simple_home.html')
     table = Table('family', 'person')
     tree_node_dict = utils.build_tree(table)
-    person_list = utils.get_all_person_info(tree_node_dict, u'罗琰')
+    if request.session.has_key('login_name'):
+        src = request.session['login_name']
+    else:
+        src = u'罗琰'
+    person_list = utils.get_all_person_info(tree_node_dict, src)
     c = template.Context({'person_list' : person_list})
     html = t.render(c)
     return HttpResponse(html)
@@ -85,3 +89,14 @@ def get_person_info(request):
     else:
         html = ''
     return HttpResponse(html)
+
+def login(request):
+    if 'login_name' in request.GET and request.GET['login_name']:
+        login_name = request.GET['login_name']
+        print ('login ' + login_name).encode('utf8')
+        request.session['login_name'] = login_name
+        html = login_name
+    else:
+        html = ''
+    #return HttpResponse(html)
+    return HttpResponseRedirect('/')

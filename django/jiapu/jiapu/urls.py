@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     #url(r'^$', 'display.views.home', name='home'),
     url(r'^$', 'display.views.simple_home', name='simple_home'),
+    url(r'^login$', 'display.views.login', name='login'),
     url(r'^get_relationship$', 'display.views.get_relationship', name='get_relationship'),
     url(r'^get_person_info$', 'display.views.get_person_info', name='get_person_info'),
     # url(r'^jiapu/', include('jiapu.foo.urls')),
