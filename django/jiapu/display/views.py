@@ -36,16 +36,17 @@ def home(request):
     cursor = table.scan()
     person_list = []
     relationship_dict = {}
+    if request.session.has_key('login_name'):
+        src = request.session['login_name']
+    else:
+        src = u'罗琰'
     for item in cursor:
         person_list.append(item)
         name = item['name']
-        #relationship_str = utils.get_relationship(table, tree_node_dict, u'罗琰', name)
-        #relationship_dict[item['name']] = relationship_str
-        name_list = utils.get_relationship_name(tree_node_dict, u'罗琰', name)
+        name_list = utils.get_relationship_name(tree_node_dict, src, name)
         info = utils.name_list_to_info(name_list)
         item['relationship'] = info
     c = template.Context({'person_list' : person_list, 'relationship_dict' : relationship_dict})
-    #c = template.Context({})
     html = t.render(c)
     return HttpResponse(html)
 
@@ -63,12 +64,15 @@ def simple_home(request):
     return HttpResponse(html)
 
 def get_relationship(request):
+    if request.session.has_key('login_name'):
+        src = request.session['login_name']
+    else:
+        src = u'罗琰'
     if request.GET.has_key('name'):
         name = request.GET['name']
         table = Table('family', 'person')
         tree_node_dict = utils.build_tree(table)
         dest = name
-        src = u'罗琰'
         name_list = utils.get_relationship_name(tree_node_dict, src, dest)
         info = utils.name_list_to_info(name_list)
         html = dest + u'是' + src + u'的' + info
@@ -77,11 +81,15 @@ def get_relationship(request):
     return HttpResponse(html)
 
 def get_person_info(request):
+    if request.session.has_key('login_name'):
+        src = request.session['login_name']
+    else:
+        src = u'罗琰'
     if request.GET.has_key('name'):
         name = request.GET['name']
         table = Table('family', 'person')
         tree_node_dict = utils.build_tree(table)
-        person_info = utils.get_person_info(tree_node_dict, name)
+        person_info = utils.get_person_info(tree_node_dict, name, src)
         t = get_template('person.html')
         c = template.Context({'item' : person_info})
         html = t.render(c)

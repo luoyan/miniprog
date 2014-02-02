@@ -783,9 +783,8 @@ def get_relationship_dict(tree_node_dict, name, src):
     d['relationship'] = info
     return d
 
-def get_person_info(tree_node_dict, name):
+def get_person_info(tree_node_dict, name, src):
     item = {}
-    src = u'罗琰'
     if not tree_node_dict.has_key(name):
         return item
     item['name'] = get_relationship_dict(tree_node_dict, name, src)

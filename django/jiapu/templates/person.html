@@ -60,7 +60,9 @@
                                 <tr>
                                         <td>配偶</td>
                                         <td>
+                                            {% if item.couple.name %}
                                             {{item.couple.relationship}}<a href="get_person_info?name={{item.couple.name}}">({{item.couple.name}})</a>
+                                            {% endif %}
                                         </td>
                                 </tr>
                                 <tr>
