@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:wb="http://open.weibo.com/wb">
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>
+        这里的书应有尽有
+    </title>
+    </head>
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css?20131118">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/seajs/2.1.1/sea.js?7e060169c1fdcef260258da925c064f2"></script>
+    <script src="/static/seajs-config.js?d4e3ded8a05b049ba191c79bcfce8eb3"></script>
+    <!--{% if hasattr(self.attr, 'load_module'): -->
+    <script>
+        seajs.use('js/page/${self.attr.load_module}', function(m) {
+            $(function(){m.init()})
+        })
+    </script>
+    <!--% endif} -->
+    <body>
+		<div class="search-bar-wrapper">
+            <div class="logo">
+                <img src="/static/logo.jpg">
+            </div>
+			<div class="search-ctn">
+                <div class="form">
+                    <form id="form1" action="/search/" method="get">
+                        <input type="text" name="wd">
+                        <input type="submit" value="搜索一下">
+                    </form>
+				</div>
+            </div>
+        </div>
+    </body>
+</html>

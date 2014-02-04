@@ -22,6 +22,7 @@ from django.template import Context
 from django.http import HttpResponse
 from django import template
 from booksearch import settings
+from backends.gen_index import BookGenIndex
 # Create your views here.
 def home(request):
     response = render_to_response("index.html",{}, context_instance=RequestContext(request))
@@ -50,11 +51,8 @@ def index(request):
     prev = page_num - 1
     next = page_num + 1
     c = template.Context({'book_items': book_items, 'end': end, 'page_num':page_num, 'prev':prev, 'next':next})
-    #c = template.Context({'book_items': book_items})
     html = t.render(c)
     return HttpResponse(html)
-    #response = render_to_response("bookindex.html",{'book_items':book_items}, context_instance=RequestContext(request))
-    #return response
 
 def images_files(request):
     path = request.get_full_path()
@@ -97,10 +95,19 @@ def render_template(request):
     html = t.render(c)
     return HttpResponse(html)
 
+g_gi = BookGenIndex(True, True, False)
 def search(request):
     if 'wd' in request.GET:
         wd = request.GET['wd']
+        query = wd
+        start = 0
+        end = 10
+        doc_list = g_gi.search(query, start, end)
+        t = get_template('search_result.html')
         html = wd
+        c = template.Context({'doc_list': doc_list})
+        html = t.render(c)
+        return HttpResponse(html)
     else:
         html = 'NONE'
     return HttpResponse(html)
