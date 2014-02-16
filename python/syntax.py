@@ -210,3 +210,12 @@ else:
     print 'download success'
 
 print url[0:len('http')]
+d={'abc':1, 'ddd':2, 'aaa':3}
+for k in d:
+    print 'key ' + str(k) + ' ' + str(d[k])
+for k in d:
+    print 'key ' + str(k) + ' ' + str(d[k])
+for k in d:
+    print 'key ' + str(k) + ' ' + str(d[k])
+for k in d:
+    print 'key ' + str(k) + ' ' + str(d[k])
