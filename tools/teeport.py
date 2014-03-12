@@ -22,7 +22,8 @@ class SocketClientThread(threading.Thread):
 
 def listen(port):
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serversocket.bind((socket.gethostname(), port))
+    #serversocket.bind((socket.gethostname(), port))
+    serversocket.bind(('0.0.0.0', port))
     serversocket.listen(5)
     while True:
         (clientsocket, address) = serversocket.accept()
