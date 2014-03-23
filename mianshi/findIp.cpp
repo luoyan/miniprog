@@ -35,12 +35,13 @@ IPADDRESS ipstr2uint(char *ip, bool & success)
     ip_int = ip_int * 256 + sum;
     return ip_int;
 }
+const int MAX_BUF_LEN=256;
 struct IpRange{
     IPADDRESS nStart;
     IPADDRESS nEnd;
-    char * pStartIp;
-    char * pEndIp;
-    char * pName;
+    char pStartIp[MAX_BUF_LEN];
+    char pEndIp[MAX_BUF_LEN];
+    char pName[MAX_BUF_LEN];
 };
 int binarySearch(IpRange a[], IPADDRESS N, int left, int right)
 {
@@ -82,14 +83,14 @@ void testBinarySearch()
         bool success = true;
         ip_range_array[i].nStart = ipstr2uint(ip_range_array[i].pStartIp, success);
         ip_range_array[i].nEnd = ipstr2uint(ip_range_array[i].pEndIp, success);
-        printf("ip [%s - %s] [%lu - %lu]\n", ip_range_array[i].pStartIp, ip_range_array[i].pEndIp, ip_range_array[i].nStart, ip_range_array[i].nEnd);
+        printf("ip [%s - %s] [%u - %u]\n", ip_range_array[i].pStartIp, ip_range_array[i].pEndIp, ip_range_array[i].nStart, ip_range_array[i].nEnd);
     }
-    char * ip_str_array[] = {
+    char ip_str_array[][MAX_BUF_LEN] = {
         "10.100.200.10",
         "10.100.210.1",
         "10.200.205.1",
     };
-    char * expect[] = {
+    char expect[][MAX_BUF_LEN] = {
         "hangzhou",
         "beijing",
         "out of range",
@@ -98,13 +99,13 @@ void testBinarySearch()
     {
         bool success = true;
         IPADDRESS ip = ipstr2uint(ip_str_array[i], success);
-        printf("ip %lu\n", ip);
+        printf("ip %u\n", ip);
         int index = binarySearch(ip_range_array, ip, 0, (sizeof(ip_range_array)/sizeof(IpRange)) - 1);
-        char * res = NULL;
+        char res[MAX_BUF_LEN];
         if (index < 0)
-            res = "out of range";
+            strcpy(res, "out of range");
         else
-            res = ip_range_array[index].pName;
+            strcpy(res, ip_range_array[index].pName);
         if (strcmp(res, expect[i]) == 0)
             printf("PASS case %d\n", i);
         else {
