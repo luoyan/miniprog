@@ -1,7 +1,7 @@
 from redis import Redis
 redisConn = Redis(host='redis1', port=6379, db=1)
 #key='hello'
-key=1
+key=2
 '''
 value='world'
 value={'1':'world'}
