@@ -1,0 +1,65 @@
+<project name="add" default="add" basedir=".">
+  <description>Thrift Java add</description>
+
+  <property name="src" location="src" />
+  <property name="gen" location="gen-java" />
+  <property name="build" location="build" />
+  <path id="libs.classpath">
+    <fileset dir="/usr/local/lib">
+      <include name="*.jar" />
+    </fileset>
+    <fileset dir="../../thrift-0.9.1/lib/java/build/lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  <path id="build.classpath">
+    <path refid="libs.classpath" />
+    <pathelement path="${gen}" />
+  </path>
+  <path id="add.classpath">
+    <path refid="build.classpath" />
+    <pathelement path="${build}" />
+    <pathelement path="add.jar" />
+  </path>
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/log"/>
+  </target>
+  <target name="generate">
+    <!-- Generate the thrift gen-java source -->
+    <exec executable="/usr/local/bin/thrift" failonerror="true">
+      <arg line="--gen java -r add.thrift"/>
+    </exec>
+  </target>
+  <target name="compile" depends="init, generate">
+    <javac srcdir="${gen}" destdir="${build}" classpathref="libs.classpath" />
+    <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath" />
+  </target>
+  <target name="add" description="Run the add" depends="compile">
+    <jar jarfile="add.jar" basedir="${build}"/>
+    <parallel>
+      <java classname="com.luoyan.sample.thrift.server.MyServer" fork="true" timeout="10000"
+        classpathref="add.classpath" failonerror="false" output="${build}/log/tutorial.log">
+      </java>
+      <sequential>
+        <sleep seconds="2"/>
+        <echo>add client simple:</echo>
+        <java classname="com.luoyan.sample.thrift.client.AdditionClient"
+          classpathref="add.classpath" failonerror="true">
+          <arg line="simple"/>
+        </java>
+        <echo>add client secure:</echo>
+        <java classname="com.luoyan.sample.thrift.client.AdditionClient"
+          classpathref="add.classpath" failonerror="true">
+          <arg line="secure"/>
+        </java>
+      </sequential>
+    </parallel>
+  </target>
+  <target name="clean">
+    <delete dir="${build}" />
+    <delete dir="${gen}"/>
+    <delete file="add.jar" />
+  </target>
+</project>
