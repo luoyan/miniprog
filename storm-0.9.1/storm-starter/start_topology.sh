@@ -15,4 +15,5 @@ else
     topologyName="test_"$topologyClassName
 fi
 #echo "./bin/storm jar ~/incubator-storm/examples/storm-starter/target/storm-starter-0.9.1-incubating-jar-with-dependencies.jar storm.starter.$topologyClassName $topologyName"
-./bin/storm jar ~/incubator-storm/examples/storm-starter/target/storm-starter-0.9.1-incubating-jar-with-dependencies.jar storm.starter.$topologyClassName $topologyName
+#./bin/storm jar ~/miniprog/storm-0.9.1/storm-starter/target/storm-starter-0.9.1-incubating-jar-with-dependencies.jar storm.starter.$topologyClassName $topologyName
+./bin/storm jar ~/miniprog/storm-0.9.1/storm-starter/target/storm-starter-0.9.1-incubating.jar storm.starter.$topologyClassName $topologyName
