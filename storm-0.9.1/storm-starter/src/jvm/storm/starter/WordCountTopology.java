@@ -70,6 +70,12 @@ public class WordCountTopology {
       counts.put(word, count);
       collector.emit(new Values(word, count));
       System.out.println("WordCountTopology.java:BaseBolt.execute emit word " + word + " count " + count);
+//      int a = 100;
+//      int b = 0;
+//      System.out.println("exception " + a/b);
+      System.out.println("start exit");
+      System.exit(-1);
+      System.out.println("end exit");
     }
 
     @Override
