@@ -26,7 +26,7 @@ public class ConsumerTest extends Thread {
 
         private static ConsumerConfig createConsumerConfig() {  
                 Properties props = new Properties();  
-                props.put("zookeeper.connect", "localhost:2181");  
+                props.put("zookeeper.connect", "localhost:2181/kafka");  
                 props.put("group.id", "0");  
                 props.put("zookeeper.session.timeout.ms", "400000");  
                 props.put("zookeeper.sync.time.ms", "200");  
