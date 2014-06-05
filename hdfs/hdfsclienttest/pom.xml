@@ -56,6 +56,32 @@
           </execution>
         </executions>
       </plugin>
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>appassembler-maven-plugin</artifactId>
+			<version>1.1.1</version>
+			<executions>
+				<execution>
+					<phase>package</phase>
+					<goals>
+						<goal>assemble</goal>
+					</goals>
+				</execution>
+			</executions>
+			<configuration>
+				<configurationDirectory>conf</configurationDirectory>
+				<configurationSourceDirectory>src/main/resources/hadoop</configurationSourceDirectory>
+				<copyConfigurationDirectory>true</copyConfigurationDirectory>
+				<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+				<!--<extraJvmArguments>-Djava.security.krb5.conf=/etc/krb5-hadoop.conf</extraJvmArguments>-->
+				<programs>
+					<program>
+						<mainClass>com.luoyan.hdfsclienttest</mainClass>
+						<name>hdfsclienttest</name>
+					</program>
+				</programs>
+			</configuration>
+		</plugin>
     </plugins>
   </build>
 </project>
