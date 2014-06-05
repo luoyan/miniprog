@@ -8,5 +8,5 @@ if [ $# -ne 1 ] ; then
         exit -1
 fi
 className=$1
-java -cp ./target/kafkatest-1.0-SNAPSHOT-jar-with-dependencies.jar com.luoyan.kafkatest.$className
+java -cp ./target/kafkatest-1.0-SNAPSHOT-jar-with-dependencies.jar:. com.luoyan.kafkatest.$className
 

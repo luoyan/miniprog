@@ -14,7 +14,7 @@ import kafka.producer.ProducerConfig;
 public class ProducerTest {  
         public static void main(String[] args) {  
                 Properties props = new Properties();  
-                props.put("zk.connect", "localhost:2181/kafak");  
+                //props.put("zk.connect", "localhost:2181/kafak");  
                 props.put("serializer.class", "kafka.serializer.StringEncoder");  
                 props.put("metadata.broker.list", "localhost:9092");  
                 ProducerConfig config = new ProducerConfig(props);  
