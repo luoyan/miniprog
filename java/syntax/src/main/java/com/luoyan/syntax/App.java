@@ -2,6 +2,10 @@ package com.luoyan.syntax;
 
 import org.slf4j.Logger;    
 import org.slf4j.LoggerFactory; 
+
+import java.util.Date;
+import java.text.*;
+
 /**
  * Hello world!
  *
@@ -17,5 +21,9 @@ public class App
         System.out.println( "Hello World!" );
         App a = new App();
         a.testLog();
+        Date d = new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
+        String str=sdf.format(d);
+        System.out.println("The date is : "+str);
     }
 }
