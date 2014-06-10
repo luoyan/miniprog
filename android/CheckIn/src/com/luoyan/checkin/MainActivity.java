@@ -20,14 +20,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
-        setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }*/
         setContentView(R.layout.webview);  
         webView = (WebView) findViewById(R.id.webView1);  
           
@@ -35,7 +28,6 @@ public class MainActivity extends Activity {
         webView.getSettings().setBuiltInZoomControls(true);//设置使支持缩放  
 //      webView.getSettings().setDefaultFontSize(5);
         
-        //webView.loadUrl("http://bbs.xiaomi.cn/qiandao/");
         webView.loadUrl("http://bbs.xiaomi.cn/qiandao/?mobile=2");
         webView.setWebViewClient(new WebViewClient(){  
             @Override  
