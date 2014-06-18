@@ -1,9 +1,12 @@
 package com.luoyan.syntax;
 
+
 import org.slf4j.Logger;    
 import org.slf4j.LoggerFactory; 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.lang.reflect.InvocationTargetException;
 import java.text.*;
 
@@ -11,6 +14,7 @@ import java.text.*;
  * Hello world!
  *
  */
+
 public class App 
 {
     private Logger logger = LoggerFactory.getLogger(App.class);
@@ -46,6 +50,9 @@ public class App
 	        Object[] parameters={1};
 	        App o=(App)constructor.newInstance(parameters);
 	        o.print();
+	        LogHandlerBolt bolt = new LogHandlerBolt();
+	        ILogHandler handler = bolt.getLogHandler("com.luoyan.syntax.HdfsLogHandler", 200);
+	        handler.parseInfo(new ArrayList<String>());
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -8,12 +8,6 @@
 </head>
 <body>
 Hello World!
-<p><a href="myforum/topic">myforum/topic</a></p>
-<p><a href="myforum/topictime">myforum/topictime</a></p>
-<p><a href="user/list-by-group">user/list-by-group</a></p>
-<p><a href="user/list-by-group-1">user/list-by-group-1</a></p>
-<p><a href="world">world</a></p>
-<p><a href="user/json">user/json</a></p>
-<p><a href="user/json2">user/json2</a></p>
+<p><a href="hello/world">hello/world</a></p>
 </body>
 </html>

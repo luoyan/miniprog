@@ -5,8 +5,10 @@ import org.json.JSONObject;
 
 import net.paoding.rose.web.annotation.Param;
 import net.paoding.rose.web.annotation.rest.Get;
+import net.paoding.rose.web.annotation.Path;
 
 //Controller should end with Controller, not need to implement other interface
+@Path("user")
 public class UserController {
 
 	public String test() {
@@ -27,7 +29,8 @@ public class UserController {
 	
 	@Get("list-by-group-{groupId:\\d+}")
     public String listByGroup3(@Param("groupId") String groupId) {
-        return "@int-${groupId}";
+        //return "@int-${groupId}";
+        return "@int-${groupId} " + groupId;
     }
 	
 	public Object json(@Param("id") String id) throws JSONException {
@@ -37,5 +40,14 @@ public class UserController {
         json.put("text", "can has Chinese");
         // rose will call json.toString() to render
         return json;
+    }
+	public Object json2(@Param("id") String id) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        json.put("name", "rose");
+        json.put("text", "can has Chinese");
+        // rose will call json.toString() to render
+        //return json;
+        return "@json:" + json.toString();
     }
 }
