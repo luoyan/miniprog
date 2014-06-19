@@ -1,4 +1,9 @@
 <html>
         <head></head>
-        <body>#msg("topiclist"), it's $date.format("yy-MM-dd HH:mm:ss", $now)</body>
+        <body>#msg("topiclist"), it's $date.format("yy-MM-dd HH:mm:ss", $now)
+        <p>bean里的值：${mybean.beanValue}</p>
+        <c:forEach var="item" items="${array}" varStatus="status"> 
+		 打印：${item}<br>
+		</c:forEach>
+        </body>
 </html>

@@ -5,7 +5,7 @@
 	<groupId>com.luoyan.rose</groupId>
 	<artifactId>RoseHelloWorld</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>RoseHelloWorld</name>
 	<url>http://maven.apache.org</url>
@@ -71,10 +71,19 @@
 				<version>2.3</version>
 				<configuration>
 					<webResources>
+					<!-- 
+						<resource>
+							<directory>src/main/resources</directory>
+							<includes>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</resource>
+						 -->
 						<resource>
 							<targetPath>WEB-INF</targetPath>
 							<filtering>true</filtering>
-							<directory>src/main/resources</directory>
+							<directory>src/main/webapp</directory>
 							<includes>
 								<include>**/*.xml</include>
 								<include>**/*.properties</include>
