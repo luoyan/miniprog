@@ -8,6 +8,7 @@ import net.paoding.rose.web.var.Model;
 
 @Path("myforum")
 public class ForumController {
+	private TestService service;
     @Get("topic")
     public String getTopics() {
         //
@@ -30,6 +31,14 @@ public class ForumController {
         String[] array = {"111","222","333"};
         model.add("array", array);
         return "topiclist";
+    }
+    @Get("getDao")
+    public String getDao() {
+        Test t = service.getTest();
+    	//Test t = new Test();
+    	//t.setId(1);
+    	//t.setMsg("100");
+        return "@t.id " + t.getId() + " t.msg " + t.getMsg();
     }
     public String throwError() {
     	int a = 1;
