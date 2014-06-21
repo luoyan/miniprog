@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.luoyan.mapred</groupId>
+  <artifactId>mapred</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>simpleMapReduce</name>
+      <dependencies>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.0.0-mdh1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+  
+	<build>
+	
+		<!-- build所需要的资源 -->
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<!-- 
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>hadoop-production-lg/core-site.xml</include>
+					<include>hadoop-production-lg/hdfs-site.xml</include>
+					<include>hadoop-production-lg/krb5.conf</include>
+				</includes>
+      		</resource>
+			 -->
+		</resources>
+		<!-- build所需要的资源 -->
+		<plugins>
+			<!-- Bind the maven-assembly-plugin to the package phase this will create 
+				a jar file without the storm dependencies suitable for deployment to a cluster. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<fork>true</fork>
+					<verbose>true</verbose>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass></mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+		    </plugin>
+		</plugins>
+	</build>
+</project>
