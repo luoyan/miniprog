@@ -1,10 +1,5 @@
 package com.luoyan.mapred;
 
-import com.xiaomi.appmarket.topic.miui.ad.ad.algorithm.evaluation.PositionDownloadStatistic;
-import com.xiaomi.appmarket.topic.miui.ad.ad.algorithm.evaluation.PositionDownloadStatistic.PositionDownloadStatisticMapper;
-import com.xiaomi.appmarket.topic.miui.ad.ad.algorithm.evaluation.PositionDownloadStatistic.PositionDownloadStatisticReducer;
-import com.xiaomi.helper.HDFSHelper;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -25,21 +20,29 @@ public class WordCount {
 	public static class WordCountMapper extends Mapper<Object, BytesWritable, Text, Text> {
         @Override
         public void map(Object key, BytesWritable value, Context context) throws IOException, InterruptedException {
-        	
+        	System.out.println("map key " + key.toString() + " value " + value.toString());
         }
 	}
     public static class WordCountReducer extends Reducer<Text, Text, Text, Text> {
         @Override
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
+        	System.out.println("reduce key " + key.toString() + " values " + values.toString());
         }
+    }
+    private static void usage() {
+        System.out.println("usage : command fromFile toFile reduceNum");
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration configuration = new Configuration();
         GenericOptionsParser genericOptionsParser = new GenericOptionsParser(configuration, args);
         String[] otherArgs = genericOptionsParser.getRemainingArgs();
         configuration = genericOptionsParser.getConfiguration();
-
+        System.out.println("args.length " + args.length); 
+        if (args.length < 3) {
+            usage();
+            return;
+        }
         String fromFile = otherArgs[0];
         String toFile = otherArgs[1];
         int reduceNum = Integer.parseInt(otherArgs[2]);
