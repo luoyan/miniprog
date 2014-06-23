@@ -20,8 +20,11 @@ public class WordCount {
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         	System.out.println("map key " + key.toString() + " value " + value.toString());
-        	context.write(new Text(value),
+        	String[] tokens = value.toString().split(" ");
+        	for (String token : tokens) {
+        		context.write(new Text(token),
                     new IntWritable(1));
+        	}
         }
 	}
     public static class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
