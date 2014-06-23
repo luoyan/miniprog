@@ -17,9 +17,9 @@ import org.apache.hadoop.util.GenericOptionsParser;
 import java.io.IOException;
 
 public class WordCount {
-	public static class WordCountMapper extends Mapper<Object, BytesWritable, Text, Text> {
+	public static class WordCountMapper extends Mapper<Object, Text, Text, Text> {
         @Override
-        public void map(Object key, BytesWritable value, Context context) throws IOException, InterruptedException {
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         	System.out.println("map key " + key.toString() + " value " + value.toString());
         }
 	}
