@@ -4,22 +4,25 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.TextOutputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
 
 public class WordCount {
-	public static class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
+	public static class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         @Override
-        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         	System.out.println("map key " + key.toString() + " value " + value.toString());
         	context.write(new Text(value),
                     new IntWritable(1));
@@ -66,6 +69,8 @@ public class WordCount {
 
         //job.setInputFormatClass(SequenceFileInputFormat.class);
         //HDFSHelper.addInputPath(job, fromFile);
+        job.setInputFormatClass(TextInputFormat.class);
+        //job.setOutputFormatClass(TextOutputFormat.class);
         FileInputFormat.addInputPath(job, new Path(fromFile));
         Path outputPath = new Path(toFile);
         FileSystem fs = FileSystem.get(configuration);
