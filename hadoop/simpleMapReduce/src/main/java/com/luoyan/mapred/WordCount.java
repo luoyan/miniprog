@@ -31,10 +31,13 @@ public class WordCount {
         @Override
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
         	int sum = 0;
+        	String values_string = "";
         	for (IntWritable value : values) {
         		sum += value.get();
+        		values_string = values_string + " " + value.get();
         	}
-        	System.out.println("reduce key " + key.toString() + " values " + values.toString());
+        	
+        	System.out.println("reduce key " + key.toString() + " values [" + values_string + "]");
         	context.write(new Text(key),
                     new IntWritable(sum));
         }
