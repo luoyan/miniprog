@@ -57,7 +57,7 @@ public class WordCount {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        job.setInputFormatClass(SequenceFileInputFormat.class);
+        //job.setInputFormatClass(SequenceFileInputFormat.class);
         //HDFSHelper.addInputPath(job, fromFile);
         FileInputFormat.addInputPath(job, new Path(fromFile));
         Path outputPath = new Path(toFile);
