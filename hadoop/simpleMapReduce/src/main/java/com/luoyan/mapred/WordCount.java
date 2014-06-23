@@ -3,7 +3,7 @@ package com.luoyan.mapred;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -17,17 +17,24 @@ import org.apache.hadoop.util.GenericOptionsParser;
 import java.io.IOException;
 
 public class WordCount {
-	public static class WordCountMapper extends Mapper<Object, Text, Text, Text> {
+	public static class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         	System.out.println("map key " + key.toString() + " value " + value.toString());
+        	context.write(new Text(value),
+                    new IntWritable(1));
         }
 	}
-    public static class WordCountReducer extends Reducer<Text, Text, Text, Text> {
+    public static class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
         @Override
-        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-
+        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+        	int sum = 0;
+        	for (IntWritable value : values) {
+        		sum += value.get();
+        	}
         	System.out.println("reduce key " + key.toString() + " values " + values.toString());
+        	context.write(new Text(key),
+                    new IntWritable(sum));
         }
     }
     private static void usage() {
