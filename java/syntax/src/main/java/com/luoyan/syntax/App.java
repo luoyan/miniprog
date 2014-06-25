@@ -53,6 +53,9 @@ public class App
 	        LogHandlerBolt bolt = new LogHandlerBolt();
 	        ILogHandler handler = bolt.getLogHandler("com.luoyan.syntax.HdfsLogHandler", 200);
 	        handler.parseInfo(new ArrayList<String>());
+	        String str2 = "hellowold";
+	        String str3 = "hellowold2";
+	        System.out.println("hashcode2 " + str2.hashCode() + " hashcode3 " + str3.hashCode());
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
