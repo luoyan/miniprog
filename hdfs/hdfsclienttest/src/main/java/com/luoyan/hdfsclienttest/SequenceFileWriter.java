@@ -14,8 +14,7 @@ import java.net.URI;
 
 public class SequenceFileWriter {
 	private void writeAndRead(Configuration conf, FileSystem fs, Path seqFilePath) throws IOException {
-
-		SequenceFile.Writer writer = SequenceFile.createWriter(fs, conf, seqFilePath, Text.class, IntWritable.class);
+		SequenceFile.Writer writer = SequenceFile.createWriter(fs, conf, seqFilePath, Text.class, IntWritable.class, org.apache.hadoop.io.SequenceFile.CompressionType.BLOCK);
 		//SequenceFile.Writer writer = SequenceFile.createWriter(conf, Writer.file(seqFilePath), Writer.keyClass(Text.class),
 		//		Writer.valueClass(IntWritable.class));
 
@@ -50,7 +49,7 @@ public class SequenceFileWriter {
 	}
 	public static void main(String[] args) throws IOException {
 		SequenceFileWriter writer = new SequenceFileWriter();
-		writer.testSeqFileReadWrite("file.seq");
-		writer.testSeqFileReadWriteHdfs("hdfs://namenode:9000/user/test/file2.seq");
+		writer.testSeqFileReadWrite("fileblock.seq");
+		writer.testSeqFileReadWriteHdfs("hdfs://namenode:9000/user/test/fileblock2.seq");
 	}
 }
