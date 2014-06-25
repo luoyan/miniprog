@@ -18,7 +18,7 @@ public class SequenceFileRead {
 		BytesWritable val = new BytesWritable();
 
 		while (reader.next(key, val)) {
-			System.err.println("key : " + key + "\t" + " value : " + val);
+			System.out.println("key : " + key.getBytes().length + " : [" + new String(key.getBytes()) + "]\t" + " value : " + val.getBytes().length + " : [" + new String(val.getBytes()) + "]");
 		}
 
 		reader.close();
