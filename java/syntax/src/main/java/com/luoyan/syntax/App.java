@@ -56,6 +56,10 @@ public class App
 	        String str2 = "hellowold";
 	        String str3 = "hellowold2";
 	        System.out.println("hashcode2 " + str2.hashCode() + " hashcode3 " + str3.hashCode());
+	        
+	        long n=Long.parseLong("1403489927594");
+	        System.out.println("long " + n);
+	        
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
