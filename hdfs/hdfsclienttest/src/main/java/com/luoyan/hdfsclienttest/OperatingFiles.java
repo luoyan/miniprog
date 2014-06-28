@@ -81,6 +81,9 @@ public class OperatingFiles {
         }
 
         public static void main(String[] args) throws IOException {
+                for (int i = 0 ; i < args.length; i++) {
+                    System.out.println("args[" + i + "] " + args[i]);
+                }
                 OperatingFiles ofs = new OperatingFiles();
                 System.out.println("\n=======create dir=======");
                 String dir = "/test";

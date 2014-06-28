@@ -76,8 +76,24 @@
 				<!--<extraJvmArguments>-Djava.security.krb5.conf=/etc/krb5-hadoop.conf</extraJvmArguments>-->
 				<programs>
 					<program>
-						<mainClass>com.luoyan.hdfsclienttest</mainClass>
-						<name>hdfsclienttest</name>
+						<mainClass>com.luoyan.hdfsclienttest.OperatingFiles</mainClass>
+						<name>OperatingFiles.sh</name>
+					</program>
+					<program>
+						<mainClass>com.luoyan.hdfsclienttest.HDFSExample</mainClass>
+						<name>HDFSExample.sh</name>
+					</program>
+					<program>
+						<mainClass>com.luoyan.hdfsclienttest.SequenceFileRead</mainClass>
+						<name>SequenceFileRead.sh</name>
+					</program>
+					<program>
+						<mainClass>com.luoyan.hdfsclienttest.SequenceFileWriter</mainClass>
+						<name>SequenceFileWriter.sh</name>
+					</program>
+					<program>
+						<mainClass>com.luoyan.hdfsclienttest.HdfsWriterTest</mainClass>
+						<name>HdfsWriterTest.sh</name>
 					</program>
 				</programs>
 			</configuration>
