@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="./fileAppender.log"/>
+        <param name="DatePattern" value=".yyyyMMdd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p %d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %l [%m]%n"/>
+        </layout>
+    </appender>
+    <appender name="fileAppender2" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="./fileAppender2.log"/>
+        <param name="DatePattern" value=".yyyyMMdd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p %d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %l [%m]%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="fileAppender3" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="./fileAppender3.log"/>
+        <param name="DatePattern" value=".yyyyMMdd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p %d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %l [%m]%n"/>
+        </layout>
+    </appender>
+    <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p %d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %l [%m]%n"/>
+        </layout>
+    </appender>
+
+    <logger name="com.luoyan.syntax" additivity="false">
+        <level value="${log4j_app_level}"/>
+        <appender-ref ref="fileAppender"/>
+        <appender-ref ref="consoleAppender"/>
+    </logger>
+	<!-- 
+    <appender class="com.xiaomi.web.miliao.access.log4j.AccessAppender" name = "scribeAppender">
+        <param name="encoding" value="utf-8"/>
+        <param name="scribeHost" value="${scribeHost}"/>
+        <param name="scribePort" value="${scribePort}"/>
+        <param name="scribeCategory" value="${scribeCategory}"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="\t%d{yyyy-MM-dd HH:mm:ss}\t%m%n"/>
+        </layout>
+        <param name="showIp" value="true" ></param>
+    </appender> -->
+    <logger name="LgHandlerBoltTest" additivity="false">
+        <level value="${log4j_level}"/>
+        <appender-ref ref="fileAppender2"/>
+    </logger>
+    <logger name="HfsLogHandler" additivity="false">
+        <level value="${log4j_level}"/>
+        <appender-ref ref="consoleAppender"/>
+    </logger>
+</log4j:configuration>

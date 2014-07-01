@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class HdfsLogHandler implements ILogHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger("HdfsLogHandler");
+	private static final Logger LOGGER = LoggerFactory.getLogger("HfsLogHandler");
 	private int taskId;
     public HdfsLogHandler(int taskId) {
     	this.taskId = taskId;
