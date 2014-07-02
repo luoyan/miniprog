@@ -88,6 +88,10 @@
 						<name>SequenceFileRead.sh</name>
 					</program>
 					<program>
+						<mainClass>com.luoyan.hdfsclienttest.SequenceFileReader</mainClass>
+						<name>SequenceFileReader.sh</name>
+					</program>
+					<program>
 						<mainClass>com.luoyan.hdfsclienttest.SequenceFileWriter</mainClass>
 						<name>SequenceFileWriter.sh</name>
 					</program>
