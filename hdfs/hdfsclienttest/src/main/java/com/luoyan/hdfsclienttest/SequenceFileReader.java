@@ -23,7 +23,7 @@ public class SequenceFileReader {
 		//LOGGER.debug("start to read");
 		int count = 0;
 		while (reader.next(key, val)) {
-			if (count >= recordNum) {
+			if (recordNum != 0 && count >= recordNum) {
 				break;
 			}
 			count += 1;
@@ -49,7 +49,7 @@ public class SequenceFileReader {
 		//LOGGER.debug("start to read");
 		int count = 0;
 		while (reader.next(key, val)) {
-			if (count >= recordNum) {
+			if (recordNum != 0 && count >= recordNum) {
 				break;
 			}
 			count += 1;
