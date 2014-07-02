@@ -20,6 +20,9 @@ public class WordCount {
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         	System.out.println("map key " + key.toString() + " value " + value.toString());
+        	int args1 = context.getConfiguration().getInt("args1", -1);
+        	String args2 = context.getConfiguration().get("args2");
+        	System.out.println("args1 " + args1 + " args2 " + args2);
         	String[] tokens = value.toString().split(" ");
         	for (String token : tokens) {
         		context.write(new Text(token),
@@ -50,14 +53,17 @@ public class WordCount {
         GenericOptionsParser genericOptionsParser = new GenericOptionsParser(configuration, args);
         String[] otherArgs = genericOptionsParser.getRemainingArgs();
         configuration = genericOptionsParser.getConfiguration();
-        System.out.println("args.length " + args.length); 
-        if (args.length < 3) {
+        System.out.println("otherArgs.length " + otherArgs.length); 
+        if (otherArgs.length < 3) {
             usage();
             return;
         }
         String fromFile = otherArgs[0];
         String toFile = otherArgs[1];
         int reduceNum = Integer.parseInt(otherArgs[2]);
+        
+        configuration.setInt("args1", 1);
+        configuration.set("args2", "string2");
 
         Job job = Job.getInstance(configuration, "word_count");
         job.setNumReduceTasks(reduceNum);
