@@ -39,6 +39,30 @@ public class SequenceFileReader {
 		reader.close();
 	}
 	
+	public void read2(Configuration conf, FileSystem fs, Path path, int recordNum) throws IOException {
+		SequenceFile.Reader reader = new SequenceFile.Reader(fs, path, conf);
+
+		BytesWritable key = new BytesWritable();
+		IntWritable val = new IntWritable();
+		//LOGGER.debug("start to read");
+		int count = 0;
+		while (reader.next(key, val)) {
+			if (recordNum != 0 && count >= recordNum) {
+				break;
+			}
+			count += 1;
+			System.out.println(count + " key : [" + (new String(key.getBytes(), 0, key.getLength(), "UTF-8")).trim() + "]\t"
+			+ " value : [" + val + "]");
+			if ((count % 1000) == 0) {
+				//LOGGER.debug("read " + count + "records");
+			}
+		}
+		System.err.println("end to read total " + count);
+		//LOGGER.debug("end to read total " + count);
+
+		reader.close();
+	}
+	
 	public void readAndWrite(Configuration conf, FileSystem fs, Path path, int recordNum) throws IOException {
 		SequenceFile.Reader reader = new SequenceFile.Reader(fs, path, conf);
 		Path writePath = new Path(path + ".part.copy");
@@ -66,11 +90,14 @@ public class SequenceFileReader {
 		reader.close();
 		writer.close();
 	}
-	public void ReadLocal(String path, int recordNum) throws IOException {
+	public void ReadLocal(String path, int recordNum, int type) throws IOException {
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.getLocal(conf);
 		Path seqFilePath = new Path(path);
-		read(conf, fs, seqFilePath, recordNum);
+		if (type == 1)
+			read(conf, fs, seqFilePath, recordNum);
+		else if (type == 2)
+			read2(conf, fs, seqFilePath, recordNum);
 	}
 	public void ReadAndWriteLocal(String path, int recordNum) throws IOException {
 		Configuration conf = new Configuration();
@@ -79,7 +106,9 @@ public class SequenceFileReader {
 		readAndWrite(conf, fs, seqFilePath, recordNum);
 	}
 	public static void usage() {
-		System.err.println("command read/readAndWrite path(file key=BytesWritable value=BytesWritable) recordNum=0");
+		System.err.println("command read/read2/readAndWrite path(file key=BytesWritable value=BytesWritable) recordNum=0");
+		System.err.println("command read key=BytesWritable value=BytesWritable");
+		System.err.println("command read2 key=BytesWritable value=IntWritable");
 	}
 	public static void main(String[] args) throws IOException {
 		SequenceFileReader reader = new SequenceFileReader();
@@ -92,7 +121,10 @@ public class SequenceFileReader {
 		String path = args[1];
 		int recordNum = Integer.parseInt(args[2]);
 		if (command.equals("read")) {
-			reader.ReadLocal(path, recordNum);
+			reader.ReadLocal(path, recordNum, 1);
+		}
+		else if (command.equals("read2")) {
+			reader.ReadLocal(path, recordNum, 2);
 		}
 		else if (command.equals("readAndWrite")) {
 			reader.ReadAndWriteLocal(path, recordNum);

@@ -14,6 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.io.BytesWritable;
@@ -25,21 +26,47 @@ public class CheckKafka {
         	String rawLine = new String(value.getBytes(), 0, value.getLength(), "UTF-8");
         	String[] tokens = rawLine.split("\t");
         	if (tokens.length != 3) {
-        		context.getCounter("ERROR", "invalid input").increment(1);
+        		context.getCounter("WARNING", "input token length " + tokens.length).increment(1);
         		return;
         	}
-        	long start_time = context.getConfiguration().getLong("start_time", 0);
-        	long end_time = context.getConfiguration().getLong("end_time", 0);
-        	System.out.println("parseLong [" + tokens[2] + "]");
-        	long time = Long.parseLong(tokens[2]);
-        	System.out.println("start_time " + start_time + " end_time " + end_time);
-        	if (time < start_time || time >= end_time) {
-        		context.getCounter("WARNING", "input out of day").increment(1);
-        		return;
+        	if (!tokens[0].equals("APP_STORE")) {
+        		context.getCounter("WARNING", "input token not APP_STORE " + tokens[0]).increment(1);
+        		return;	
         	}
-        	context.write(new BytesWritable(value.getBytes()),
-                    new IntWritable(1));
-        	context.getCounter("INFO", "valid map records").increment(1);
+        	context.getCounter("INFO", "input token APP_STORE").increment(1);
+			String time_str = tokens[2].trim();
+        	try {
+				long start_time = context.getConfiguration().getLong(
+						"start_time", 0);
+				long end_time = context.getConfiguration().getLong("end_time",
+						0);
+				//System.out.println("parseLong [" + time_str + "]");
+				long time = Long.parseLong(time_str);
+				//System.out.println("start_time " + start_time + " end_time "
+				//		+ end_time);
+				if (time < start_time || time >= end_time) {
+					context.getCounter("WARNING", "input out of day")
+							.increment(1);
+					return;
+				}
+				//System.out.println("map value [" + rawLine + "]");
+	        	context.write(new BytesWritable(rawLine.trim().getBytes()),
+	                    new IntWritable(1));
+	        	context.getCounter("INFO", "valid map records").increment(1);
+        	} catch (NumberFormatException e) {
+        		//System.err.println("")
+        		e.printStackTrace();
+        		System.out.println("failed to parseLong[" + time_str + "] tokens [" + rawLine + "]");
+        		System.out.println("length " + time_str.length() + " digit list for number [" + displayCharValues(tokens[2]) + "]");
+        		context.getCounter("ERROR", "invalid timestamp").increment(1);
+        	}
+        }
+        public static String displayCharValues(String s) {
+            StringBuilder sb = new StringBuilder();
+            for (char c : s.toCharArray()) {
+                sb.append((int) c).append(",");
+            }
+            return sb.toString();
         }
 	}
     public static class CheckKafkaReducer extends Reducer<BytesWritable, IntWritable, BytesWritable, IntWritable> {
@@ -49,16 +76,17 @@ public class CheckKafka {
         	String values_string = "";
         	for (IntWritable value : values) {
         		sum += value.get();
-        		values_string = values_string + " " + value.get();
+        		values_string = values_string + "][" + value.get();
         	}
-        	String rawKey = new String(key.getBytes(), 0, key.getLength(), "UTF-8");
+        	String rawKey = (new String(key.getBytes(), 0, key.getLength(), "UTF-8")).trim();
         	System.out.println("reduce key " + rawKey + " values [" + values_string + "]");
         	if (sum == 2) {
         		context.getCounter("INFO", "same reduce records").increment(sum);
         		return;
         	}
-        	context.getCounter("ERROR", "different reduce records").increment(sum);
-        	context.write(new BytesWritable(key.getBytes()),
+        	System.out.println("diff reduce key [" + rawKey + "] sum = " + sum);
+        	context.getCounter("ERROR", "different reduce records sum = " + sum).increment(sum);
+        	context.write(new BytesWritable(rawKey.getBytes()),
                     new IntWritable(sum));
         }
     }
@@ -94,7 +122,7 @@ public class CheckKafka {
         job.setOutputValueClass(IntWritable.class);
 
         job.setInputFormatClass(SequenceFileInputFormat.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
+        job.setOutputFormatClass(SequenceFileOutputFormat.class);
         for (String file : fromFiles.split(":")) {
         	System.out.println("input file : " + file);
         	FileInputFormat.addInputPath(job, new Path(file));
