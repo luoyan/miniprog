@@ -69,6 +69,7 @@ public class WordCount {
         job.setNumReduceTasks(reduceNum);
         job.setJarByClass(WordCount.class);
         job.setMapperClass(WordCountMapper.class);
+        job.setCombinerClass(WordCountReducer.class);
         job.setReducerClass(WordCountReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(IntWritable.class);
