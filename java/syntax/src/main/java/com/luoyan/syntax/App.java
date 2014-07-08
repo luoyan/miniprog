@@ -59,6 +59,7 @@ public class App
 	        
 	        long n=Long.parseLong("1403489927594");
 	        System.out.println("long " + n);
+	        System.out.println("A " + ConstEnum.A);
 	        
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
