@@ -25,7 +25,7 @@
         </activity>
          -->
         <activity
-            android:name="com.luoyan.androidsyntax.ListPackagesActivity"
+            android:name="com.luoyan.androidsyntax.AppListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,16 +34,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.luoyan.androidsyntax.ListPackagesActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="com.luoyan.androidsyntax.PhoneContactsActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application> 
     <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     
 
 </manifest>
