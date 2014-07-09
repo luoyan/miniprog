@@ -1,0 +1,70 @@
+/**
+ * 
+ */
+package com.luoyan.checkin;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.webkit.WebView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+import android.webkit.WebView;
+import android.content.Intent;
+import android.os.Bundle;
+
+/**
+ * @author fool
+ *
+ */
+public class CheckInListActivity extends ListActivity {
+	 
+	static final String[] FRUITS = new String[] { "Apple", "Avocado", "Banana",
+			"Blueberry", "Coconut", "Durian", "Guava", "Kiwifruit",
+			"Jackfruit", "Mango", "Olive", "Pear", "Sugar-apple" };
+	static final String[] urls = new String[] { 
+		"http://bbs.xiaomi.cn/qiandao/?mobile=2",
+		"http://www.miui.com/forum.php",
+		"http://geek.miui.com/"
+		};
+	private WebView webview;
+ 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+ 
+		// no more this
+		// setContentView(R.layout.list_fruit);
+
+        //webview = new WebView(this); 
+        //webview.getSettings().setJavaScriptEnabled(true);
+        //webview.loadUrl("http://www.51cto.com/"); 
+        //setContentView(webview);
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.listview, this.urls));
+ 
+		ListView listView = getListView();
+		listView.setTextFilterEnabled(true);
+ 
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+			    // When clicked, show a toast with the TextView text
+			    //Toast.makeText(getApplicationContext(),
+				//((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+		        //webview.loadUrl((String) ((TextView) view).getText()); 
+		        //setContentView(webview);
+				Intent intent = new Intent(CheckInListActivity.this, MainActivity.class);
+				Bundle b = new Bundle();
+				b.putInt("key", 1); //Your id
+				intent.putExtras(b); //Put your id to your next Intent
+				startActivity(intent);
+				finish();
+			}
+		});
+ 
+	}
+}
