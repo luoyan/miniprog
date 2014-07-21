@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory; 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.lang.reflect.InvocationTargetException;
 import java.text.*;
 
@@ -27,8 +29,32 @@ public class App
     }
     public void testLog(){       
         logger.info("this is a test log");       
-    } 
-    public static void main( String[] args )
+    }
+    
+	public static Date getDateWithoutTime(final Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		return getDateWithoutTime(c);
+	}
+
+	public static Date getDateWithoutTime(final Calendar calendar) {
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+	
+    public static void date2string() throws ParseException {
+        String dateStr = "2014-07-09";
+
+        Date date = getDateWithoutTime(
+                new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(dateStr));
+        
+        System.out.println("date " + date.toString());
+        System.out.println("format " + new SimpleDateFormat("yyyy-MM-dd HH:mm:SS.s").format(date));
+    }
+    public static void main( String[] args ) throws ParseException
     {
         System.out.println( "Hello World!" );
         App a = new App(0);
@@ -60,6 +86,7 @@ public class App
 	        long n=Long.parseLong("1403489927594");
 	        System.out.println("long " + n);
 	        System.out.println("A " + ConstEnum.A);
+	        date2string();
 	        
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
