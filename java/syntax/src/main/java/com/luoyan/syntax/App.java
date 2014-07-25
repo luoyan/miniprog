@@ -20,6 +20,7 @@ import java.text.*;
 public class App 
 {
     private Logger logger = LoggerFactory.getLogger(App.class);
+    
     private int num;
     public App(int n) {
     	this.num = num;
@@ -45,6 +46,28 @@ public class App
 		return calendar.getTime();
 	}
 	
+	public void testDate() throws ParseException {
+		String dateStr = "2014-12-01";
+        //Date date = getDateWithoutTime(
+        //        new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(dateStr));
+        Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(dateStr);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+        System.out.println("month " + cal.get(Calendar.MONTH) + " old " + date.getMonth());
+		cal.set(Calendar.MONTH, (cal.get(Calendar.MONTH)+1));
+        System.out.println("month " + cal.get(Calendar.MONTH) + " old " + date.getMonth());
+        Date date2 = cal.getTime();
+        System.out.println("date " + date.toString() + " date2 " + date2.toString());
+	}
+	
+	public static void testStringBuffer() {
+		StringBuffer recommendContentBuffer = new StringBuffer();
+		recommendContentBuffer.append("hello");
+		System.out.println("recommendContentBuffer " + recommendContentBuffer.toString());
+		recommendContentBuffer.append("world");
+		System.out.println("recommendContentBuffer " + recommendContentBuffer.toString());
+	}
+	
     public static void date2string() throws ParseException {
         String dateStr = "2014-07-09";
 
@@ -54,6 +77,13 @@ public class App
         System.out.println("date " + date.toString());
         System.out.println("format " + new SimpleDateFormat("yyyy-MM-dd HH:mm:SS.s").format(date));
     }
+    
+    public static void testEnumType() {
+    	for (EnvironmentType env : EnvironmentType.values()) {
+    		System.out.println("env " + env.name());
+    	}
+    }
+    
     public static void main( String[] args ) throws ParseException
     {
         System.out.println( "Hello World!" );
@@ -87,7 +117,9 @@ public class App
 	        System.out.println("long " + n);
 	        System.out.println("A " + ConstEnum.A);
 	        date2string();
-	        
+	        a.testDate();
+	        testEnumType();
+	        testStringBuffer();
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
