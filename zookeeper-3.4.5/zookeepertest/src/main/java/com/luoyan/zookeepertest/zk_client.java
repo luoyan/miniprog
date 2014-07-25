@@ -72,6 +72,18 @@ public class zk_client {
             this.zk.delete("/root/childone", -1);
             logger.info("delete /root/childone");
                   
+            logger.info("create /root/nulldata");
+            this.zk.create("/root/nulldata", null, Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
+            byte[] nulldata_child = this.zk.getData("/root/nulldata", true, null);
+            if (nulldata_child == null) {
+            	logger.info("/root/nulldata null");
+            }
+            else {
+            	logger.info("/root/nulldata data");
+            }
+            Thread.sleep(10000);
+            this.zk.delete("/root/nulldata", -1);
+            logger.info("delete /root/nulldata");
             //关闭session
             this.zk.close();
         }
