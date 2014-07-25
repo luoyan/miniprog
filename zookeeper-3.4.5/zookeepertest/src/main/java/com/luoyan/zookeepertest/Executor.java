@@ -1,3 +1,4 @@
+package com.luoyan.zookeepertest;
 /**
  * A simple example program to use DataMonitor to start and
  * stop executables based on a znode. The program watches the

@@ -1,3 +1,4 @@
+package com.luoyan.zookeepertest;
 /**
  * A simple class that monitors the data and existence of a ZooKeeper
  * node. It uses asynchronous ZooKeeper APIs.
