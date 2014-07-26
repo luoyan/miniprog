@@ -113,11 +113,11 @@
 				<configuration>
 					<programs>
                         <program>
-                            <mainClass>com.luoyan.syntax.idlocal</mainClass>
+                            <mainClass>com.luoyan.pig.idlocal</mainClass>
                             <name>idlocal.sh</name>
                         </program>
                         <program>
-                            <mainClass>com.luoyan.syntax.idmapreduce</mainClass>
+                            <mainClass>com.luoyan.pig.idmapreduce</mainClass>
                             <name>idmapreduce.sh</name>
                         </program>
                     </programs>
