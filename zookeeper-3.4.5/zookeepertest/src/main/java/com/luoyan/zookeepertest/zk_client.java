@@ -137,7 +137,7 @@ public class zk_client {
             logger.info(i + " " + args[i]);
         }
         logger.info("length " + args.length);
-        if (args.length > 2) {
+        if (args.length > 3) {
             usage();
             System.exit(-1);
         }
