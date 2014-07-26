@@ -120,7 +120,7 @@ public class App
 	        a.testDate();
 	        testEnumType();
 	        testStringBuffer();
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
