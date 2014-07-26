@@ -2,6 +2,7 @@ package com.luoyan.zookeepertest;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.log4j.*;
+
 import java.util.*;
 //import ZooKeeper
 public class zk_client {
@@ -24,6 +25,20 @@ public class zk_client {
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+    public void list(String listPath, boolean showData) throws KeeperException, InterruptedException {
+    	if (showData) {
+    		System.out.println(listPath + " [" + this.zk.getData(listPath, false, null));
+    	}
+    	else {
+    		System.out.println(listPath);
+    	}
+    	List<String> nodeList = this.zk.getChildren(listPath, false);
+    	if (nodeList == null)
+    		return;
+    	for (String node : nodeList) {
+    		list(listPath + "/" + node, showData);
+    	}
     }
     public void test() {
         try {
@@ -114,8 +129,9 @@ public class zk_client {
     public static void usage() {
         logger.info(" test");
         logger.info(" create filename");
+        logger.info(" list path showdata=0");
     }
-    public static void main(String [] args) {
+    public static void main(String [] args) throws KeeperException, InterruptedException {
         zk_client zkc = new zk_client();
         for(int i = 0 ; i < args.length;i++) {
             logger.info(i + " " + args[i]);
@@ -130,6 +146,15 @@ public class zk_client {
         else if (args.length == 2 && args[0].equals("create")) {
             String filename = args[1];
             zkc.create(filename);
+        }
+        else if (args.length == 3 && args[0].equals("list")) {
+        	String path = args[1];
+        	String strShowData = args[2];
+        	boolean showData = true; 
+        	if (strShowData.equals("0")) {
+        		showData = false;
+        	}
+        	zkc.list(path, showData);
         } else {
             usage();
             System.exit(-1);
