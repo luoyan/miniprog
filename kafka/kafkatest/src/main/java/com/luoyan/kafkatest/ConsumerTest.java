@@ -59,10 +59,13 @@ public class ConsumerTest extends Thread {
 		KafkaStream<byte[], byte[]> stream = consumerMap.get(topic).get(0);
 		ConsumerIterator<byte[], byte[]> it = stream.iterator();
 		LOGGER.debug("start loop");
+		String content = null;
 		while (it.hasNext())
 			// LOGGER.debug("hasNext");
 			// System.out.println(new String(it.next().message()));
-			LOGGER.debug(new String(it.next().message()));
+			content = new String(it.next().message());
+		    System.out.println("consumer get [" + content + "]");
+			LOGGER.debug("consumer get [" + content + "]");
 		LOGGER.debug("end loop");
 	}
 }
