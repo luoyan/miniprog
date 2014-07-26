@@ -28,7 +28,11 @@ public class zk_client {
     }
     public void list(String listPath, boolean showData) throws KeeperException, InterruptedException {
     	if (showData) {
-    		System.out.println(listPath + " [" + new String(this.zk.getData(listPath, false, null)));
+    		byte[] data = this.zk.getData(listPath, false, null);
+    		String strData = "null";
+    		if (data != null)
+    			strData = new String(data);
+    		System.out.println(listPath + " [" + strData + "]");
     	}
     	else {
     		System.out.println(listPath);
