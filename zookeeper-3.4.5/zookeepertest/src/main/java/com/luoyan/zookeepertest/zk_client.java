@@ -84,6 +84,18 @@ public class zk_client {
             Thread.sleep(10000);
             this.zk.delete("/root/nulldata", -1);
             logger.info("delete /root/nulldata");
+            logger.info("create /root/tempnode");
+            this.zk.create("/root/tempnode", null, Ids.OPEN_ACL_UNSAFE,CreateMode.EPHEMERAL);
+            byte[] tempnode_child = this.zk.getData("/root/tempnode", true, null);
+            if (tempnode_child == null) {
+            	logger.info("/root/tempnode null");
+            }
+            else {
+            	logger.info("/root/tempnode data");
+            }
+            Thread.sleep(10000);
+            //this.zk.delete("/root/nulldata", -1);
+            logger.info("/root/tempnode should be disappeared");
             //关闭session
             this.zk.close();
         }
