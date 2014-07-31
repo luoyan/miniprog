@@ -29,18 +29,11 @@ public class Syntax {
 
     @Autowired
     private AppStoreBackendServiceProxy appStoreBackendServiceProxy;
-	public static void testZookeeper() {
-        ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.ONEBOX);
-        System.out.println("onebox zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
-        ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.STAGING);
-        System.out.println("staging zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
-        ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.SHANGDI);
-        System.out.println("shangdi zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
-        
+
+	private void getZookeeperList(String environment) {
+        System.out.println(environment + " zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
 	}
-	public void testService() throws TException, CatchableException {
-        ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.STAGING);
-        System.out.println("staging zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
+	private void getBiddingInfoList() throws TException {
 		List<BiddingInfo> biddingInfos = miuiAdStoreServiceClient.getBiddingInfoByStatus(
                 BiddingStatus.NORMAL, 0, 100000);
 		int count = 0;
@@ -48,15 +41,23 @@ public class Syntax {
 			System.out.println(count + " : " + biddingInfo.getName() + "\t" + biddingInfo.getAppId());
 			count ++;
 		}
+	}
+	private void getAppList() throws TException, CatchableException {
 		int offset = 0;
-		int batchNum = 10000;
+		int batchNum = 1000;
+		int count = 0;
 		appStoreBackendServiceProxy = new AppStoreBackendServiceProxy();
-        List<AppData> appDataList = appStoreBackendServiceProxy.getAppList(offset, batchNum);
-        count = 0;
-        for (AppData appData : appDataList) {
-        	System.out.println(count + " : " + appData.getAppInfo().getPackageName() + "\t" + appData.getAppInfo().getAppId());
-        	count ++;
-        }
+		int batchResultCount = batchNum;
+		while (batchResultCount == batchNum) {
+            List<AppData> appDataList = appStoreBackendServiceProxy.getAppList(offset, batchNum);
+            batchResultCount = appDataList.size();
+            offset += batchNum;
+            //System.out.println("offset " + offset);
+            for (AppData appData : appDataList) {
+            	System.out.println(count + " : " + appData.getAppInfo().getPackageName() + "\t" + appData.getAppInfo().getAppId() + "\t" + appData.getAppInfo().getDisplayName());
+            	count ++;
+            }
+		}
 	}
 	
 	public static void testGetKeywordList() throws TException {
@@ -91,15 +92,44 @@ public class Syntax {
 			i++;
 		}
 	}
+	private static void usage() {
+		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList]");
+	}
 	
 	public static void main(String[] args) throws TException, CatchableException {
-		//Syntax s = RoseBeanFactory.getBean(Syntax.class);
 		Syntax s = new Syntax();
-
-		//testZookeeper();
-		//s.testService();
-		//testGetKeywordList();
-		testList();
+		if (args.length != 2) {
+			usage();
+			System.exit(-1);
+		}
+		String environment = args[0];
+		String command = args[1];
+		if (environment.equals("onbox")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.ONEBOX);
+		}
+		else if (environment.equals("staging")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.STAGING);
+		}
+		else if (environment.equals("shangdi")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.SHANGDI);
+		}
+		else {
+			usage();
+			System.exit(-1);
+		}
+		if (command.equals("getZookeeperList")) {
+			s.getZookeeperList(environment);
+		}
+		else if (command.equals("getBiddingInfoList")) {
+			s.getBiddingInfoList();
+		}
+		else if (command.equals("getAppList")) {
+			s.getAppList();
+		}
+		else {
+			usage();
+			System.exit(-1);
+		}
 	}
 
 }

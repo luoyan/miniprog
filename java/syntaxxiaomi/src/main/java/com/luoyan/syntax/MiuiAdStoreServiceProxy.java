@@ -74,7 +74,6 @@ public class MiuiAdStoreServiceProxy {
     }
 
     /**
-     * è¿”å›žæœ?¿‘5å¤©çš„biddingEffect
      * @param packageName
      * @return
      * @throws TException
