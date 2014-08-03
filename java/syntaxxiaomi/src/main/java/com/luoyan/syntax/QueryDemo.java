@@ -73,6 +73,11 @@ public class QueryDemo {
     	int appId = 2;
     	int layerId = 1;
     	Map<String, String> expId2Strategy = new HashMap<String, String>();
+    	expId2Strategy.put("3", "ma");
+    	expId2Strategy.put("4", "lrctr");
+    	expId2Strategy.put("5", "purelrctr");
+    	expId2Strategy.put("0", "purelrctr");
+    	expId2Strategy.put("0", "lrctr");
         AlgorithmInfo algorithmInfo = new AlgorithmInfo();
         algorithmInfo.setExpId(appId + "^" + layerId + "^-1");
         algorithmInfo.setAlgorithmName(Constants.MA_CTR_ALGORITHM_NAME);
@@ -82,6 +87,7 @@ public class QueryDemo {
             String lastCharacter = imeiStr.substring(imeiStr.length() - 1);
             if (lastCharacter.equals("5") || lastCharacter.equals("6")) {
                 algorithmInfo.setExpId(experimentServiceProxy.getExpId(appId, layerId, imeiStr));
+                System.out.println("algorithmInfo.getExpId() " + algorithmInfo.getExpId());
                 String[] info = algorithmInfo.getExpId().split("\\^");
                 algorithmInfo.setAlgorithmName(Constants.MA_CTR_ALGORITHM_NAME);
                 if (info.length == 3 && expId2Strategy.containsKey(info[2])) {

@@ -32,6 +32,12 @@ public class Utils {
 		else if (environment.equals("shangdi")) {
 		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.SHANGDI);
 		}
+		else if (environment.equals("lugu")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.LUGU);
+		}
+		else if (environment.equals("haihang")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.HAIHANG);
+		}
 		else {
 			return false;
 		}

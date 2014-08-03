@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -25,6 +27,7 @@ import com.xiaomi.miui.ad.thrift.model.AppStat;
 import com.xiaomi.miui.ad.thrift.model.BiddingInfo;
 import com.xiaomi.miui.ad.thrift.model.BiddingStatus;
 import com.xiaomi.miui.ad.thrift.model.Constants;
+import com.xiaomi.miui.ad.thrift.model.CtrScore;
 import com.xiaomi.miui.ad.thrift.service.MiuiAdStoreService;
 import com.xiaomi.miui.analytics.util.factory.RoseBeanFactory;
 
@@ -91,6 +94,38 @@ public class Syntax {
 	    	}
 	    }
     }
+    
+    private void getManualRecommendFeatureList() {
+        try {
+            Set<String> positionTypes = miuiAdStoreServiceClient.getAllPositionTypes();
+            System.out.println("Current position types " + positionTypes);
+            if (positionTypes.size() > 0) {
+                //Map<String, Set<String>> currentManualRecommendFeaturedListMap = new HashMap<String, Set<String>>();
+                
+                for (String item : positionTypes) {
+                	Set<String> set = miuiAdStoreServiceClient.getManualRecommendFeaturedList(item);
+                	String info = "";
+                	for (String feature : set) {
+                		info = info + "," + feature;
+                	}
+                	System.out.println("positionType : [" + item + "] feature [" + info + "]");
+                    //currentManualRecommendFeaturedListMap.put(item, set);
+                }
+                //System.out.println("Current manual recommend featured list map " + currentManualRecommendFeaturedListMap);
+            }
+        } catch (Exception e) {
+        	System.err.println("Failed to update manual recommend featured lists." + e);
+        }
+    }
+    
+    private void getAllCtrScores(String algorithmName) throws TException {
+    	System.out.println("zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
+        List<CtrScore> ctrScores = miuiAdStoreServiceClient.getAllCtrScores(algorithmName);
+        System.out.println("ctrScores " + ctrScores.size());
+        for (CtrScore ctrScore : ctrScores) {
+            System.out.println("packageName " + ctrScore.getPackageName() + " ctr " + ctrScore.getScore() + " algorithm " + ctrScore.getAlgorithmName());
+        }
+    }
 	
 	public static void testGetKeywordList() throws TException {
         String keywordStr = miuiAdStoreServiceClient.getString("ad:11:", "1");
@@ -105,33 +140,14 @@ public class Syntax {
         System.out.println("recommendAdStr " + recommendAdStr);
 	}
 	
-	public static void testString() {
-		//String str = new String("\xe5\xbe\xae\xe8\xa7\x86");
-		//System.out.println(str);
-	}
-	
-	public static void testList() {
-		List<Long> array = new ArrayList<Long>();
-		array.add((long)0);
-		array.add((long)1);
-		array.add((long)3);
-		array.add((long)4);
-		array.add((long)5);
-		array.add(2, (long)2);
-		int i = 0;
-		for (long n : array) {
-			System.out.println("array[" + i + "] = " + n);
-			i++;
-		}
-	}
 	private static void usage() {
-		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes]");
+		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes/getManualRecommendFeatureList/getAllCtrScores [algrithm]]");
+		System.err.println("algorithm = ma/recommend/simple/decay/random/nma/lrctr/purelrctr");
 	}
-
 	
 	public static void main(String[] args) throws TException, CatchableException, IOException {
 		Syntax s = new Syntax();
-		if (args.length != 2) {
+		if (args.length < 2) {
 			usage();
 			System.exit(-1);
 		}
@@ -156,6 +172,13 @@ public class Syntax {
 		}
 		else if (command.equals("getAllPositionTypes")) {
 			s.getAllPositionTypes();
+		}
+		else if (command.equals("getManualRecommendFeatureList")) {
+			s.getManualRecommendFeatureList();
+		}
+		else if (command.equals("getAllCtrScores") && args.length == 3) {
+			String algorithmName = args[2];
+			s.getAllCtrScores(algorithmName);
 		}
 		else {
 			usage();
