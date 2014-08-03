@@ -1,8 +1,15 @@
 package com.luoyan.syntax;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +21,7 @@ import com.xiaomi.marketing.exception.CatchableException;
 import com.xiaomi.miliao.thrift.ClientFactory;
 import com.xiaomi.miliao.zookeeper.EnvironmentType;
 import com.xiaomi.miliao.zookeeper.ZKFacade;
+import com.xiaomi.miui.ad.thrift.model.AppStat;
 import com.xiaomi.miui.ad.thrift.model.BiddingInfo;
 import com.xiaomi.miui.ad.thrift.model.BiddingStatus;
 import com.xiaomi.miui.ad.thrift.model.Constants;
@@ -42,6 +50,16 @@ public class Syntax {
 			count ++;
 		}
 	}
+	private void getAllPositionTypes() throws TException {
+		Set<String> types = miuiAdStoreServiceClient.getAllPositionTypes();
+		for (String category : types) {
+			System.out.println("category [" + category + "]");
+			Set<String> features = miuiAdStoreServiceClient.getManualRecommendFeaturedList(category);
+			for (String feature : features) {
+				System.out.println("feature : " + feature);
+			}
+		}
+	}
 	private void getAppList() throws TException, CatchableException {
 		int offset = 0;
 		int batchNum = 1000;
@@ -59,6 +77,20 @@ public class Syntax {
             }
 		}
 	}
+	
+    private void getAppDownloadNum() throws IOException, TException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    String s;
+	    while ((s = in.readLine()) != null && s.length() != 0) {
+	    	List<String> packageNames = new ArrayList<String>();
+	    	packageNames.add(s);
+	    	List<AppStat> appStatList = miuiAdStoreServiceClient.getAppStatListByPackageNames(packageNames);
+	    	//System.out.println("appStatList.size() " + appStatList.size());
+	    	for (AppStat appStat : appStatList) {
+	    	    System.out.println("downloadNum " + appStat.getAllDownloadNumTotal());
+	    	}
+	    }
+    }
 	
 	public static void testGetKeywordList() throws TException {
         String keywordStr = miuiAdStoreServiceClient.getString("ad:11:", "1");
@@ -93,10 +125,11 @@ public class Syntax {
 		}
 	}
 	private static void usage() {
-		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList]");
+		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes]");
 	}
+
 	
-	public static void main(String[] args) throws TException, CatchableException {
+	public static void main(String[] args) throws TException, CatchableException, IOException {
 		Syntax s = new Syntax();
 		if (args.length != 2) {
 			usage();
@@ -104,19 +137,11 @@ public class Syntax {
 		}
 		String environment = args[0];
 		String command = args[1];
-		if (environment.equals("onbox")) {
-		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.ONEBOX);
-		}
-		else if (environment.equals("staging")) {
-		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.STAGING);
-		}
-		else if (environment.equals("shangdi")) {
-		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.SHANGDI);
-		}
-		else {
+		if (!Utils.setEnvironment(environment)) {
 			usage();
 			System.exit(-1);
 		}
+		
 		if (command.equals("getZookeeperList")) {
 			s.getZookeeperList(environment);
 		}
@@ -125,6 +150,12 @@ public class Syntax {
 		}
 		else if (command.equals("getAppList")) {
 			s.getAppList();
+		}
+		else if (command.equals("getAppDownloadNum")) {
+			s.getAppDownloadNum();
+		}
+		else if (command.equals("getAllPositionTypes")) {
+			s.getAllPositionTypes();
 		}
 		else {
 			usage();

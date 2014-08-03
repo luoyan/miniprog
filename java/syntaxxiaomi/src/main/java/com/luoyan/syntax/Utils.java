@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 
+import com.xiaomi.miliao.zookeeper.EnvironmentType;
+import com.xiaomi.miliao.zookeeper.ZKFacade;
+
 public class Utils {
     public static List<String> getKeywordListFromBase64Content(String base64Content) {
         List<String> ret = new ArrayList<String>();
@@ -18,4 +21,20 @@ public class Utils {
         }
         return ret;
     }
+	
+	public static boolean setEnvironment(String environment) {
+		if (environment.equals("onbox")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.ONEBOX);
+		}
+		else if (environment.equals("staging")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.STAGING);
+		}
+		else if (environment.equals("shangdi")) {
+		    ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.SHANGDI);
+		}
+		else {
+			return false;
+		}
+		return true;
+	}
 }
