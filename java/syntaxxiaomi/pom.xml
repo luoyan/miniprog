@@ -129,6 +129,10 @@
                             <mainClass>com.luoyan.syntax.Syntax</mainClass>
                             <name>Syntax.sh</name>
                         </program>
+                        <program>
+                            <mainClass>com.luoyan.syntax.QueryDemo</mainClass>
+                            <name>QueryDemo.sh</name>
+                        </program>
                     </programs>
 				</configuration>
 			</plugin>

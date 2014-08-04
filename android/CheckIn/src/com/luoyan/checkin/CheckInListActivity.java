@@ -23,7 +23,8 @@ public class CheckInListActivity extends ListActivity {
 	static final String[] urls = new String[] { 
 		"http://bbs.xiaomi.cn/qiandao/?mobile=2",
 		"http://www.miui.com/forum.php",
-		"http://geek.miui.com/"
+		"http://geek.miui.com/",
+		"http://weekly.mioffice.cn/myreport",
 		};
 	private WebView webview;
  

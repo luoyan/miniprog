@@ -169,7 +169,7 @@ public class QueryDemo {
         clientInfoV3.setMediaType(MediaType.APP_STORE);
         clientInfoV3.setAppStore(appStore);
         System.out.println("isSupportSearchAd(clientInfoV3) " + isSupportSearchAd(clientInfoV3));
-        String [] queryList = {"下厨房", "掌上公交"};
+        String [] queryList = {"乐视","下厨房", "掌上公交"};
 		for (String query : queryList) {
 			param.setKeyword(query);
 			param.setOffset(0);
@@ -207,7 +207,7 @@ public class QueryDemo {
 			usage();
 			System.exit(-1);
 		}
-		
+		System.out.println(environment + " zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
 		if (command.equals("getSearchAdResult")) {
 			getSearchAdResult();
 		}
