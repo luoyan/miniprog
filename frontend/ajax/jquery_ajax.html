@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+		</script>
+		<script>
+			$(document).ready(function(){
+				$("#btn1").click(function(){
+					$("#myDiv").load("ajax_info.txt", function(responseTxt,statusTxt,xhr) {
+						if (statusTxt=="success") {
+							$("h2").text(responseTxt);
+						}
+						else {
+							$("h2").text("error in ajax");
+						}
+					})
+				});
+				$("#btn2").click(function(){
+					$.get("ajax_info.txt", function(responseTxt,statusTxt,xhr) {
+						if (statusTxt=="success") {
+							$("h2").text(responseTxt);
+						}
+						else {
+							$("h2").text("error in ajax");
+						}
+					})
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="myDiv"><h2>Let AJAX change this text</h2></div>
+		<button type="button" id="btn1">Change Content by load</button>
+		<button type="button" id="btn2">Change Content by get</button>
+	</body>
+</html>
