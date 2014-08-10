@@ -19,11 +19,9 @@ import com.xiaomi.marketing.exception.CatchableException;
 import com.xiaomi.miliao.thrift.ClientFactory;
 import com.xiaomi.miliao.zookeeper.EnvironmentType;
 import com.xiaomi.miliao.zookeeper.ZKFacade;
-//import com.xiaomi.miui.ad.query.algorithm.appmarket.SimpleAlgorithm;
-import com.xiaomi.miui.ad.query.common.AlgorithmInfo;
-//import com.xiaomi.miui.ad.query.common.ConstantHelper;
-import com.xiaomi.miui.ad.query.common.StrategyHelper;
-import com.xiaomi.miui.ad.query.proxy.ExperimentServiceProxy;
+//import com.xiaomi.miui.ad.query.common.AlgorithmInfo;
+//import com.xiaomi.miui.ad.query.common.StrategyHelper;
+//import com.xiaomi.miui.ad.query.proxy.ExperimentServiceProxy;
 //import com.xiaomi.miui.ad.query.proxy.MiuiAdStoreServiceProxy;
 import com.xiaomi.miui.ad.thrift.model.AppFitModel;
 import com.xiaomi.miui.ad.thrift.model.AppStore;
@@ -42,7 +40,7 @@ import com.xiaomi.miui.ad.util.ABTestUtils;
 public class QueryDemo {
     private static final String IMEI = "d08c5e09c81b66a8b32cd1c72518ae75";
     private static final String TRIGGER_ID = "987";
-    private static final ExperimentServiceProxy experimentServiceProxy = new ExperimentServiceProxy();
+    //private static final ExperimentServiceProxy experimentServiceProxy = new ExperimentServiceProxy();
     private static final int DEFAULT_AD_RETURN_NO = 10;
     private static final String SERVICE_NAME = "UNIT_TEST";
     private final AppStoreBackendService.Iface appStoreBackendServiceClient = ClientFactory.getClient(AppStoreBackendService.Iface.class, 10000);
@@ -68,7 +66,7 @@ public class QueryDemo {
         return null != clientInfoV3 && null != clientInfoV3.getAppStore() && clientInfoV3.getAppStore()
                 .isSetSupportSearchAd() && clientInfoV3.getAppStore().isSupportSearchAd();
     }
-    
+    /*
     public static AlgorithmInfo getAlgorithmInfo(ClientInfo clientInfo) {
     	int appId = 2;
     	int layerId = 1;
@@ -99,18 +97,10 @@ public class QueryDemo {
         }
         return algorithmInfo;
     }
-    
     public static void getAds() {
     	ClientInfo clientInfo = new ClientInfo();
         clientInfo.setImei(IMEI);
         clientInfo.setPositionType(Constants.PARENT_PAGE_IDENTITY);
-        /*
-        int adReturnNo = DEFAULT_AD_RETURN_NO;
-        SimpleAlgorithm simpleAlgorithm = new SimpleAlgorithm();
-        AlgorithmInfo algorithmInfo = new AlgorithmInfo();
-        algorithmInfo.setAlgorithmName(Constants.SIMPLE_ALGORITHM_NAME);
-        List<String> ads = simpleAlgorithm.getAds(clientInfo, 0, adReturnNo, SERVICE_NAME, algorithmInfo);
-        */
         StrategyHelper strategyHelper = new StrategyHelper();
         String[] imeiList = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
         		"a", "b", "c", "d", "e", "f", "g"};
@@ -122,6 +112,7 @@ public class QueryDemo {
         	System.out.println("imei " + imeiStr + " algorithmName " + algorithmName);
         }
     }
+    */
     
     public static void getSearchAdResult() throws TException, NumberFormatException, IOException {
         final MiuiAdQueryService.Iface miuiAdQueryServiceClient = ClientFactory.getClient(MiuiAdQueryService.Iface.class, 1000000);
@@ -212,7 +203,7 @@ public class QueryDemo {
 			getSearchAdResult();
 		}
 		else if (command.equals("getAds")) {
-			getAds();
+			//getAds();
 		}
 		else {
 			usage();
