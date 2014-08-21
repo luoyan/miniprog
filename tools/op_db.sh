@@ -19,7 +19,7 @@ if [ $db_type == "report_db" ] ; then
         user=root
         passwd=3487e498770b9740086144fc03140876
         host=zc-stage1-miui-ad02.bj
-        dbname=miui_ad_stat
+        dbname=miui_ad_stat_staging
     fi
 elif [ $db_type == "bidding_db" ] ; then
     if [ $env == "production" ] ; then
@@ -31,7 +31,7 @@ elif [ $db_type == "bidding_db" ] ; then
         user=root
         passwd=3487e498770b9740086144fc03140876
         host=zc-stage1-miui-ad02.bj
-        dbname=miui_bidding_ad
+        dbname=miui_bidding_ad_staging
     fi
 elif [ $db_type == "statistic_db" ] ; then
     if [ $env == "production" ] ; then
@@ -43,7 +43,7 @@ elif [ $db_type == "statistic_db" ] ; then
         user=root
         passwd=3487e498770b9740086144fc03140876
         host=zc-stage1-miui-ad02.bj
-        dbname=miui_statistic
+        dbname=miui_statistic_staging
     fi
 else
     usage $0
