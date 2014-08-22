@@ -2,6 +2,7 @@ package com.luoyan.zookeepertest;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.log4j.*;
+
 import java.util.*;
 //import ZooKeeper
 public class zk_client {
@@ -24,6 +25,24 @@ public class zk_client {
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+    public void list(String listPath, boolean showData) throws KeeperException, InterruptedException {
+    	if (showData) {
+    		byte[] data = this.zk.getData(listPath, false, null);
+    		String strData = "null";
+    		if (data != null)
+    			strData = new String(data);
+    		System.out.println(listPath + " [" + strData + "]");
+    	}
+    	else {
+    		System.out.println(listPath);
+    	}
+    	List<String> nodeList = this.zk.getChildren(listPath, false);
+    	if (nodeList == null)
+    		return;
+    	for (String node : nodeList) {
+    		list(listPath + "/" + node, showData);
+    	}
     }
     public void test() {
         try {
@@ -72,6 +91,30 @@ public class zk_client {
             this.zk.delete("/root/childone", -1);
             logger.info("delete /root/childone");
                   
+            logger.info("create /root/nulldata");
+            this.zk.create("/root/nulldata", null, Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
+            byte[] nulldata_child = this.zk.getData("/root/nulldata", true, null);
+            if (nulldata_child == null) {
+            	logger.info("/root/nulldata null");
+            }
+            else {
+            	logger.info("/root/nulldata data");
+            }
+            Thread.sleep(10000);
+            this.zk.delete("/root/nulldata", -1);
+            logger.info("delete /root/nulldata");
+            logger.info("create /root/tempnode");
+            this.zk.create("/root/tempnode", null, Ids.OPEN_ACL_UNSAFE,CreateMode.EPHEMERAL);
+            byte[] tempnode_child = this.zk.getData("/root/tempnode", true, null);
+            if (tempnode_child == null) {
+            	logger.info("/root/tempnode null");
+            }
+            else {
+            	logger.info("/root/tempnode data");
+            }
+            Thread.sleep(10000);
+            //this.zk.delete("/root/nulldata", -1);
+            logger.info("/root/tempnode should be disappeared");
             //关闭session
             this.zk.close();
         }
@@ -90,14 +133,15 @@ public class zk_client {
     public static void usage() {
         logger.info(" test");
         logger.info(" create filename");
+        logger.info(" list path showdata=0");
     }
-    public static void main(String [] args) {
+    public static void main(String [] args) throws KeeperException, InterruptedException {
         zk_client zkc = new zk_client();
         for(int i = 0 ; i < args.length;i++) {
             logger.info(i + " " + args[i]);
         }
         logger.info("length " + args.length);
-        if (args.length > 2) {
+        if (args.length > 3) {
             usage();
             System.exit(-1);
         }
@@ -106,6 +150,15 @@ public class zk_client {
         else if (args.length == 2 && args[0].equals("create")) {
             String filename = args[1];
             zkc.create(filename);
+        }
+        else if (args.length == 3 && args[0].equals("list")) {
+        	String path = args[1];
+        	String strShowData = args[2];
+        	boolean showData = true; 
+        	if (strShowData.equals("0")) {
+        		showData = false;
+        	}
+        	zkc.list(path, showData);
         } else {
             usage();
             System.exit(-1);

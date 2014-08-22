@@ -15,12 +15,14 @@
   </properties>
 
   <dependencies>
+  <!-- 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+     -->
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -41,6 +43,41 @@
       <artifactId>freemarker</artifactId>
       <version>2.3.20</version>
     </dependency>
+    
+        <!-- Unit Test使用 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>2.5.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pig</groupId>
+            <artifactId>pig</artifactId>
+            <version>0.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+        </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -71,6 +108,31 @@
           </execution>
         </executions>
       </plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+				<configuration>
+					<programs>
+                        <program>
+                            <mainClass>com.luoyan.pig.idlocal</mainClass>
+                            <name>idlocal.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.luoyan.pig.idmapreduce</mainClass>
+                            <name>idmapreduce.sh</name>
+                        </program>
+                    </programs>
+				</configuration>
+			</plugin>
     </plugins>
   </build>
 </project>

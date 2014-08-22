@@ -7,6 +7,9 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Counter;
+import org.apache.hadoop.mapreduce.CounterGroup;
+import org.apache.hadoop.mapreduce.Counters;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -135,5 +138,14 @@ public class CheckKafka {
         FileOutputFormat.setOutputPath(job, new Path(toFile));
 
         job.waitForCompletion(true);
+        Counters counters = job.getCounters();
+
+		for (CounterGroup group : counters) {
+		    System.out.println("* Counter Group: " + group.getDisplayName() + " (" + group.getName() + ")");
+		    System.out.println("  number of counters in this group: " + group.size());
+		    for (Counter counter : group) {
+		        System.out.println("  - " + counter.getDisplayName() + ": " + counter.getName() + ": "+counter.getValue());
+		    }
+		}
     }
 }

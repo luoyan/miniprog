@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory; 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.lang.reflect.InvocationTargetException;
 import java.text.*;
 
@@ -18,6 +20,7 @@ import java.text.*;
 public class App 
 {
     private Logger logger = LoggerFactory.getLogger(App.class);
+    
     private int num;
     public App(int n) {
     	this.num = num;
@@ -27,8 +30,61 @@ public class App
     }
     public void testLog(){       
         logger.info("this is a test log");       
-    } 
-    public static void main( String[] args )
+    }
+    
+	public static Date getDateWithoutTime(final Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		return getDateWithoutTime(c);
+	}
+
+	public static Date getDateWithoutTime(final Calendar calendar) {
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+	
+	public void testDate() throws ParseException {
+		String dateStr = "2014-12-01";
+        //Date date = getDateWithoutTime(
+        //        new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(dateStr));
+        Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(dateStr);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+        System.out.println("month " + cal.get(Calendar.MONTH) + " old " + date.getMonth());
+		cal.set(Calendar.MONTH, (cal.get(Calendar.MONTH)+1));
+        System.out.println("month " + cal.get(Calendar.MONTH) + " old " + date.getMonth());
+        Date date2 = cal.getTime();
+        System.out.println("date " + date.toString() + " date2 " + date2.toString());
+	}
+	
+	public static void testStringBuffer() {
+		StringBuffer recommendContentBuffer = new StringBuffer();
+		recommendContentBuffer.append("hello");
+		System.out.println("recommendContentBuffer " + recommendContentBuffer.toString());
+		recommendContentBuffer.append("world");
+		System.out.println("recommendContentBuffer " + recommendContentBuffer.toString());
+	}
+	
+    public static void date2string() throws ParseException {
+        String dateStr = "2014-07-09";
+
+        Date date = getDateWithoutTime(
+                new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(dateStr));
+        
+        System.out.println("date " + date.toString());
+        System.out.println("format " + new SimpleDateFormat("yyyy-MM-dd HH:mm:SS.s").format(date));
+    }
+    
+    public static void testEnumType() {
+    	for (EnvironmentType env : EnvironmentType.values()) {
+    		System.out.println("env " + env.name());
+    	}
+    }
+    
+    public static void main( String[] args ) throws ParseException
     {
         System.out.println( "Hello World!" );
         App a = new App(0);
@@ -60,8 +116,11 @@ public class App
 	        long n=Long.parseLong("1403489927594");
 	        System.out.println("long " + n);
 	        System.out.println("A " + ConstEnum.A);
-	        
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+	        date2string();
+	        a.testDate();
+	        testEnumType();
+	        testStringBuffer();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
