@@ -14,7 +14,7 @@
         <log4j_level>debug</log4j_level>
         <log4j_db_level>debug</log4j_db_level>
         <!--scribe 配置-->
-        <scribeHost>127.0.0.1</scribeHost>
+        <scribeHost>zc-stage1-miui-ad01.bj</scribeHost>
         <scribePort>1463</scribePort>
         <scribeCategory>syntaxxiaomi</scribeCategory>
     </properties>
