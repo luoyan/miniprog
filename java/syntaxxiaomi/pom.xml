@@ -8,6 +8,15 @@
     <properties>
         <zookeeper_use>true</zookeeper_use>
         <zookeeper_host>staging</zookeeper_host>
+        
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <log4j_level>debug</log4j_level>
+        <log4j_db_level>debug</log4j_db_level>
+        <!--scribe 配置-->
+        <scribeHost>127.0.0.1</scribeHost>
+        <scribePort>1463</scribePort>
+        <scribeCategory>syntaxxiaomi</scribeCategory>
     </properties>
 	<!--引入公共包 -->
 	<dependencies>
@@ -49,16 +58,29 @@
             <artifactId>miui-analytics-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- 
         <dependency>
             <groupId>miui_ad</groupId>
             <artifactId>miui_ad_query_service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+         -->
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
             <version>2.4</version>
             <classifier>jdk15</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.miliao</groupId>
+            <artifactId>miliao-serviceapi</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>kafka</groupId>
+                    <artifactId>kafka</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 	</dependencies>
 	<build>
@@ -138,6 +160,10 @@
                         <program>
                             <mainClass>com.luoyan.syntax.QueryDemo</mainClass>
                             <name>QueryDemo.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.luoyan.syntax.LoggerPrinter</mainClass>
+                            <name>LoggerPrinter.sh</name>
                         </program>
                     </programs>
 				</configuration>
