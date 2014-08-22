@@ -15,10 +15,11 @@ class SocketClientThread(threading.Thread):
 
     def run(self):
         data = ''
-	if os.path.exists(self.file_name):
-	    now_timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-	    os.rename(self.file_name, self.file_name + "." + now_timestamp)
-	f = open(self.file_name, 'w')
+	now_timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
+	real_file_name = self.file_name + "." + now_timestamp
+	#if os.path.exists(self.file_name):
+	#os.rename(self.file_name, self.file_name + "." + now_timestamp)
+	f = open(real_file_name, 'a')
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((self.dest_host, self.dest_port))
         while True:
