@@ -1,0 +1,74 @@
+/**
+ * 
+ */
+package com.luoyan.androidsyntax;
+
+import android.content.ContentResolver;
+import android.os.Bundle;
+import android.app.Activity;
+
+/**
+ * @author fool
+ * 
+ */
+public class PhoneContactsActivity extends Activity {
+	private Context mContext;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        this.mContext = this.getApplicationContext();
+    }
+
+	/** 得到手机通讯录联系人信息 **/
+	private void getPhoneContacts() {
+		ContentResolver resolver = mContext.getContentResolver();
+
+		// 获取手机联系人
+		Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,
+				PHONES_PROJECTION, null, null, null);
+
+		if (phoneCursor != null) {
+			while (phoneCursor.moveToNext()) {
+
+				// 得到手机号码
+				String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);
+				// 当手机号码为空的或者为空字段 跳过当前循环
+				if (TextUtils.isEmpty(phoneNumber))
+					continue;
+
+				// 得到联系人名称
+				String contactName = phoneCursor
+						.getString(PHONES_DISPLAY_NAME_INDEX);
+
+				// 得到联系人ID
+				Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
+
+				// 得到联系人头像ID
+				Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);
+
+				// 得到联系人头像Bitamp
+				Bitmap contactPhoto = null;
+
+				// photoid 大于0 表示联系人有头像 如果没有给此人设置头像则给他一个默认的
+				if (photoid > 0) {
+					Uri uri = ContentUris.withAppendedId(
+							ContactsContract.Contacts.CONTENT_URI, contactid);
+					InputStream input = ContactsContract.Contacts
+							.openContactPhotoInputStream(resolver, uri);
+					contactPhoto = BitmapFactory.decodeStream(input);
+				} else {
+					contactPhoto = BitmapFactory.decodeResource(getResources(),
+							R.drawable.contact_photo);
+				}
+
+				mContactsName.add(contactName);
+				mContactsNumber.add(phoneNumber);
+				mContactsPhonto.add(contactPhoto);
+			}
+
+			phoneCursor.close();
+		}
+	}
+}

@@ -1,0 +1,16 @@
+package com.luoyan.androidsyntax;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import android.app.ListActivity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
+import android.widget.SimpleAdapter;
+
+public class PhoneContacts2Activity {
+
+}
