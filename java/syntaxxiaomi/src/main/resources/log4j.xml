@@ -20,7 +20,7 @@
         <level value="debug"/>
         <appender-ref ref="SyntaxxiaomiScribe"/>
     </logger>
-    <logger name="consoleLOGGER" additivity="false">
+    <logger name="consoleLogger" additivity="false">
         <level value="debug"/>
         <appender-ref ref="consoleAppender"/>
     </logger>

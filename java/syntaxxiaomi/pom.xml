@@ -82,6 +82,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>thrift</groupId>
+            <artifactId>libthrift-fix-leak</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.marketing</groupId>
+            <artifactId>marketing-user-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi</groupId>
+            <artifactId>xiaomi-thrift-shared</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 	<build>
 	
@@ -164,6 +179,10 @@
                         <program>
                             <mainClass>com.luoyan.syntax.LoggerPrinter</mainClass>
                             <name>LoggerPrinter.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.luoyan.syntax.LogParser</mainClass>
+                            <name>LogParser.sh</name>
                         </program>
                     </programs>
 				</configuration>

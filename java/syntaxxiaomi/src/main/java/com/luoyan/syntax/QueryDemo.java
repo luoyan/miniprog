@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.TException;
 
@@ -36,6 +37,7 @@ import com.xiaomi.miui.ad.thrift.model.SearchAdResult;
 import com.xiaomi.miui.ad.thrift.model.UserInfo;
 import com.xiaomi.miui.ad.thrift.service.MiuiAdQueryService;
 import com.xiaomi.miui.ad.util.ABTestUtils;
+import com.xiaomi.miui.ad.util.ThriftHelper;
 
 public class QueryDemo {
     private static final String IMEI = "d08c5e09c81b66a8b32cd1c72518ae75";
@@ -159,6 +161,8 @@ public class QueryDemo {
         clientInfoV3.setGameCenter(gameCenter);
         clientInfoV3.setMediaType(MediaType.APP_STORE);
         clientInfoV3.setAppStore(appStore);
+        String jsonString = ThriftHelper.thriftToJsonString(clientInfoV3);
+        System.out.println("clientInfoV3 " + jsonString);
         System.out.println("isSupportSearchAd(clientInfoV3) " + isSupportSearchAd(clientInfoV3));
         String [] queryList = {"乐视","下厨房", "掌上公交"};
 		for (String query : queryList) {
