@@ -22,7 +22,8 @@ import com.xiaomi.miui.ad.thrift.model.ClientInfo;
 import com.xiaomi.miui.ad.thrift.model.ClientInfoV3;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAlgorithm;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAlgorithmExposeDetail;
-import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogScribeInfo;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAppStore;
+import com.xiaomi.miui.ad.thrift.model.MiuiLogScribeInfo;
 import com.xiaomi.miui.ad.thrift.model.SearchAdResult;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAppStoreSearchExpose;
 import com.xiaomi.miui.ad.util.ThriftHelper;
@@ -30,10 +31,10 @@ import com.xiaomi.miui.ad.util.ThriftHelper;
 public class LogParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger("consoleLogger");
 	public static void usage() {
-		System.out.println("LogParser logType=query_service/store_service/appstore logFileName");
+		System.out.println("LogParser logType=query_service/store_service/appstore logFileName maxRecordNum");
 	}
 	
-	public static void parseQueryServiceLog(String fileName) throws IOException, TException {
+	public static void parseQueryServiceLog(String fileName, int maxRecordNum) throws IOException, TException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = null;
         int count = 0;
@@ -52,16 +53,16 @@ public class LogParser {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("scribeInfo", scribeInfo);
                 jsonObject.put("time", time);
-                MiuiAdQueryServiceLogScribeInfo miuiAdQueryServiceLogScribeInfo = new MiuiAdQueryServiceLogScribeInfo();
-                miuiAdQueryServiceLogScribeInfo.setScribeInfo(scribeInfo);
-                miuiAdQueryServiceLogScribeInfo.setTime(time);
+                MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
+                miuiLogScribeInfo.setScribeInfo(scribeInfo);
+                miuiLogScribeInfo.setTime(time);
                 if (itemLevel2.startsWith("{")) {
                 	JSONObject itemLevel2Object = JSONObject.fromObject(itemLevel2);
                     if (itemLevel2Object.get("log_type").equals("algorithm_expose_detail")) {
                         //jsonObject.put("itemLevel2", itemLevel2Object);
                         jsonObject.put("itemLevel2", itemLevel2Object);
                     	MiuiAdQueryServiceLogAlgorithmExposeDetail miuiAdQueryServiceLogAlgorithmExposeDetail = new MiuiAdQueryServiceLogAlgorithmExposeDetail();
-                    	miuiAdQueryServiceLogAlgorithmExposeDetail.setScribeInfo(miuiAdQueryServiceLogScribeInfo);
+                    	miuiAdQueryServiceLogAlgorithmExposeDetail.setScribeInfo(miuiLogScribeInfo);
                     	miuiAdQueryServiceLogAlgorithmExposeDetail.setLogType(itemLevel2Object.getString("log_type"));
                     	
                     	ClientInfo clientInfo = new ClientInfo();
@@ -123,7 +124,7 @@ public class LogParser {
                     	}
                         
                         MiuiAdQueryServiceLogAppStoreSearchExpose miuiAdQueryServiceLogAppStoreSearchExpose = new MiuiAdQueryServiceLogAppStoreSearchExpose();
-                        miuiAdQueryServiceLogAppStoreSearchExpose.setScribeInfo(miuiAdQueryServiceLogScribeInfo);
+                        miuiAdQueryServiceLogAppStoreSearchExpose.setScribeInfo(miuiLogScribeInfo);
                         miuiAdQueryServiceLogAppStoreSearchExpose.setClientInfoV3(clientInfoV3);
                         miuiAdQueryServiceLogAppStoreSearchExpose.setLogType(itemLevel2Object.getString("log_type"));
                         miuiAdQueryServiceLogAppStoreSearchExpose.setSearchParam(searchParam);
@@ -150,7 +151,7 @@ public class LogParser {
                 		jsonObjectLevel2.put("packageNameList", packageNameList);
                         jsonObject.put("itemLevel2", jsonObjectLevel2);
                         MiuiAdQueryServiceLogAlgorithm miuiAdQueryServiceLogAlgorithm = new MiuiAdQueryServiceLogAlgorithm();
-                        miuiAdQueryServiceLogAlgorithm.setScribeInfo(miuiAdQueryServiceLogScribeInfo);
+                        miuiAdQueryServiceLogAlgorithm.setScribeInfo(miuiLogScribeInfo);
                         miuiAdQueryServiceLogAlgorithm.setAlgorithmName(miuiAdAlgorithm);
                         miuiAdQueryServiceLogAlgorithm.setClientInfoStr(clientInfoStr);
                         miuiAdQueryServiceLogAlgorithm.setUnknown1(unknown1);
@@ -160,36 +161,89 @@ public class LogParser {
                 //LOGGER.info("\n" + jsonObject.toString() + "\n");
             }
             count ++;
-            if (count >= 100)
+            if (maxRecordNum > 0 && count >= maxRecordNum)
             	break;
         }
         br.close();
 	}
 
-	public static void parseStoreServiceLog(String fileName) {
-		
+	public static void parseStoreServiceLog(String fileName, int maxRecordNum) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = null;
+        int count = 0;
+        while ((line = br.readLine()) != null) {
+            String[] itemLevel1Array = line.trim().split("\t");
+            if (itemLevel1Array.length == 1) {
+            	continue;
+            }
+            if (itemLevel1Array.length != 3) {
+            	LOGGER.warn("warning format itemLevel1Array length = " + itemLevel1Array.length + " [" + line.trim() + "]");
+            }
+            else {
+            	String scribeInfo = itemLevel1Array[0];
+            	String time = itemLevel1Array[1];
+                String itemLevel2 = new String(Base64.decodeBase64(itemLevel1Array[2]));
+                MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
+                miuiLogScribeInfo.setScribeInfo(scribeInfo);
+                miuiLogScribeInfo.setTime(time);
+            	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+                if (itemLevel2.startsWith("{")) {
+                	
+                }
+                else {
+                    String[] itemLevel2Array = itemLevel2.split("\t");
+                    if (itemLevel2Array[0].equals("APP_STORE")) {
+                    	long timestamp = Long.parseLong(itemLevel2Array[2]);
+                    	String appStoreContent = new String(Base64.decodeBase64(itemLevel2Array[1]));
+                    	//LOGGER.debug("appStoreContent [\n" + appStoreContent + "\n");
+                    	String[] appStoreContentArray = appStoreContent.split("\t");
+                    	String clientInfoV3Str = appStoreContentArray[0];
+                    	String packageName = appStoreContentArray[1];
+                    	String downloadUrl = appStoreContentArray[2];
+                    	MiuiAdStoreServiceLogAppStore miuiAdStoreServiceLogAppStore = new MiuiAdStoreServiceLogAppStore();
+                    	miuiAdStoreServiceLogAppStore.setScribeInfo(miuiLogScribeInfo);
+                    	miuiAdStoreServiceLogAppStore.setLogType("APP_STORE");
+                    	miuiAdStoreServiceLogAppStore.setClientInfoV3(clientInfoV3Str);
+                    	miuiAdStoreServiceLogAppStore.setPackageName(packageName);
+                    	miuiAdStoreServiceLogAppStore.setDownloadUrl(downloadUrl);
+                    	miuiAdStoreServiceLogAppStore.setTimestamp(timestamp);
+                    }
+                    else if (itemLevel2Array[0] == "algorithm_download_detail") {
+            		
+                    }
+                    else if (itemLevel2Array[0] == "algorithm_download_detail") {
+            		
+                    }
+                }
+            }
+            count ++;
+            if (maxRecordNum > 0 && count >= maxRecordNum)
+            	break;
+        }
+        br.close();
 	}
 
-	public static void parseAppstoreLog(String fileName) {
+	public static void parseAppstoreLog(String fileName, int maxRecordNum) {
 		
 	}
 	
 	public static void main(String[] args) throws IOException, TException {
 		// TODO Auto-generated method stub
-		if (args.length != 2) {
+		if (args.length != 3) {
 			usage();
 			System.exit(-1);
 		}
 		String logType = args[0];
 		String logFileName = args[1];
+		int maxRecordNum = Integer.parseInt(args[2]);
 		if (logType.equals("query_service")) {
-			parseQueryServiceLog(logFileName);
+			parseQueryServiceLog(logFileName, maxRecordNum);
 		}
 		else if (logType.equals("store_service")) {
-			parseStoreServiceLog(logFileName);
+			parseStoreServiceLog(logFileName, maxRecordNum);
 		}
 		else if (logType.equals("store")) {
-			parseAppstoreLog(logFileName);
+			parseAppstoreLog(logFileName, maxRecordNum);
 		}
 		else {
 			usage();

@@ -6,7 +6,6 @@
 package com.xiaomi.miui.ad.thrift.model;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,39 +18,40 @@ import java.util.Collections;
 import java.util.BitSet;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.thrift.*;
 import org.apache.thrift.async.*;
 import org.apache.thrift.meta_data.*;
 import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
-import com.xiaomi.appstore.thrift.model.AppMarketSearchParam;
-
-public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQueryServiceLogAppStoreSearchExpose, MiuiAdQueryServiceLogAppStoreSearchExpose._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("MiuiAdQueryServiceLogAppStoreSearchExpose");
+public class MiuiAdStoreServiceLogAppStore implements TBase<MiuiAdStoreServiceLogAppStore, MiuiAdStoreServiceLogAppStore._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("MiuiAdStoreServiceLogAppStore");
 
   private static final TField SCRIBE_INFO_FIELD_DESC = new TField("scribeInfo", TType.STRUCT, (short)1);
   private static final TField LOG_TYPE_FIELD_DESC = new TField("logType", TType.STRING, (short)2);
-  private static final TField CLIENT_INFO_V3_FIELD_DESC = new TField("clientInfoV3", TType.STRUCT, (short)3);
-  private static final TField SEARCH_PARAM_FIELD_DESC = new TField("searchParam", TType.STRUCT, (short)4);
-  private static final TField SEARCH_AD_RESULT_FIELD_DESC = new TField("SearchAdResult", TType.STRUCT, (short)5);
+  private static final TField CLIENT_INFO_V3_FIELD_DESC = new TField("clientInfoV3", TType.STRING, (short)3);
+  private static final TField PACKAGE_NAME_FIELD_DESC = new TField("packageName", TType.STRING, (short)4);
+  private static final TField DOWNLOAD_URL_FIELD_DESC = new TField("downloadUrl", TType.STRING, (short)5);
+  private static final TField TIMESTAMP_FIELD_DESC = new TField("timestamp", TType.I64, (short)6);
 
   private MiuiLogScribeInfo scribeInfo;
   private String logType;
-  private ClientInfoV3 clientInfoV3;
-  private AppMarketSearchParam searchParam;
-  private SearchAdResult SearchAdResult;
+  private String clientInfoV3;
+  private String packageName;
+  private String downloadUrl;
+  private long timestamp;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SCRIBE_INFO((short)1, "scribeInfo"),
     LOG_TYPE((short)2, "logType"),
     CLIENT_INFO_V3((short)3, "clientInfoV3"),
-    SEARCH_PARAM((short)4, "searchParam"),
-    SEARCH_AD_RESULT((short)5, "SearchAdResult");
+    PACKAGE_NAME((short)4, "packageName"),
+    DOWNLOAD_URL((short)5, "downloadUrl"),
+    TIMESTAMP((short)6, "timestamp");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -72,10 +72,12 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
           return LOG_TYPE;
         case 3: // CLIENT_INFO_V3
           return CLIENT_INFO_V3;
-        case 4: // SEARCH_PARAM
-          return SEARCH_PARAM;
-        case 5: // SEARCH_AD_RESULT
-          return SEARCH_AD_RESULT;
+        case 4: // PACKAGE_NAME
+          return PACKAGE_NAME;
+        case 5: // DOWNLOAD_URL
+          return DOWNLOAD_URL;
+        case 6: // TIMESTAMP
+          return TIMESTAMP;
         default:
           return null;
       }
@@ -116,6 +118,8 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
   }
 
   // isset id assignments
+  private static final int __TIMESTAMP_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
 
   public static final Map<_Fields, FieldMetaData> metaDataMap;
   static {
@@ -125,37 +129,44 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     tmpMap.put(_Fields.LOG_TYPE, new FieldMetaData("logType", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.CLIENT_INFO_V3, new FieldMetaData("clientInfoV3", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, ClientInfoV3.class)));
-    tmpMap.put(_Fields.SEARCH_PARAM, new FieldMetaData("searchParam", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, AppMarketSearchParam.class)));
-    tmpMap.put(_Fields.SEARCH_AD_RESULT, new FieldMetaData("SearchAdResult", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, SearchAdResult.class)));
+        new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.PACKAGE_NAME, new FieldMetaData("packageName", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.DOWNLOAD_URL, new FieldMetaData("downloadUrl", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.TIMESTAMP, new FieldMetaData("timestamp", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.I64)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(MiuiAdQueryServiceLogAppStoreSearchExpose.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(MiuiAdStoreServiceLogAppStore.class, metaDataMap);
   }
 
-  public MiuiAdQueryServiceLogAppStoreSearchExpose() {
+  public MiuiAdStoreServiceLogAppStore() {
   }
 
-  public MiuiAdQueryServiceLogAppStoreSearchExpose(
+  public MiuiAdStoreServiceLogAppStore(
     MiuiLogScribeInfo scribeInfo,
     String logType,
-    ClientInfoV3 clientInfoV3,
-    AppMarketSearchParam searchParam,
-    SearchAdResult SearchAdResult)
+    String clientInfoV3,
+    String packageName,
+    String downloadUrl,
+    long timestamp)
   {
     this();
     this.scribeInfo = scribeInfo;
     this.logType = logType;
     this.clientInfoV3 = clientInfoV3;
-    this.searchParam = searchParam;
-    this.SearchAdResult = SearchAdResult;
+    this.packageName = packageName;
+    this.downloadUrl = downloadUrl;
+    this.timestamp = timestamp;
+    setTimestampIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public MiuiAdQueryServiceLogAppStoreSearchExpose(MiuiAdQueryServiceLogAppStoreSearchExpose other) {
+  public MiuiAdStoreServiceLogAppStore(MiuiAdStoreServiceLogAppStore other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetScribeInfo()) {
       this.scribeInfo = new MiuiLogScribeInfo(other.scribeInfo);
     }
@@ -163,18 +174,19 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
       this.logType = other.logType;
     }
     if (other.isSetClientInfoV3()) {
-      this.clientInfoV3 = new ClientInfoV3(other.clientInfoV3);
+      this.clientInfoV3 = other.clientInfoV3;
     }
-    if (other.isSetSearchParam()) {
-      this.searchParam = new AppMarketSearchParam(other.searchParam);
+    if (other.isSetPackageName()) {
+      this.packageName = other.packageName;
     }
-    if (other.isSetSearchAdResult()) {
-      this.SearchAdResult = new SearchAdResult(other.SearchAdResult);
+    if (other.isSetDownloadUrl()) {
+      this.downloadUrl = other.downloadUrl;
     }
+    this.timestamp = other.timestamp;
   }
 
-  public MiuiAdQueryServiceLogAppStoreSearchExpose deepCopy() {
-    return new MiuiAdQueryServiceLogAppStoreSearchExpose(this);
+  public MiuiAdStoreServiceLogAppStore deepCopy() {
+    return new MiuiAdStoreServiceLogAppStore(this);
   }
 
   @Override
@@ -182,8 +194,10 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     this.scribeInfo = null;
     this.logType = null;
     this.clientInfoV3 = null;
-    this.searchParam = null;
-    this.SearchAdResult = null;
+    this.packageName = null;
+    this.downloadUrl = null;
+    setTimestampIsSet(false);
+    this.timestamp = 0;
   }
 
   public MiuiLogScribeInfo getScribeInfo() {
@@ -232,11 +246,11 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     }
   }
 
-  public ClientInfoV3 getClientInfoV3() {
+  public String getClientInfoV3() {
     return this.clientInfoV3;
   }
 
-  public void setClientInfoV3(ClientInfoV3 clientInfoV3) {
+  public void setClientInfoV3(String clientInfoV3) {
     this.clientInfoV3 = clientInfoV3;
   }
 
@@ -255,50 +269,72 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     }
   }
 
-  public AppMarketSearchParam getSearchParam() {
-    return this.searchParam;
+  public String getPackageName() {
+    return this.packageName;
   }
 
-  public void setSearchParam(AppMarketSearchParam searchParam) {
-    this.searchParam = searchParam;
+  public void setPackageName(String packageName) {
+    this.packageName = packageName;
   }
 
-  public void unsetSearchParam() {
-    this.searchParam = null;
+  public void unsetPackageName() {
+    this.packageName = null;
   }
 
-  /** Returns true if field searchParam is set (has been asigned a value) and false otherwise */
-  public boolean isSetSearchParam() {
-    return this.searchParam != null;
+  /** Returns true if field packageName is set (has been asigned a value) and false otherwise */
+  public boolean isSetPackageName() {
+    return this.packageName != null;
   }
 
-  public void setSearchParamIsSet(boolean value) {
+  public void setPackageNameIsSet(boolean value) {
     if (!value) {
-      this.searchParam = null;
+      this.packageName = null;
     }
   }
 
-  public SearchAdResult getSearchAdResult() {
-    return this.SearchAdResult;
+  public String getDownloadUrl() {
+    return this.downloadUrl;
   }
 
-  public void setSearchAdResult(SearchAdResult SearchAdResult) {
-    this.SearchAdResult = SearchAdResult;
+  public void setDownloadUrl(String downloadUrl) {
+    this.downloadUrl = downloadUrl;
   }
 
-  public void unsetSearchAdResult() {
-    this.SearchAdResult = null;
+  public void unsetDownloadUrl() {
+    this.downloadUrl = null;
   }
 
-  /** Returns true if field SearchAdResult is set (has been asigned a value) and false otherwise */
-  public boolean isSetSearchAdResult() {
-    return this.SearchAdResult != null;
+  /** Returns true if field downloadUrl is set (has been asigned a value) and false otherwise */
+  public boolean isSetDownloadUrl() {
+    return this.downloadUrl != null;
   }
 
-  public void setSearchAdResultIsSet(boolean value) {
+  public void setDownloadUrlIsSet(boolean value) {
     if (!value) {
-      this.SearchAdResult = null;
+      this.downloadUrl = null;
     }
+  }
+
+  public long getTimestamp() {
+    return this.timestamp;
+  }
+
+  public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+    setTimestampIsSet(true);
+  }
+
+  public void unsetTimestamp() {
+    __isset_bit_vector.clear(__TIMESTAMP_ISSET_ID);
+  }
+
+  /** Returns true if field timestamp is set (has been asigned a value) and false otherwise */
+  public boolean isSetTimestamp() {
+    return __isset_bit_vector.get(__TIMESTAMP_ISSET_ID);
+  }
+
+  public void setTimestampIsSet(boolean value) {
+    __isset_bit_vector.set(__TIMESTAMP_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -323,23 +359,31 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
       if (value == null) {
         unsetClientInfoV3();
       } else {
-        setClientInfoV3((ClientInfoV3)value);
+        setClientInfoV3((String)value);
       }
       break;
 
-    case SEARCH_PARAM:
+    case PACKAGE_NAME:
       if (value == null) {
-        unsetSearchParam();
+        unsetPackageName();
       } else {
-        setSearchParam((AppMarketSearchParam)value);
+        setPackageName((String)value);
       }
       break;
 
-    case SEARCH_AD_RESULT:
+    case DOWNLOAD_URL:
       if (value == null) {
-        unsetSearchAdResult();
+        unsetDownloadUrl();
       } else {
-        setSearchAdResult((SearchAdResult)value);
+        setDownloadUrl((String)value);
+      }
+      break;
+
+    case TIMESTAMP:
+      if (value == null) {
+        unsetTimestamp();
+      } else {
+        setTimestamp((Long)value);
       }
       break;
 
@@ -357,11 +401,14 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     case CLIENT_INFO_V3:
       return getClientInfoV3();
 
-    case SEARCH_PARAM:
-      return getSearchParam();
+    case PACKAGE_NAME:
+      return getPackageName();
 
-    case SEARCH_AD_RESULT:
-      return getSearchAdResult();
+    case DOWNLOAD_URL:
+      return getDownloadUrl();
+
+    case TIMESTAMP:
+      return new Long(getTimestamp());
 
     }
     throw new IllegalStateException();
@@ -380,10 +427,12 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
       return isSetLogType();
     case CLIENT_INFO_V3:
       return isSetClientInfoV3();
-    case SEARCH_PARAM:
-      return isSetSearchParam();
-    case SEARCH_AD_RESULT:
-      return isSetSearchAdResult();
+    case PACKAGE_NAME:
+      return isSetPackageName();
+    case DOWNLOAD_URL:
+      return isSetDownloadUrl();
+    case TIMESTAMP:
+      return isSetTimestamp();
     }
     throw new IllegalStateException();
   }
@@ -392,12 +441,12 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof MiuiAdQueryServiceLogAppStoreSearchExpose)
-      return this.equals((MiuiAdQueryServiceLogAppStoreSearchExpose)that);
+    if (that instanceof MiuiAdStoreServiceLogAppStore)
+      return this.equals((MiuiAdStoreServiceLogAppStore)that);
     return false;
   }
 
-  public boolean equals(MiuiAdQueryServiceLogAppStoreSearchExpose that) {
+  public boolean equals(MiuiAdStoreServiceLogAppStore that) {
     if (that == null)
       return false;
 
@@ -428,21 +477,30 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
         return false;
     }
 
-    boolean this_present_searchParam = true && this.isSetSearchParam();
-    boolean that_present_searchParam = true && that.isSetSearchParam();
-    if (this_present_searchParam || that_present_searchParam) {
-      if (!(this_present_searchParam && that_present_searchParam))
+    boolean this_present_packageName = true && this.isSetPackageName();
+    boolean that_present_packageName = true && that.isSetPackageName();
+    if (this_present_packageName || that_present_packageName) {
+      if (!(this_present_packageName && that_present_packageName))
         return false;
-      if (!this.searchParam.equals(that.searchParam))
+      if (!this.packageName.equals(that.packageName))
         return false;
     }
 
-    boolean this_present_SearchAdResult = true && this.isSetSearchAdResult();
-    boolean that_present_SearchAdResult = true && that.isSetSearchAdResult();
-    if (this_present_SearchAdResult || that_present_SearchAdResult) {
-      if (!(this_present_SearchAdResult && that_present_SearchAdResult))
+    boolean this_present_downloadUrl = true && this.isSetDownloadUrl();
+    boolean that_present_downloadUrl = true && that.isSetDownloadUrl();
+    if (this_present_downloadUrl || that_present_downloadUrl) {
+      if (!(this_present_downloadUrl && that_present_downloadUrl))
         return false;
-      if (!this.SearchAdResult.equals(that.SearchAdResult))
+      if (!this.downloadUrl.equals(that.downloadUrl))
+        return false;
+    }
+
+    boolean this_present_timestamp = true;
+    boolean that_present_timestamp = true;
+    if (this_present_timestamp || that_present_timestamp) {
+      if (!(this_present_timestamp && that_present_timestamp))
+        return false;
+      if (this.timestamp != that.timestamp)
         return false;
     }
 
@@ -468,26 +526,31 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     if (present_clientInfoV3)
       builder.append(clientInfoV3);
 
-    boolean present_searchParam = true && (isSetSearchParam());
-    builder.append(present_searchParam);
-    if (present_searchParam)
-      builder.append(searchParam);
+    boolean present_packageName = true && (isSetPackageName());
+    builder.append(present_packageName);
+    if (present_packageName)
+      builder.append(packageName);
 
-    boolean present_SearchAdResult = true && (isSetSearchAdResult());
-    builder.append(present_SearchAdResult);
-    if (present_SearchAdResult)
-      builder.append(SearchAdResult);
+    boolean present_downloadUrl = true && (isSetDownloadUrl());
+    builder.append(present_downloadUrl);
+    if (present_downloadUrl)
+      builder.append(downloadUrl);
+
+    boolean present_timestamp = true;
+    builder.append(present_timestamp);
+    if (present_timestamp)
+      builder.append(timestamp);
 
     return builder.toHashCode();
   }
 
-  public int compareTo(MiuiAdQueryServiceLogAppStoreSearchExpose other) {
+  public int compareTo(MiuiAdStoreServiceLogAppStore other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    MiuiAdQueryServiceLogAppStoreSearchExpose typedOther = (MiuiAdQueryServiceLogAppStoreSearchExpose)other;
+    MiuiAdStoreServiceLogAppStore typedOther = (MiuiAdStoreServiceLogAppStore)other;
 
     lastComparison = Boolean.valueOf(isSetScribeInfo()).compareTo(typedOther.isSetScribeInfo());
     if (lastComparison != 0) {
@@ -519,22 +582,32 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSearchParam()).compareTo(typedOther.isSetSearchParam());
+    lastComparison = Boolean.valueOf(isSetPackageName()).compareTo(typedOther.isSetPackageName());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSearchParam()) {
-      lastComparison = TBaseHelper.compareTo(this.searchParam, typedOther.searchParam);
+    if (isSetPackageName()) {
+      lastComparison = TBaseHelper.compareTo(this.packageName, typedOther.packageName);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSearchAdResult()).compareTo(typedOther.isSetSearchAdResult());
+    lastComparison = Boolean.valueOf(isSetDownloadUrl()).compareTo(typedOther.isSetDownloadUrl());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSearchAdResult()) {
-      lastComparison = TBaseHelper.compareTo(this.SearchAdResult, typedOther.SearchAdResult);
+    if (isSetDownloadUrl()) {
+      lastComparison = TBaseHelper.compareTo(this.downloadUrl, typedOther.downloadUrl);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetTimestamp()).compareTo(typedOther.isSetTimestamp());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetTimestamp()) {
+      lastComparison = TBaseHelper.compareTo(this.timestamp, typedOther.timestamp);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -572,25 +645,30 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
           }
           break;
         case 3: // CLIENT_INFO_V3
-          if (field.type == TType.STRUCT) {
-            this.clientInfoV3 = new ClientInfoV3();
-            this.clientInfoV3.read(iprot);
+          if (field.type == TType.STRING) {
+            this.clientInfoV3 = iprot.readString();
           } else { 
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 4: // SEARCH_PARAM
-          if (field.type == TType.STRUCT) {
-            this.searchParam = new AppMarketSearchParam();
-            this.searchParam.read(iprot);
+        case 4: // PACKAGE_NAME
+          if (field.type == TType.STRING) {
+            this.packageName = iprot.readString();
           } else { 
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
-        case 5: // SEARCH_AD_RESULT
-          if (field.type == TType.STRUCT) {
-            this.SearchAdResult = new SearchAdResult();
-            this.SearchAdResult.read(iprot);
+        case 5: // DOWNLOAD_URL
+          if (field.type == TType.STRING) {
+            this.downloadUrl = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 6: // TIMESTAMP
+          if (field.type == TType.I64) {
+            this.timestamp = iprot.readI64();
+            setTimestampIsSet(true);
           } else { 
             TProtocolUtil.skip(iprot, field.type);
           }
@@ -620,26 +698,29 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     }
     if (this.clientInfoV3 != null) {
       oprot.writeFieldBegin(CLIENT_INFO_V3_FIELD_DESC);
-      this.clientInfoV3.write(oprot);
+      oprot.writeString(this.clientInfoV3);
       oprot.writeFieldEnd();
     }
-    if (this.searchParam != null) {
-      oprot.writeFieldBegin(SEARCH_PARAM_FIELD_DESC);
-      this.searchParam.write(oprot);
+    if (this.packageName != null) {
+      oprot.writeFieldBegin(PACKAGE_NAME_FIELD_DESC);
+      oprot.writeString(this.packageName);
       oprot.writeFieldEnd();
     }
-    if (this.SearchAdResult != null) {
-      oprot.writeFieldBegin(SEARCH_AD_RESULT_FIELD_DESC);
-      this.SearchAdResult.write(oprot);
+    if (this.downloadUrl != null) {
+      oprot.writeFieldBegin(DOWNLOAD_URL_FIELD_DESC);
+      oprot.writeString(this.downloadUrl);
       oprot.writeFieldEnd();
     }
+    oprot.writeFieldBegin(TIMESTAMP_FIELD_DESC);
+    oprot.writeI64(this.timestamp);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("MiuiAdQueryServiceLogAppStoreSearchExpose(");
+    StringBuilder sb = new StringBuilder("MiuiAdStoreServiceLogAppStore(");
     boolean first = true;
 
     sb.append("scribeInfo:");
@@ -666,20 +747,24 @@ public class MiuiAdQueryServiceLogAppStoreSearchExpose implements TBase<MiuiAdQu
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("searchParam:");
-    if (this.searchParam == null) {
+    sb.append("packageName:");
+    if (this.packageName == null) {
       sb.append("null");
     } else {
-      sb.append(this.searchParam);
+      sb.append(this.packageName);
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("SearchAdResult:");
-    if (this.SearchAdResult == null) {
+    sb.append("downloadUrl:");
+    if (this.downloadUrl == null) {
       sb.append("null");
     } else {
-      sb.append(this.SearchAdResult);
+      sb.append(this.downloadUrl);
     }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("timestamp:");
+    sb.append(this.timestamp);
     first = false;
     sb.append(")");
     return sb.toString();

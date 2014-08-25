@@ -36,7 +36,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
   private static final TField UNKNOWN1_FIELD_DESC = new TField("unknown1", TType.I32, (short)4);
   private static final TField PACKAGE_NAME_LIST_FIELD_DESC = new TField("packageNameList", TType.STRING, (short)5);
 
-  private MiuiAdQueryServiceLogScribeInfo scribeInfo;
+  private MiuiLogScribeInfo scribeInfo;
   private String algorithmName;
   private String clientInfoStr;
   private int unknown1;
@@ -120,7 +120,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
   static {
     Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.SCRIBE_INFO, new FieldMetaData("scribeInfo", TFieldRequirementType.DEFAULT, 
-        new StructMetaData(TType.STRUCT, MiuiAdQueryServiceLogScribeInfo.class)));
+        new StructMetaData(TType.STRUCT, MiuiLogScribeInfo.class)));
     tmpMap.put(_Fields.ALGORITHM_NAME, new FieldMetaData("algorithmName", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.CLIENT_INFO_STR, new FieldMetaData("clientInfoStr", TFieldRequirementType.DEFAULT, 
@@ -137,7 +137,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
   }
 
   public MiuiAdQueryServiceLogAlgorithm(
-    MiuiAdQueryServiceLogScribeInfo scribeInfo,
+    MiuiLogScribeInfo scribeInfo,
     String algorithmName,
     String clientInfoStr,
     int unknown1,
@@ -159,7 +159,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
     __isset_bit_vector.clear();
     __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetScribeInfo()) {
-      this.scribeInfo = new MiuiAdQueryServiceLogScribeInfo(other.scribeInfo);
+      this.scribeInfo = new MiuiLogScribeInfo(other.scribeInfo);
     }
     if (other.isSetAlgorithmName()) {
       this.algorithmName = other.algorithmName;
@@ -187,11 +187,11 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
     this.packageNameList = null;
   }
 
-  public MiuiAdQueryServiceLogScribeInfo getScribeInfo() {
+  public MiuiLogScribeInfo getScribeInfo() {
     return this.scribeInfo;
   }
 
-  public void setScribeInfo(MiuiAdQueryServiceLogScribeInfo scribeInfo) {
+  public void setScribeInfo(MiuiLogScribeInfo scribeInfo) {
     this.scribeInfo = scribeInfo;
   }
 
@@ -307,7 +307,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
       if (value == null) {
         unsetScribeInfo();
       } else {
-        setScribeInfo((MiuiAdQueryServiceLogScribeInfo)value);
+        setScribeInfo((MiuiLogScribeInfo)value);
       }
       break;
 
@@ -558,7 +558,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
       switch (field.id) {
         case 1: // SCRIBE_INFO
           if (field.type == TType.STRUCT) {
-            this.scribeInfo = new MiuiAdQueryServiceLogScribeInfo();
+            this.scribeInfo = new MiuiLogScribeInfo();
             this.scribeInfo.read(iprot);
           } else { 
             TProtocolUtil.skip(iprot, field.type);

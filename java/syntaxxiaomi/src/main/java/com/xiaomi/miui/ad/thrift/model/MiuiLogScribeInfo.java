@@ -27,8 +27,8 @@ import org.apache.thrift.meta_data.*;
 import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
-public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryServiceLogScribeInfo, MiuiAdQueryServiceLogScribeInfo._Fields>, java.io.Serializable, Cloneable {
-  private static final TStruct STRUCT_DESC = new TStruct("MiuiAdQueryServiceLogScribeInfo");
+public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribeInfo._Fields>, java.io.Serializable, Cloneable {
+  private static final TStruct STRUCT_DESC = new TStruct("MiuiLogScribeInfo");
 
   private static final TField SCRIBE_INFO_FIELD_DESC = new TField("scribeInfo", TType.STRING, (short)1);
   private static final TField TIME_FIELD_DESC = new TField("time", TType.STRING, (short)2);
@@ -107,13 +107,13 @@ public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryService
     tmpMap.put(_Fields.TIME, new FieldMetaData("time", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    FieldMetaData.addStructMetaDataMap(MiuiAdQueryServiceLogScribeInfo.class, metaDataMap);
+    FieldMetaData.addStructMetaDataMap(MiuiLogScribeInfo.class, metaDataMap);
   }
 
-  public MiuiAdQueryServiceLogScribeInfo() {
+  public MiuiLogScribeInfo() {
   }
 
-  public MiuiAdQueryServiceLogScribeInfo(
+  public MiuiLogScribeInfo(
     String scribeInfo,
     String time)
   {
@@ -125,7 +125,7 @@ public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryService
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public MiuiAdQueryServiceLogScribeInfo(MiuiAdQueryServiceLogScribeInfo other) {
+  public MiuiLogScribeInfo(MiuiLogScribeInfo other) {
     if (other.isSetScribeInfo()) {
       this.scribeInfo = other.scribeInfo;
     }
@@ -134,8 +134,8 @@ public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryService
     }
   }
 
-  public MiuiAdQueryServiceLogScribeInfo deepCopy() {
-    return new MiuiAdQueryServiceLogScribeInfo(this);
+  public MiuiLogScribeInfo deepCopy() {
+    return new MiuiLogScribeInfo(this);
   }
 
   @Override
@@ -242,12 +242,12 @@ public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryService
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof MiuiAdQueryServiceLogScribeInfo)
-      return this.equals((MiuiAdQueryServiceLogScribeInfo)that);
+    if (that instanceof MiuiLogScribeInfo)
+      return this.equals((MiuiLogScribeInfo)that);
     return false;
   }
 
-  public boolean equals(MiuiAdQueryServiceLogScribeInfo that) {
+  public boolean equals(MiuiLogScribeInfo that) {
     if (that == null)
       return false;
 
@@ -289,13 +289,13 @@ public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryService
     return builder.toHashCode();
   }
 
-  public int compareTo(MiuiAdQueryServiceLogScribeInfo other) {
+  public int compareTo(MiuiLogScribeInfo other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    MiuiAdQueryServiceLogScribeInfo typedOther = (MiuiAdQueryServiceLogScribeInfo)other;
+    MiuiLogScribeInfo typedOther = (MiuiLogScribeInfo)other;
 
     lastComparison = Boolean.valueOf(isSetScribeInfo()).compareTo(typedOther.isSetScribeInfo());
     if (lastComparison != 0) {
@@ -377,7 +377,7 @@ public class MiuiAdQueryServiceLogScribeInfo implements TBase<MiuiAdQueryService
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("MiuiAdQueryServiceLogScribeInfo(");
+    StringBuilder sb = new StringBuilder("MiuiLogScribeInfo(");
     boolean first = true;
 
     sb.append("scribeInfo:");
