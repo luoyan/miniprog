@@ -1,6 +1,6 @@
 function usage() {
     local arg0=$1
-    echo $arg0 "connect/dump/restore report_db/bidding_db/statistic_db env=staging/production"
+    echo $arg0 "connect/dump/restore report_db/bidding_db/statistic_db/appmarket_db env=staging/production"
 }
 if [ $# -ne 3 ] ; then
     usage $0
@@ -44,6 +44,18 @@ elif [ $db_type == "statistic_db" ] ; then
         passwd=3487e498770b9740086144fc03140876
         host=zc-stage1-miui-ad02.bj
         dbname=miui_statistic_staging
+    fi
+elif [ $db_type == "appmarket_db" ] ; then
+    if [ $env == "production" ] ; then
+        user=miui_app_r
+        passwd=5726ebb6efe83e2d00d6c79dcc0a7f7b
+        host=10.101.30.209
+        dbname=miui_statistics_new
+    #else
+    #    user=root
+    #    passwd=3487e498770b9740086144fc03140876
+    #    host=zc-stage1-miui-ad02.bj
+    #    dbname=miui_statistic_staging
     fi
 else
     usage $0

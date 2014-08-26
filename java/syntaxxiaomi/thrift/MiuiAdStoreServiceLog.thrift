@@ -60,3 +60,7 @@ struct MiuiAdStoreServiceLogConsumptionDetail {
     10: i64 consumption;
 }
 
+struct MiuiAdStoreServiceLogFictionEventDetail {
+    1: MiuiLogScribeInfo scribeInfo;
+    2: string logType;
+}
