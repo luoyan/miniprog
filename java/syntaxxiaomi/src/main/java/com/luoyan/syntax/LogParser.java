@@ -22,7 +22,10 @@ import com.xiaomi.miui.ad.thrift.model.ClientInfo;
 import com.xiaomi.miui.ad.thrift.model.ClientInfoV3;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAlgorithm;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAlgorithmExposeDetail;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAlgorithmDownloadDetail;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAppStore;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogBiddingEffectRecord;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogConsumptionDetail;
 import com.xiaomi.miui.ad.thrift.model.MiuiLogScribeInfo;
 import com.xiaomi.miui.ad.thrift.model.SearchAdResult;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAppStoreSearchExpose;
@@ -186,9 +189,26 @@ public class LogParser {
                 MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
                 miuiLogScribeInfo.setScribeInfo(scribeInfo);
                 miuiLogScribeInfo.setTime(time);
-            	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
                 if (itemLevel2.startsWith("{")) {
-                	
+                	JSONObject itemLevel2Object = JSONObject.fromObject(itemLevel2);
+                	if (itemLevel2Object.getString("log_type").equals("algorithm_download_detail")) {
+                		MiuiAdStoreServiceLogAlgorithmDownloadDetail miuiAdStoreServiceLogAlgorithmDownloadDetail = new MiuiAdStoreServiceLogAlgorithmDownloadDetail();
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setScribeInfo(miuiLogScribeInfo);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setLogType(itemLevel2Object.getString("log_type"));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setImei(itemLevel2Object.getString("imei"));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setPackageName(itemLevel2Object.getString("package_name"));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setCategoryId(Integer.parseInt(itemLevel2Object.getString("category_id")));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setPosition(itemLevel2Object.getString("position"));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setConsumptionType(itemLevel2Object.getString("consumption_type"));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setDownloadNo(Long.parseLong(itemLevel2Object.getString("download_no")));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setPrice(Long.parseLong(itemLevel2Object.getString("price")));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setConsumption(Long.parseLong(itemLevel2Object.getString("consumption")));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setMiuiAdAlgorithm(itemLevel2Object.getString("miui_ad_alg"));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setMiuiAdExperiment(itemLevel2Object.getString("miui_ad_exp"));
+                	}
+                	else {
+                    	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+                	}
                 }
                 else {
                     String[] itemLevel2Array = itemLevel2.split("\t");
@@ -208,12 +228,57 @@ public class LogParser {
                     	miuiAdStoreServiceLogAppStore.setDownloadUrl(downloadUrl);
                     	miuiAdStoreServiceLogAppStore.setTimestamp(timestamp);
                     }
-                    else if (itemLevel2Array[0] == "algorithm_download_detail") {
-            		
+                    else if (itemLevel2Array[0].equals("algorithm_download_detail")) {
+                    	if (itemLevel2Array.length != 10) {
+                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
+                    		return;
+                    	}
+                		MiuiAdStoreServiceLogAlgorithmDownloadDetail miuiAdStoreServiceLogAlgorithmDownloadDetail = new MiuiAdStoreServiceLogAlgorithmDownloadDetail();
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setScribeInfo(miuiLogScribeInfo);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setLogType(itemLevel2Array[0]);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setImei(itemLevel2Array[1]);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setPackageName(itemLevel2Array[2]);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setCategoryId(Integer.parseInt(itemLevel2Array[3]));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setPosition(itemLevel2Array[4]);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setConsumptionType(itemLevel2Array[5]);
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setDownloadNo(Long.parseLong(itemLevel2Array[6]));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setPrice(Long.parseLong(itemLevel2Array[7]));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setConsumption(Long.parseLong(itemLevel2Array[8]));
+                		miuiAdStoreServiceLogAlgorithmDownloadDetail.setMiuiAdAlgorithm(itemLevel2Array[9]);
                     }
-                    else if (itemLevel2Array[0] == "algorithm_download_detail") {
-            		
+                    else if (itemLevel2Array[0].equals("consumption_detail")) {
+                    	if (itemLevel2Array.length != 9) {
+                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
+                    		return;
+                    	}
+                    	MiuiAdStoreServiceLogConsumptionDetail miuiAdStoreServiceLogConsumptionDetail = new MiuiAdStoreServiceLogConsumptionDetail();
+                    	miuiAdStoreServiceLogConsumptionDetail.setScribeInfo(miuiLogScribeInfo);
+                    	miuiAdStoreServiceLogConsumptionDetail.setLogType(itemLevel2Array[0]);
+                    	miuiAdStoreServiceLogConsumptionDetail.setImei(itemLevel2Array[1]);
+                    	miuiAdStoreServiceLogConsumptionDetail.setPackageName(itemLevel2Array[2]);
+                    	miuiAdStoreServiceLogConsumptionDetail.setCategoryId(Integer.parseInt(itemLevel2Array[3]));
+                    	miuiAdStoreServiceLogConsumptionDetail.setPosition(itemLevel2Array[4]);
+                    	miuiAdStoreServiceLogConsumptionDetail.setConsumptionType(itemLevel2Array[5]);
+                    	miuiAdStoreServiceLogConsumptionDetail.setDownloadNo(Long.parseLong(itemLevel2Array[6]));
+                    	miuiAdStoreServiceLogConsumptionDetail.setPrice(Long.parseLong(itemLevel2Array[7]));
+                    	miuiAdStoreServiceLogConsumptionDetail.setConsumption(Long.parseLong(itemLevel2Array[8]));
                     }
+                    else if (itemLevel2Array[0].equals("bidding_effect_record")) {
+                    	if (itemLevel2Array.length != 5) {
+                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
+                    		return;
+                    	}
+                    	MiuiAdStoreServiceLogBiddingEffectRecord miuiAdStoreServiceLogBiddingEffectRecord = new MiuiAdStoreServiceLogBiddingEffectRecord();
+                    	miuiAdStoreServiceLogBiddingEffectRecord.setScribeInfo(miuiLogScribeInfo);
+                    	miuiAdStoreServiceLogBiddingEffectRecord.setLogType(itemLevel2Array[0]);
+                    	miuiAdStoreServiceLogBiddingEffectRecord.setPackageName(itemLevel2Array[1]);
+                    	miuiAdStoreServiceLogBiddingEffectRecord.setDownloadNo(Long.parseLong(itemLevel2Array[2]));
+                    	miuiAdStoreServiceLogBiddingEffectRecord.setPrice(Long.parseLong(itemLevel2Array[3]));
+                    	miuiAdStoreServiceLogBiddingEffectRecord.setConsumption(Long.parseLong(itemLevel2Array[4]));
+                    }
+                	else {
+                    	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+                	}
                 }
             }
             count ++;
