@@ -181,7 +181,7 @@
                             <name>LoggerPrinter.sh</name>
                         </program>
                         <program>
-                            <mainClass>com.luoyan.syntax.LogParser</mainClass>
+                            <mainClass>com.xiaomi.miui.ad.log.LogParser</mainClass>
                             <name>LogParser.sh</name>
                         </program>
                     </programs>

@@ -26,6 +26,8 @@ import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAlgorithmDownloadDet
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAppStore;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogBiddingEffectRecord;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogConsumptionDetail;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogFictionEventDetail;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogOtherBiddingEffectRecord;
 import com.xiaomi.miui.ad.thrift.model.MiuiLogScribeInfo;
 import com.xiaomi.miui.ad.thrift.model.SearchAdResult;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdQueryServiceLogAppStoreSearchExpose;
@@ -275,6 +277,35 @@ public class LogParser {
                     	miuiAdStoreServiceLogBiddingEffectRecord.setDownloadNo(Long.parseLong(itemLevel2Array[2]));
                     	miuiAdStoreServiceLogBiddingEffectRecord.setPrice(Long.parseLong(itemLevel2Array[3]));
                     	miuiAdStoreServiceLogBiddingEffectRecord.setConsumption(Long.parseLong(itemLevel2Array[4]));
+                    }
+                    else if (itemLevel2Array[0].equals("other_bidding_effect_record")) {
+                    	if (itemLevel2Array.length != 5) {
+                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
+                    		return;
+                    	}
+                    	MiuiAdStoreServiceLogOtherBiddingEffectRecord miuiAdStoreServiceLogOtherBiddingEffectRecord = new MiuiAdStoreServiceLogOtherBiddingEffectRecord();
+                    	miuiAdStoreServiceLogOtherBiddingEffectRecord.setScribeInfo(miuiLogScribeInfo);
+                    	miuiAdStoreServiceLogOtherBiddingEffectRecord.setLogType(itemLevel2Array[0]);
+                    	miuiAdStoreServiceLogOtherBiddingEffectRecord.setPackageName(itemLevel2Array[1]);
+                    	miuiAdStoreServiceLogOtherBiddingEffectRecord.setMediaType(Integer.parseInt(itemLevel2Array[2]));
+                    	miuiAdStoreServiceLogOtherBiddingEffectRecord.setDownloadNo(Long.parseLong(itemLevel2Array[3]));
+                    	miuiAdStoreServiceLogOtherBiddingEffectRecord.setConsumption(Long.parseLong(itemLevel2Array[4]));
+                    }
+                    else if (itemLevel2Array[0].equals("fiction_event_detail")) {
+                    	if (itemLevel2Array.length != 8) {
+                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
+                    		return;
+                    	}
+                    	MiuiAdStoreServiceLogFictionEventDetail miuiAdStoreServiceLogFictionEventDetail = new MiuiAdStoreServiceLogFictionEventDetail();
+                    	miuiAdStoreServiceLogFictionEventDetail.setScribeInfo(miuiLogScribeInfo);
+                    	miuiAdStoreServiceLogFictionEventDetail.setLogType(itemLevel2Array[0]);
+                    	miuiAdStoreServiceLogFictionEventDetail.setEventType(itemLevel2Array[1]);
+                    	miuiAdStoreServiceLogFictionEventDetail.setImei(itemLevel2Array[2]);
+                    	miuiAdStoreServiceLogFictionEventDetail.setBookId(itemLevel2Array[3]);
+                    	miuiAdStoreServiceLogFictionEventDetail.setBookName(itemLevel2Array[4]);
+                    	miuiAdStoreServiceLogFictionEventDetail.setPackageName(itemLevel2Array[5]);
+                    	miuiAdStoreServiceLogFictionEventDetail.setBookNum(Long.parseLong(itemLevel2Array[6]));
+                    	miuiAdStoreServiceLogFictionEventDetail.setPrice(Long.parseLong(itemLevel2Array[7]));
                     }
                 	else {
                     	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");

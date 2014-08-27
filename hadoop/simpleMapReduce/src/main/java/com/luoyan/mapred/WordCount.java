@@ -50,6 +50,13 @@ public class WordCount {
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Configuration configuration = new Configuration();
+        /*
+         * 
+        configuration.set("mapreduce.map.java.opts", "-Xmx2048m");
+        configuration.set("mapreduce.map.memory.mb", "3072"); // container的内存资源，超过这个值会被kill掉
+        configuration.set("mapreduce.reduce.java.opts", "-Xmx2048m");
+        configuration.set("mapreduce.reduce.memory.mb", "3072");// container的内存资源，超过这个值会被kill掉
+         */
         GenericOptionsParser genericOptionsParser = new GenericOptionsParser(configuration, args);
         String[] otherArgs = genericOptionsParser.getRemainingArgs();
         configuration = genericOptionsParser.getConfiguration();
