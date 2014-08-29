@@ -53,10 +53,12 @@ public class LogParser {
 		String logFileName = args[1];
 		int maxRecordNum = Integer.parseInt(args[2]);
 		if (logType.equals("query_service")) {
-			MiuiAdQueryServiceLogParser.parse(logFileName, maxRecordNum);
+			MiuiAdQueryServiceLogParser miuiAdQueryServiceLogParser = new MiuiAdQueryServiceLogParser();
+			miuiAdQueryServiceLogParser.parse(logFileName, maxRecordNum);
 		}
 		else if (logType.equals("store_service")) {
-			MiuiAdStoreServiceLogParser.parse(logFileName, maxRecordNum);
+			MiuiAdStoreServiceLogParser miuiAdStoreServiceLogParser = new MiuiAdStoreServiceLogParser();
+			miuiAdStoreServiceLogParser.parse(logFileName, maxRecordNum);
 		}
 		else if (logType.equals("appstore")) {
 			parseAppstoreLog(logFileName, maxRecordNum);

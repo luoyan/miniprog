@@ -19,6 +19,7 @@ import java.text.*;
 
 public class App 
 {
+
     private Logger logger = LoggerFactory.getLogger(App.class);
     
     private int num;
@@ -31,7 +32,18 @@ public class App
     public void testLog(){       
         logger.info("this is a test log");       
     }
+    class C {
+    	public C(IBase b, int a) {
+    		b.foo(a);
+    	}
+    }
     
+	private void testInterface() {
+		Base b = new Base();
+		C c = new C(b, 1);
+		
+	}
+	
 	public static Date getDateWithoutTime(final Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
@@ -120,6 +132,7 @@ public class App
 	        a.testDate();
 	        testEnumType();
 	        testStringBuffer();
+	        a.testInterface();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -42,6 +45,15 @@ public class MiuiAdStoreServiceLogParser {
 		miuiAdStoreServiceLogAlgorithmDownloadDetail.setMiuiAdExperiment(jsonObject.getString("miui_ad_exp"));
 		return miuiAdStoreServiceLogAlgorithmDownloadDetail;
 	}
+
+	public class AlgorithmDownloadDetailJSONParser implements LogHandler.JSONParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo,
+				JSONObject jsonObject) {
+			return parseAlgorithmDownloadDetailByJson(miuiLogScribeInfo, jsonObject);
+		}
+		
+	}
 	
 	public static TBase parseAppStore(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
     	long timestamp = Long.parseLong(items[2]);
@@ -60,7 +72,17 @@ public class MiuiAdStoreServiceLogParser {
     	return miuiAdStoreServiceLogAppStore;
 	}
 	
+	public class AppStoreTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseAppStore(miuiLogScribeInfo, items);
+		}
+		
+	}
+	
 	public static TBase parseAlgorithmDownloadDetailByTab(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 10)
+			return null;
 		MiuiAdStoreServiceLogAlgorithmDownloadDetail miuiAdStoreServiceLogAlgorithmDownloadDetail = new MiuiAdStoreServiceLogAlgorithmDownloadDetail();
 		miuiAdStoreServiceLogAlgorithmDownloadDetail.setScribeInfo(miuiLogScribeInfo);
 		miuiAdStoreServiceLogAlgorithmDownloadDetail.setLogType(items[0]);
@@ -76,7 +98,16 @@ public class MiuiAdStoreServiceLogParser {
 		return miuiAdStoreServiceLogAlgorithmDownloadDetail;
 	}
 	
+	public class AlgorithmDownloadDetailTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseAlgorithmDownloadDetailByTab(miuiLogScribeInfo, items);
+		}
+	}
+	
 	public static TBase parseConsumptionDetail(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 9)
+			return null;
     	MiuiAdStoreServiceLogConsumptionDetail miuiAdStoreServiceLogConsumptionDetail = new MiuiAdStoreServiceLogConsumptionDetail();
     	miuiAdStoreServiceLogConsumptionDetail.setScribeInfo(miuiLogScribeInfo);
     	miuiAdStoreServiceLogConsumptionDetail.setLogType(items[0]);
@@ -91,7 +122,16 @@ public class MiuiAdStoreServiceLogParser {
     	return miuiAdStoreServiceLogConsumptionDetail;
 	}
 	
+	public class ConsumptionDetailTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseConsumptionDetail(miuiLogScribeInfo, items);
+		}
+	}
+	
 	public static TBase parseBiddingEffectRecord(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 5)
+			return null;
     	MiuiAdStoreServiceLogBiddingEffectRecord miuiAdStoreServiceLogBiddingEffectRecord = new MiuiAdStoreServiceLogBiddingEffectRecord();
     	miuiAdStoreServiceLogBiddingEffectRecord.setScribeInfo(miuiLogScribeInfo);
     	miuiAdStoreServiceLogBiddingEffectRecord.setLogType(items[0]);
@@ -102,7 +142,16 @@ public class MiuiAdStoreServiceLogParser {
 		return miuiAdStoreServiceLogBiddingEffectRecord;
 	}
 	
+	public class BiddingEffectRecordTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseBiddingEffectRecord(miuiLogScribeInfo, items);
+		}
+	}
+	
 	public static TBase parseOtherBiddingEffectRecord(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 5)
+			return null;
     	MiuiAdStoreServiceLogOtherBiddingEffectRecord miuiAdStoreServiceLogOtherBiddingEffectRecord = new MiuiAdStoreServiceLogOtherBiddingEffectRecord();
     	miuiAdStoreServiceLogOtherBiddingEffectRecord.setScribeInfo(miuiLogScribeInfo);
     	miuiAdStoreServiceLogOtherBiddingEffectRecord.setLogType(items[0]);
@@ -112,8 +161,17 @@ public class MiuiAdStoreServiceLogParser {
     	miuiAdStoreServiceLogOtherBiddingEffectRecord.setConsumption(Long.parseLong(items[4]));
 		return miuiAdStoreServiceLogOtherBiddingEffectRecord;
 	}
+
+	public class OtherBiddingEffectRecordTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseOtherBiddingEffectRecord(miuiLogScribeInfo, items);
+		}
+	}
 	
 	public static TBase parseFictionEventDetail(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 8)
+			return null;
     	MiuiAdStoreServiceLogFictionEventDetail miuiAdStoreServiceLogFictionEventDetail = new MiuiAdStoreServiceLogFictionEventDetail();
     	miuiAdStoreServiceLogFictionEventDetail.setScribeInfo(miuiLogScribeInfo);
     	miuiAdStoreServiceLogFictionEventDetail.setLogType(items[0]);
@@ -125,6 +183,13 @@ public class MiuiAdStoreServiceLogParser {
     	miuiAdStoreServiceLogFictionEventDetail.setBookNum(Long.parseLong(items[6]));
     	miuiAdStoreServiceLogFictionEventDetail.setPrice(Long.parseLong(items[7]));
 		return miuiAdStoreServiceLogFictionEventDetail;
+	}
+	
+	public class FictionEventDetailTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseFictionEventDetail(miuiLogScribeInfo, items);
+		}
 	}
 
     private static List<String> getListFromJsonArray(JSONObject adLogJsonObject, String key) {
@@ -139,6 +204,8 @@ public class MiuiAdStoreServiceLogParser {
     }
     
 	public static TBase parseFiction(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 3)
+			return null;
 		MiuiAdStoreServiceLogFiction miuiAdStoreServiceLogFiction = new MiuiAdStoreServiceLogFiction();
 		miuiAdStoreServiceLogFiction.setScribeInfo(miuiLogScribeInfo);
 		miuiAdStoreServiceLogFiction.setLogType(items[0]);
@@ -156,8 +223,17 @@ public class MiuiAdStoreServiceLogParser {
 		miuiAdStoreServiceLogFiction.setTimestamp(Long.parseLong(items[2]));
 		return miuiAdStoreServiceLogFiction;
 	}
+
+	public class FictionTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseFiction(miuiLogScribeInfo, items);
+		}
+	}
 	
 	public static TBase parseBiddingStatusChange(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		if (items.length != 3)
+			return null;
 		MiuiAdStoreServiceLogBiddingStatusChange miuiAdStoreServiceLogBiddingStatusChange = new MiuiAdStoreServiceLogBiddingStatusChange();
 		miuiAdStoreServiceLogBiddingStatusChange.setScribeInfo(miuiLogScribeInfo);
 		miuiAdStoreServiceLogBiddingStatusChange.setLogType(items[0]);
@@ -167,8 +243,26 @@ public class MiuiAdStoreServiceLogParser {
 		miuiAdStoreServiceLogBiddingStatusChange.setToStatus(status[1]);
 		return miuiAdStoreServiceLogBiddingStatusChange;
 	}
+
+	public class BiddingStatusChangeTabParser implements LogHandler.TabParser {
+
+		public TBase parse(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+			return parseBiddingStatusChange(miuiLogScribeInfo, items);
+		}
+	}
 	
-	public static void parse(String fileName, int maxRecordNum) throws IOException {
+	public void parse(String fileName, int maxRecordNum) throws IOException {
+		Map<String, LogHandler> logHandlerMap = new HashMap<String, LogHandler>();
+		logHandlerMap.put("algorithm_download_detail", new LogHandler("algorithm_download_detail", 
+				new AlgorithmDownloadDetailTabParser(), new AlgorithmDownloadDetailJSONParser()));
+		logHandlerMap.put("consumption_detail", new LogHandler("consumption_detail", new ConsumptionDetailTabParser(), null));
+		logHandlerMap.put("bidding_effect_record", new LogHandler("bidding_effect_record", new BiddingEffectRecordTabParser(), null));
+		logHandlerMap.put("other_bidding_effect_record", new LogHandler("other_bidding_effect_record", new OtherBiddingEffectRecordTabParser(), null));
+		logHandlerMap.put("fiction_event_detail", new LogHandler("fiction_event_detail", new FictionEventDetailTabParser(), null));
+		logHandlerMap.put("bidding_status_change", new LogHandler("bidding_status_change", new BiddingStatusChangeTabParser(), null));
+		logHandlerMap.put("APP_STORE", new LogHandler("APP_STORE", new AppStoreTabParser(), null));
+		logHandlerMap.put("FICTION", new LogHandler("FICTION", new FictionTabParser(), null));
+		Map<String, Long> logCountMap = new HashMap<String, Long>();
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = null;
         int total = 0;
@@ -197,101 +291,45 @@ public class MiuiAdStoreServiceLogParser {
 					MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
 					miuiLogScribeInfo.setScribeInfo(scribeInfo);
 					miuiLogScribeInfo.setTime(time);
+					String logType = null;
 					if (itemLevel2.startsWith("{")) {
 						JSONObject itemLevel2Object = JSONObject
 								.fromObject(itemLevel2);
-						if (itemLevel2Object.getString("log_type").equals(
-								"algorithm_download_detail")) {
-							parseAlgorithmDownloadDetailByJson(
-									miuiLogScribeInfo, itemLevel2Object);
-						} else {
-							LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+						logType = itemLevel2Object.getString("log_type");
+						LogHandler logHandler = logHandlerMap.get(logType);
+						if (logHandler == null || logHandler.getJSONParser() == null) {
+							LOGGER.debug("unknown logType " + logType + " itemLevel2 [\n" + itemLevel2 + "\n");
 							badFormatNum++;
+							continue;
+						}
+						TBase thriftObject = logHandler.getJSONParser().parse(miuiLogScribeInfo, itemLevel2Object);
+						if (thriftObject == null) {
+							LOGGER.debug("badformat logType " + logType + " itemLevel2 [\n" + itemLevel2 + "\n");
+							badFormatNum++;
+							continue;
 						}
 					} else {
 						String[] itemLevel2Array = itemLevel2.split("\t");
-						if (itemLevel2Array[0].equals("APP_STORE")) {
-							parseAppStore(miuiLogScribeInfo, itemLevel2Array);
-						} else if (itemLevel2Array[0]
-								.equals("algorithm_download_detail")) {
-							if (itemLevel2Array.length != 10) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseAlgorithmDownloadDetailByTab(
-									miuiLogScribeInfo, itemLevel2Array);
-						} else if (itemLevel2Array[0]
-								.equals("consumption_detail")) {
-							if (itemLevel2Array.length != 9) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseConsumptionDetail(miuiLogScribeInfo,
-									itemLevel2Array);
-						} else if (itemLevel2Array[0]
-								.equals("bidding_effect_record")) {
-							if (itemLevel2Array.length != 5) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseBiddingEffectRecord(miuiLogScribeInfo,
-									itemLevel2Array);
-						} else if (itemLevel2Array[0]
-								.equals("other_bidding_effect_record")) {
-							if (itemLevel2Array.length != 5) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseOtherBiddingEffectRecord(miuiLogScribeInfo,
-									itemLevel2Array);
-						} else if (itemLevel2Array[0]
-								.equals("fiction_event_detail")) {
-							if (itemLevel2Array.length != 8) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseFictionEventDetail(miuiLogScribeInfo,
-									itemLevel2Array);
-						} else if (itemLevel2Array[0].equals("FICTION")) {
-							if (itemLevel2Array.length != 3) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseFiction(miuiLogScribeInfo, itemLevel2Array);
-						} else if (itemLevel2Array[0]
-								.equals("bidding_status_change")) {
-							if (itemLevel2Array.length != 3) {
-								LOGGER.warn("bad format logType "
-										+ itemLevel2Array[0] + "\n"
-										+ itemLevel2 + "\n");
-								badFormatNum++;
-								continue;
-							}
-							parseBiddingStatusChange(miuiLogScribeInfo,
-									itemLevel2Array);
-						} else {
-							LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+						logType = itemLevel2Array[0];
+						LogHandler logHandler = logHandlerMap.get(logType);
+						if (logHandler == null || logHandler.getTabParser() == null) {
+							LOGGER.debug("unknown logType " + logType + "itemLevel2 [\n" + itemLevel2 + "\n");
 							badFormatNum++;
+							continue;
+						}
+						TBase thriftObject = logHandler.getTabParser().parse(miuiLogScribeInfo, itemLevel2Array);
+						if (thriftObject == null) {
+							LOGGER.debug("badformat logType " + logType + " itemLevel2 [\n" + itemLevel2 + "\n");
+							badFormatNum++;
+							continue;
 						}
 					}
+					Long logCount = logCountMap.get(logType);
+					if (logCount == null) {
+						logCount = 0L;
+					}
+					logCount++;
+					logCountMap.put(logType, logCount);
 				}
 				count++;
 			}
@@ -302,6 +340,13 @@ public class MiuiAdStoreServiceLogParser {
         	}
         }
         LOGGER.info("total " + total + " valid " + count + " exception " + exceptionNum + " badFormatNum " + badFormatNum);
+        Iterator iter = logCountMap.entrySet().iterator(); 
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+			Object key = entry.getKey();
+			Object val = entry.getValue();
+			LOGGER.info("logType " + key + " count " + val);
+		}
         br.close();
 	}
 }
