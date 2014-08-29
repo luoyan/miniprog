@@ -95,3 +95,11 @@ struct MiuiAdStoreServiceLogFiction {
     11: list<string> unknownC;
     12: i64 timestamp;
 }
+#comment
+struct MiuiAdStoreServiceLogBiddingStatusChange {
+    1: MiuiLogScribeInfo scribeInfo;
+    2: string logType;
+    3: string packageName;
+    4: string fromStatus;
+    5: string toStatus;
+}

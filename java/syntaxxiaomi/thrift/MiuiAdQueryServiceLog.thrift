@@ -19,7 +19,7 @@ struct MiuiAdQueryServiceLogAlgorithm {
     2: string algorithmName;
     3: string clientInfoStr;
     4: i32 unknown1;
-    5: string packageNameList; 
+    5: optional string packageNameList; 
 }
 
 struct MiuiAdQueryServiceLogAlgorithmExposeDetail {

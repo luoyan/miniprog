@@ -127,7 +127,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
         new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.UNKNOWN1, new FieldMetaData("unknown1", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.I32)));
-    tmpMap.put(_Fields.PACKAGE_NAME_LIST, new FieldMetaData("packageNameList", TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.PACKAGE_NAME_LIST, new FieldMetaData("packageNameList", TFieldRequirementType.OPTIONAL, 
         new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(MiuiAdQueryServiceLogAlgorithm.class, metaDataMap);
@@ -140,8 +140,7 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
     MiuiLogScribeInfo scribeInfo,
     String algorithmName,
     String clientInfoStr,
-    int unknown1,
-    String packageNameList)
+    int unknown1)
   {
     this();
     this.scribeInfo = scribeInfo;
@@ -149,7 +148,6 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
     this.clientInfoStr = clientInfoStr;
     this.unknown1 = unknown1;
     setUnknown1IsSet(true);
-    this.packageNameList = packageNameList;
   }
 
   /**
@@ -625,9 +623,11 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
     oprot.writeI32(this.unknown1);
     oprot.writeFieldEnd();
     if (this.packageNameList != null) {
-      oprot.writeFieldBegin(PACKAGE_NAME_LIST_FIELD_DESC);
-      oprot.writeString(this.packageNameList);
-      oprot.writeFieldEnd();
+      if (isSetPackageNameList()) {
+        oprot.writeFieldBegin(PACKAGE_NAME_LIST_FIELD_DESC);
+        oprot.writeString(this.packageNameList);
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -665,14 +665,16 @@ public class MiuiAdQueryServiceLogAlgorithm implements TBase<MiuiAdQueryServiceL
     sb.append("unknown1:");
     sb.append(this.unknown1);
     first = false;
-    if (!first) sb.append(", ");
-    sb.append("packageNameList:");
-    if (this.packageNameList == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.packageNameList);
+    if (isSetPackageNameList()) {
+      if (!first) sb.append(", ");
+      sb.append("packageNameList:");
+      if (this.packageNameList == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.packageNameList);
+      }
+      first = false;
     }
-    first = false;
     sb.append(")");
     return sb.toString();
   }

@@ -35,7 +35,9 @@ public class MiuiAdQueryServiceLogParser {
     	
     	ClientInfo clientInfo = new ClientInfo();
     	JSONObject client_info = jsonObject.getJSONObject("client_info");
-    	clientInfo.setImei(client_info.getString("imei"));
+
+    	if (client_info.has("imei"))
+    		clientInfo.setImei(client_info.getString("imei"));
     	clientInfo.setUserid(Integer.parseInt(client_info.getString("user_id")));
     	JSONArray positions = client_info.getJSONArray("positions");
     	List<Integer> positionList = new ArrayList<Integer>();
@@ -105,64 +107,96 @@ public class MiuiAdQueryServiceLogParser {
 		String miuiAdAlgorithm = items[0];
 		String clientInfoStr = items[1];
 		int unknown1 = Integer.parseInt(items[2]);
-		String packageNameList =  items[3];
         MiuiAdQueryServiceLogAlgorithm miuiAdQueryServiceLogAlgorithm = new MiuiAdQueryServiceLogAlgorithm();
         miuiAdQueryServiceLogAlgorithm.setScribeInfo(miuiLogScribeInfo);
         miuiAdQueryServiceLogAlgorithm.setAlgorithmName(miuiAdAlgorithm);
         miuiAdQueryServiceLogAlgorithm.setClientInfoStr(clientInfoStr);
         miuiAdQueryServiceLogAlgorithm.setUnknown1(unknown1);
-        miuiAdQueryServiceLogAlgorithm.setPackageNameList(packageNameList);
+        if (items.length == 4) {
+        	String packageNameList = items[3];
+        	miuiAdQueryServiceLogAlgorithm.setPackageNameList(packageNameList);
+        }
         return miuiAdQueryServiceLogAlgorithm;
 	}
 	
 	public static void parse(String fileName, int maxRecordNum) throws IOException, TException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = null;
+        int total = 0;
         int count = 0;
+        int exceptionNum = 0;
+        int badFormatNum = 0;
         while ((line = br.readLine()) != null) {
-            String[] itemLevel1Array = line.trim().split("\t");
-            if (itemLevel1Array.length == 1) {
-            	continue;
-            }
-            if (itemLevel1Array.length != 3) {
-            	LOGGER.warn("warning format itemLevel1Array length = " + itemLevel1Array.length + " [" + line.trim() + "]");
-            }
-            else {
-            	String scribeInfo = itemLevel1Array[0];
-            	String time = itemLevel1Array[1];
-                String itemLevel2 = new String(Base64.decodeBase64(itemLevel1Array[2]));
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("scribeInfo", scribeInfo);
-                jsonObject.put("time", time);
-                MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
-                miuiLogScribeInfo.setScribeInfo(scribeInfo);
-                miuiLogScribeInfo.setTime(time);
-                if (itemLevel2.startsWith("{")) {
-                	JSONObject itemLevel2Object = JSONObject.fromObject(itemLevel2);
-                    if (itemLevel2Object.get("log_type").equals("algorithm_expose_detail")) {
-                    	parseAlgorithmExposeDetail(miuiLogScribeInfo, itemLevel2Object);
-                    }
-                    else if (itemLevel2Object.get("log_type").equals("app_store_search_expose")) {
-                    	parseAppStoreSearchExpose(miuiLogScribeInfo, itemLevel2Object);
-                    }
-                    else {
-                    	LOGGER.warn("warning format itemLevel2Object log_type = " + itemLevel2Object.get("log_type") + "  [\n" + itemLevel2 + "\n]");
-                    }
-                }
-                else {
-                	String[] itemLevel3Array = itemLevel2.split("\t");
-                	if (itemLevel3Array.length != 4) {
-                    	LOGGER.warn("warning format itemLevel3Array length = " + itemLevel3Array.length + " [" + itemLevel2 + "]");
-                	} 
-                	else {
-                		parseAlgorithm(miuiLogScribeInfo, itemLevel3Array);
-                	}
-                }
-            }
-            count ++;
-            if (maxRecordNum > 0 && count >= maxRecordNum)
-            	break;
+        	try {
+				String[] itemLevel1Array = line.trim().split("\t");
+				if (itemLevel1Array.length == 1) {
+					continue;
+				}
+				if (maxRecordNum > 0 && total >= maxRecordNum) {
+					break;
+				}
+				total++;
+				if (itemLevel1Array.length != 3) {
+					LOGGER.warn("warning format itemLevel1Array length = "
+							+ itemLevel1Array.length + " [" + line.trim() + "]");
+					badFormatNum++;
+					continue;
+				} else {
+					String scribeInfo = itemLevel1Array[0];
+					String time = itemLevel1Array[1];
+					String itemLevel2 = new String(
+							Base64.decodeBase64(itemLevel1Array[2]));
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("scribeInfo", scribeInfo);
+					jsonObject.put("time", time);
+					MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
+					miuiLogScribeInfo.setScribeInfo(scribeInfo);
+					miuiLogScribeInfo.setTime(time);
+					if (itemLevel2.startsWith("{")) {
+						JSONObject itemLevel2Object = JSONObject
+								.fromObject(itemLevel2);
+						if (itemLevel2Object.get("log_type").equals(
+								"algorithm_expose_detail")) {
+							parseAlgorithmExposeDetail(miuiLogScribeInfo,
+									itemLevel2Object);
+						} else if (itemLevel2Object.get("log_type").equals(
+								"app_store_search_expose")) {
+							TBase thrirftObject = parseAppStoreSearchExpose(miuiLogScribeInfo,
+									itemLevel2Object);
+							if (thrirftObject == null) {
+								badFormatNum++;
+								continue;
+							}
+						} else {
+							LOGGER.warn("warning format itemLevel2Object log_type = "
+									+ itemLevel2Object.get("log_type")
+									+ "  [\n" + itemLevel2 + "\n]");
+							badFormatNum++;
+							continue;
+						}
+					} else {
+						String[] itemLevel3Array = itemLevel2.split("\t");
+						if (itemLevel3Array.length != 4 && itemLevel3Array.length != 3) {
+							LOGGER.warn("warning format itemLevel3Array length = "
+									+ itemLevel3Array.length
+									+ " ["
+									+ itemLevel2 + "]");
+							badFormatNum++;
+							continue;
+						} else {
+							parseAlgorithm(miuiLogScribeInfo, itemLevel3Array);
+						}
+					}
+				}
+				count++;
+        	}
+        	catch (Exception e) {
+        		e.printStackTrace();
+        		LOGGER.warn("failed to parse log [\n" + line + "\n");
+        		exceptionNum++;
+        	}
         }
+        LOGGER.info("total " + total + " valid " + count + " exception " + exceptionNum + " badFormatNum " + badFormatNum);
         br.close();
 	}
 }

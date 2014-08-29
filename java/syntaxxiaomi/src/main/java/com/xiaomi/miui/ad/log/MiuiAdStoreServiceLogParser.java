@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAlgorithmDownloadDetail;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogAppStore;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogBiddingEffectRecord;
+import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogBiddingStatusChange;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogConsumptionDetail;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogFiction;
 import com.xiaomi.miui.ad.thrift.model.MiuiAdStoreServiceLogFictionEventDetail;
@@ -125,16 +126,6 @@ public class MiuiAdStoreServiceLogParser {
     	miuiAdStoreServiceLogFictionEventDetail.setPrice(Long.parseLong(items[7]));
 		return miuiAdStoreServiceLogFictionEventDetail;
 	}
-	
-    private static String getJsonArrayFirstVal(JSONObject adLogJsonObject, String key) {
-        if (adLogJsonObject.containsKey(key)) {
-            JSONArray jsonArray = adLogJsonObject.getJSONArray(key);
-            if (jsonArray.size() > 0) {
-                return jsonArray.getString(0);
-            }
-        }
-        return null;
-    }
 
     private static List<String> getListFromJsonArray(JSONObject adLogJsonObject, String key) {
     	List<String> list = new ArrayList<String>();
@@ -145,12 +136,6 @@ public class MiuiAdStoreServiceLogParser {
             }
         }
         return list;
-    }
-    
-    private static List<String> getList(String e) {
-    	List<String> list = new ArrayList<String>();
-    	list.add(e);
-    	return list;
     }
     
 	public static TBase parseFiction(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
@@ -172,90 +157,151 @@ public class MiuiAdStoreServiceLogParser {
 		return miuiAdStoreServiceLogFiction;
 	}
 	
+	public static TBase parseBiddingStatusChange(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) {
+		MiuiAdStoreServiceLogBiddingStatusChange miuiAdStoreServiceLogBiddingStatusChange = new MiuiAdStoreServiceLogBiddingStatusChange();
+		miuiAdStoreServiceLogBiddingStatusChange.setScribeInfo(miuiLogScribeInfo);
+		miuiAdStoreServiceLogBiddingStatusChange.setLogType(items[0]);
+		miuiAdStoreServiceLogBiddingStatusChange.setPackageName(items[1]);
+		String[] status = items[2].split("==>");
+		miuiAdStoreServiceLogBiddingStatusChange.setFromStatus(status[0]);
+		miuiAdStoreServiceLogBiddingStatusChange.setToStatus(status[1]);
+		return miuiAdStoreServiceLogBiddingStatusChange;
+	}
+	
 	public static void parse(String fileName, int maxRecordNum) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = null;
+        int total = 0;
         int count = 0;
+        int exceptionNum = 0;
+        int badFormatNum = 0;
         while ((line = br.readLine()) != null) {
-            String[] itemLevel1Array = line.trim().split("\t");
-            if (itemLevel1Array.length == 1) {
-            	continue;
-            }
-            if (itemLevel1Array.length != 3) {
-            	LOGGER.warn("warning format itemLevel1Array length = " + itemLevel1Array.length + " [" + line.trim() + "]");
-            }
-            else {
-            	String scribeInfo = itemLevel1Array[0];
-            	String time = itemLevel1Array[1];
-                String itemLevel2 = new String(Base64.decodeBase64(itemLevel1Array[2]));
-                MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
-                miuiLogScribeInfo.setScribeInfo(scribeInfo);
-                miuiLogScribeInfo.setTime(time);
-                if (itemLevel2.startsWith("{")) {
-                	JSONObject itemLevel2Object = JSONObject.fromObject(itemLevel2);
-                	if (itemLevel2Object.getString("log_type").equals("algorithm_download_detail")) {
-                		parseAlgorithmDownloadDetailByJson(miuiLogScribeInfo, itemLevel2Object);
-                	}
-                	else {
-                    	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
-                	}
-                }
-                else {
-                    String[] itemLevel2Array = itemLevel2.split("\t");
-                    if (itemLevel2Array[0].equals("APP_STORE")) {
-                    	parseAppStore(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                    else if (itemLevel2Array[0].equals("algorithm_download_detail")) {
-                    	if (itemLevel2Array.length != 10) {
-                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
-                    		return;
-                    	}
-                    	parseAlgorithmDownloadDetailByTab(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                    else if (itemLevel2Array[0].equals("consumption_detail")) {
-                    	if (itemLevel2Array.length != 9) {
-                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
-                    		return;
-                    	}
-                    	parseConsumptionDetail(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                    else if (itemLevel2Array[0].equals("bidding_effect_record")) {
-                    	if (itemLevel2Array.length != 5) {
-                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
-                    		return;
-                    	}
-                    	parseBiddingEffectRecord(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                    else if (itemLevel2Array[0].equals("other_bidding_effect_record")) {
-                    	if (itemLevel2Array.length != 5) {
-                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
-                    		return;
-                    	}
-                    	parseOtherBiddingEffectRecord(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                    else if (itemLevel2Array[0].equals("fiction_event_detail")) {
-                    	if (itemLevel2Array.length != 8) {
-                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
-                    		return;
-                    	}
-                    	parseFictionEventDetail(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                    else if (itemLevel2Array[0].equals("FICTION")) {
-                    	if (itemLevel2Array.length != 3) {
-                    		LOGGER.warn("bad format logType " + itemLevel2Array[0] + "\n" + itemLevel2 + "\n");
-                    		return;
-                    	}
-                    	parseFiction(miuiLogScribeInfo, itemLevel2Array);
-                    }
-                	else {
-                    	LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
-                	}
-                }
-            }
-            count ++;
-            if (maxRecordNum > 0 && count >= maxRecordNum)
-            	break;
+        	try {
+				String[] itemLevel1Array = line.trim().split("\t");
+				if (itemLevel1Array.length == 1) {
+					continue;
+				}
+				if (maxRecordNum > 0 && total >= maxRecordNum) {
+					break;
+				}
+				total++;
+				if (itemLevel1Array.length != 3) {
+					LOGGER.warn("warning format itemLevel1Array length = "
+							+ itemLevel1Array.length + " [" + line.trim() + "]");
+					badFormatNum++;
+				} else {
+					String scribeInfo = itemLevel1Array[0];
+					String time = itemLevel1Array[1];
+					String itemLevel2 = new String(
+							Base64.decodeBase64(itemLevel1Array[2]));
+					MiuiLogScribeInfo miuiLogScribeInfo = new MiuiLogScribeInfo();
+					miuiLogScribeInfo.setScribeInfo(scribeInfo);
+					miuiLogScribeInfo.setTime(time);
+					if (itemLevel2.startsWith("{")) {
+						JSONObject itemLevel2Object = JSONObject
+								.fromObject(itemLevel2);
+						if (itemLevel2Object.getString("log_type").equals(
+								"algorithm_download_detail")) {
+							parseAlgorithmDownloadDetailByJson(
+									miuiLogScribeInfo, itemLevel2Object);
+						} else {
+							LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+							badFormatNum++;
+						}
+					} else {
+						String[] itemLevel2Array = itemLevel2.split("\t");
+						if (itemLevel2Array[0].equals("APP_STORE")) {
+							parseAppStore(miuiLogScribeInfo, itemLevel2Array);
+						} else if (itemLevel2Array[0]
+								.equals("algorithm_download_detail")) {
+							if (itemLevel2Array.length != 10) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseAlgorithmDownloadDetailByTab(
+									miuiLogScribeInfo, itemLevel2Array);
+						} else if (itemLevel2Array[0]
+								.equals("consumption_detail")) {
+							if (itemLevel2Array.length != 9) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseConsumptionDetail(miuiLogScribeInfo,
+									itemLevel2Array);
+						} else if (itemLevel2Array[0]
+								.equals("bidding_effect_record")) {
+							if (itemLevel2Array.length != 5) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseBiddingEffectRecord(miuiLogScribeInfo,
+									itemLevel2Array);
+						} else if (itemLevel2Array[0]
+								.equals("other_bidding_effect_record")) {
+							if (itemLevel2Array.length != 5) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseOtherBiddingEffectRecord(miuiLogScribeInfo,
+									itemLevel2Array);
+						} else if (itemLevel2Array[0]
+								.equals("fiction_event_detail")) {
+							if (itemLevel2Array.length != 8) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseFictionEventDetail(miuiLogScribeInfo,
+									itemLevel2Array);
+						} else if (itemLevel2Array[0].equals("FICTION")) {
+							if (itemLevel2Array.length != 3) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseFiction(miuiLogScribeInfo, itemLevel2Array);
+						} else if (itemLevel2Array[0]
+								.equals("bidding_status_change")) {
+							if (itemLevel2Array.length != 3) {
+								LOGGER.warn("bad format logType "
+										+ itemLevel2Array[0] + "\n"
+										+ itemLevel2 + "\n");
+								badFormatNum++;
+								continue;
+							}
+							parseBiddingStatusChange(miuiLogScribeInfo,
+									itemLevel2Array);
+						} else {
+							LOGGER.debug("itemLevel2 [\n" + itemLevel2 + "\n");
+							badFormatNum++;
+						}
+					}
+				}
+				count++;
+			}
+        	catch (Exception e) {
+        		e.printStackTrace();
+        		LOGGER.warn("failed to parse log [\n" + line + "\n");
+        		exceptionNum++;
+        	}
         }
+        LOGGER.info("total " + total + " valid " + count + " exception " + exceptionNum + " badFormatNum " + badFormatNum);
         br.close();
 	}
 }
