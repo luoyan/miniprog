@@ -32,14 +32,17 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
 
   private static final TField SCRIBE_INFO_FIELD_DESC = new TField("scribeInfo", TType.STRING, (short)1);
   private static final TField TIME_FIELD_DESC = new TField("time", TType.STRING, (short)2);
+  private static final TField IP_FIELD_DESC = new TField("ip", TType.STRING, (short)3);
 
   private String scribeInfo;
   private String time;
+  private String ip;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     SCRIBE_INFO((short)1, "scribeInfo"),
-    TIME((short)2, "time");
+    TIME((short)2, "time"),
+    IP((short)3, "ip");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -58,6 +61,8 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
           return SCRIBE_INFO;
         case 2: // TIME
           return TIME;
+        case 3: // IP
+          return IP;
         default:
           return null;
       }
@@ -106,6 +111,8 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
         new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.TIME, new FieldMetaData("time", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.IP, new FieldMetaData("ip", TFieldRequirementType.OPTIONAL, 
+        new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(MiuiLogScribeInfo.class, metaDataMap);
   }
@@ -132,6 +139,9 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
     if (other.isSetTime()) {
       this.time = other.time;
     }
+    if (other.isSetIp()) {
+      this.ip = other.ip;
+    }
   }
 
   public MiuiLogScribeInfo deepCopy() {
@@ -142,6 +152,7 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
   public void clear() {
     this.scribeInfo = null;
     this.time = null;
+    this.ip = null;
   }
 
   public String getScribeInfo() {
@@ -190,6 +201,29 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
     }
   }
 
+  public String getIp() {
+    return this.ip;
+  }
+
+  public void setIp(String ip) {
+    this.ip = ip;
+  }
+
+  public void unsetIp() {
+    this.ip = null;
+  }
+
+  /** Returns true if field ip is set (has been asigned a value) and false otherwise */
+  public boolean isSetIp() {
+    return this.ip != null;
+  }
+
+  public void setIpIsSet(boolean value) {
+    if (!value) {
+      this.ip = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SCRIBE_INFO:
@@ -208,6 +242,14 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
       }
       break;
 
+    case IP:
+      if (value == null) {
+        unsetIp();
+      } else {
+        setIp((String)value);
+      }
+      break;
+
     }
   }
 
@@ -218,6 +260,9 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
 
     case TIME:
       return getTime();
+
+    case IP:
+      return getIp();
 
     }
     throw new IllegalStateException();
@@ -234,6 +279,8 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
       return isSetScribeInfo();
     case TIME:
       return isSetTime();
+    case IP:
+      return isSetIp();
     }
     throw new IllegalStateException();
   }
@@ -269,6 +316,15 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
         return false;
     }
 
+    boolean this_present_ip = true && this.isSetIp();
+    boolean that_present_ip = true && that.isSetIp();
+    if (this_present_ip || that_present_ip) {
+      if (!(this_present_ip && that_present_ip))
+        return false;
+      if (!this.ip.equals(that.ip))
+        return false;
+    }
+
     return true;
   }
 
@@ -285,6 +341,11 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
     builder.append(present_time);
     if (present_time)
       builder.append(time);
+
+    boolean present_ip = true && (isSetIp());
+    builder.append(present_ip);
+    if (present_ip)
+      builder.append(ip);
 
     return builder.toHashCode();
   }
@@ -313,6 +374,16 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
     }
     if (isSetTime()) {
       lastComparison = TBaseHelper.compareTo(this.time, typedOther.time);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetIp()).compareTo(typedOther.isSetIp());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetIp()) {
+      lastComparison = TBaseHelper.compareTo(this.ip, typedOther.ip);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -348,6 +419,13 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 3: // IP
+          if (field.type == TType.STRING) {
+            this.ip = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -370,6 +448,13 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
       oprot.writeFieldBegin(TIME_FIELD_DESC);
       oprot.writeString(this.time);
       oprot.writeFieldEnd();
+    }
+    if (this.ip != null) {
+      if (isSetIp()) {
+        oprot.writeFieldBegin(IP_FIELD_DESC);
+        oprot.writeString(this.ip);
+        oprot.writeFieldEnd();
+      }
     }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
@@ -395,6 +480,16 @@ public class MiuiLogScribeInfo implements TBase<MiuiLogScribeInfo, MiuiLogScribe
       sb.append(this.time);
     }
     first = false;
+    if (isSetIp()) {
+      if (!first) sb.append(", ");
+      sb.append("ip:");
+      if (this.ip == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ip);
+      }
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }

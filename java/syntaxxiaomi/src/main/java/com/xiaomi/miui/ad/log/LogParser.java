@@ -61,7 +61,8 @@ public class LogParser {
 			miuiAdStoreServiceLogParser.parse(logFileName, maxRecordNum);
 		}
 		else if (logType.equals("appstore")) {
-			parseAppstoreLog(logFileName, maxRecordNum);
+			MiuiAppStoreServiceLogParser miuiAppStoreServiceLogParser = new MiuiAppStoreServiceLogParser();
+			miuiAppStoreServiceLogParser.parse(logFileName, maxRecordNum);
 		}
 		else {
 			usage();

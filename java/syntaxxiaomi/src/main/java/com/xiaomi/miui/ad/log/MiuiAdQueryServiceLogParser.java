@@ -247,7 +247,7 @@ public class MiuiAdQueryServiceLogParser {
         		exceptionNum++;
         	}
         }
-        LOGGER.info("total " + total + " valid " + count + " exception " + exceptionNum + " badFormatNum " + badFormatNum + " AppStoreSearchExposeNum " + AppStoreSearchExposeNum);
+        LOGGER.info("total " + total + " valid " + count + " exception " + exceptionNum + " badFormatNum " + badFormatNum);
         Iterator iter = logCountMap.entrySet().iterator(); 
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry) iter.next();
