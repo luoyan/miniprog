@@ -35,7 +35,7 @@ public class CalculateMovies {
 		for (LongPrimitiveIterator it = model.getUserIDs(); it.hasNext();) {
 			long userId = it.nextLong();
 			List<RecommendedItem> recommendations = cachingRecommender.recommend(userId, 10);
-			System.out.println("recommendations.size() " + recommendations.size());
+			//System.out.println("recommendations.size() " + recommendations.size());
 			if (recommendations.size() == 0) {
 				System.out.println("User " + userId + " : no recommendations");
 			}
