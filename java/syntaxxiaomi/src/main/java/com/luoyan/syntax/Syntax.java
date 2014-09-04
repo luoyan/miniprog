@@ -1,19 +1,26 @@
 package com.luoyan.syntax;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.TException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.xiaomi.appstore.backend.model.AppData;
@@ -28,6 +35,7 @@ import com.xiaomi.miui.ad.thrift.model.BiddingInfo;
 import com.xiaomi.miui.ad.thrift.model.BiddingStatus;
 import com.xiaomi.miui.ad.thrift.model.Constants;
 import com.xiaomi.miui.ad.thrift.model.CtrScore;
+import com.xiaomi.miui.ad.thrift.model.RecommendAd;
 import com.xiaomi.miui.ad.thrift.service.MiuiAdStoreService;
 import com.xiaomi.miui.analytics.util.factory.RoseBeanFactory;
 
@@ -36,7 +44,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Syntax {
-    private static MiuiAdStoreService.Iface miuiAdStoreServiceClient = ClientFactory.getClient(MiuiAdStoreService.Iface.class, 100000);
+	private static final Logger LOGGER = LoggerFactory.getLogger("consoleLogger");
+    private static MiuiAdStoreService.Iface miuiAdStoreServiceClient;
+    
+
+    private Map<String, String> adIdMap = new HashMap<String, String>();
 
     @Autowired
     private AppStoreBackendServiceProxy appStoreBackendServiceProxy;
@@ -53,6 +65,24 @@ public class Syntax {
 			count ++;
 		}
 	}
+
+    public List<String> getAllSearchAdKeyWord() throws TException {
+        System.out.println(" zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
+        String keywordStr = miuiAdStoreServiceClient.getString(Constants
+                .REDIS_KEY_PREFIX_MIUI_BIDDING_AD_ALL_SEARCH_KEYWORDS, ConstantHelper.REDIS_ALL_SEARCH_KEYWORD_VERSION);
+        //System.out.println(keywordStr);
+        System.out.println("keywordStr [" + keywordStr + "]");
+        return Utils.getKeywordListFromBase64Content(keywordStr);
+    }
+    
+    public Set<RecommendAd> getReadRecommendAdsBySeachQuery(String queryKeyword) throws TException {
+        return getRecommendAds(Constants.REDIS_KEY_PREFIX_MIUI_BIDDING_AD_SEARCH_RECOMMEND_APP, queryKeyword.trim().toLowerCase());
+    }
+	
+	public List<BiddingInfo> getAllBiddingInfo() throws TException {
+	    return miuiAdStoreServiceClient.getAllBiddingInfo(0, 10000000);
+	}
+	
 	private void getAllPositionTypes() throws TException {
 		Set<String> types = miuiAdStoreServiceClient.getAllPositionTypes();
 		for (String category : types) {
@@ -79,6 +109,27 @@ public class Syntax {
             	count ++;
             }
 		}
+	}
+	
+	private Map<String, String> getIdAppNameMap() throws TException, CatchableException {
+		int offset = 0;
+		int batchNum = 1000;
+		int count = 0;
+		appStoreBackendServiceProxy = new AppStoreBackendServiceProxy();
+		int batchResultCount = batchNum;
+		Map<String, String> idAppNameMap = new HashMap<String, String>();
+		while (batchResultCount == batchNum) {
+            List<AppData> appDataList = appStoreBackendServiceProxy.getAppList(offset, batchNum);
+            batchResultCount = appDataList.size();
+            offset += batchNum;
+            //System.out.println("offset " + offset);
+            for (AppData appData : appDataList) {
+            	//System.out.println(count + " : " + appData.getAppInfo().getPackageName() + "\t" + appData.getAppInfo().getAppId() + "\t" + appData.getAppInfo().getDisplayName());
+            	count ++;
+            	idAppNameMap.put("" + appData.getAppInfo().getAppId(), appData.getAppInfo().getDisplayName());
+            }
+		}
+		return idAppNameMap;
 	}
 	
     private void getAppDownloadNum() throws IOException, TException {
@@ -118,6 +169,92 @@ public class Syntax {
         }
     }
     
+    private Map<String, Set<RecommendAd>> getSearchAdMap() throws TException {
+    	List<String> keywordList = getAllSearchAdKeyWord();
+    	System.out.println("getAllSearchAdKeyWord " + keywordList.size());
+    	Map<String, Set<RecommendAd>> recommendAdsMap = new HashMap<String, Set<RecommendAd>>();
+        for (String keyword : keywordList) {
+            String updatedKeyword = keyword.trim().toLowerCase();
+            Set<RecommendAd> recommendAds = getReadRecommendAdsBySeachQuery(updatedKeyword);
+            recommendAdsMap.put(updatedKeyword, recommendAds);
+            System.out.println("keyword\t" + keyword + "\t" + recommendAds.size());
+        }
+        return recommendAdsMap;
+    }
+    
+    private void getTopQueryWithAds(String fileName, int maxNum, boolean showAll) throws TException, IOException, CatchableException {
+    	List<BiddingInfo> allBiddingInfo = getAllBiddingInfo();
+        Map<String, String> adIdMap = new HashMap<String, String>();
+        for (BiddingInfo biddingInfo : allBiddingInfo) {
+        	adIdMap.put(biddingInfo.getAppId() + "", biddingInfo.getPackageName());
+        }
+        System.out.println("getAllBiddingInfo " + allBiddingInfo.size());
+        this.adIdMap = getIdAppNameMap();//adIdMap;
+
+        Map<String, Set<RecommendAd>> recommendAdsMap = getSearchAdMap();
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = null;
+        int total = 0;
+        while ((line = br.readLine()) != null) {
+        	total++;
+        	String[] items = line.split("\t");
+        	String keyword = items[0];
+        	String searchNum = items[1];
+        	String downloadNum = items[2];
+            String updatedKeyword = keyword.trim().toLowerCase();
+            Set<RecommendAd> recommendAds = recommendAdsMap.get(updatedKeyword);
+        	String info = keyword + "\t" + searchNum + "\t" + downloadNum;
+            if (recommendAds != null) {
+            	info = info + "\t" + recommendAds.size();
+            	for (RecommendAd recommendAd : recommendAds) {
+            		String AppName = recommendAd.getPackageName();
+            		JSONObject jsonObject = JSONObject.fromObject(AppName);
+            		String AppCNName = jsonObject.getString("zh_CN");
+            		if (AppCNName == null)
+            			AppCNName = AppName;
+            		info = info + "\t" + AppCNName;
+            	}
+            	System.out.println(total + "\t" + info);
+            }
+            else if (showAll){
+            	info = info + "\t" + 0;
+            	System.out.println(total + "\t" + info);
+            }
+        	if (total >= maxNum)
+        		break;
+        }
+    }
+
+    /*
+   * recommend ad在redis中存储格式为：
+   * imei id:relevancy;id:r
+   * elevancy
+   * */
+    private Set<RecommendAd> getRecommendAds(String prefix, String imei) throws TException {
+        String recommendAdStr = miuiAdStoreServiceClient.getString(prefix, imei);
+        //LOGGER.debug("Recommend str {}", recommendAdStr);
+        Set<RecommendAd> recommendAds = new HashSet<RecommendAd>();
+        if (StringUtils.isNotEmpty(recommendAdStr)) {
+            String[] items = recommendAdStr.split(Constants.REDIS_VALUE_GROUP_SEPARATOR);
+            if (items.length > 0) {
+                Map<String, String> appIdMap = adIdMap;
+                for (String item : items) {
+                    String[] subItems = item.split(Constants.REDIS_VALUE_ITEM_SEPARATOR);
+                    if (2 == subItems.length) {
+                        RecommendAd newRecommendAd = new RecommendAd();
+                        String appId = subItems[0];
+                        if (appIdMap.containsKey(appId)) {
+                            newRecommendAd.setPackageName(appIdMap.get(appId));
+                            newRecommendAd.setRelevancy(Double.parseDouble(subItems[1]));
+                            recommendAds.add(newRecommendAd);
+                        }
+                    }
+                }
+            }
+        }
+        return recommendAds;
+    }
+
     private void getAllCtrScores(String algorithmName) throws TException {
     	System.out.println("zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
         List<CtrScore> ctrScores = miuiAdStoreServiceClient.getAllCtrScores(algorithmName);
@@ -141,7 +278,9 @@ public class Syntax {
 	}
 	
 	private static void usage() {
-		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes/getManualRecommendFeatureList/getAllCtrScores [algrithm]]");
+		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes/getManualRecommendFeatureList]");
+		System.err.println("args envirenment getAllCtrScores algrithm");
+		System.err.println("args envirenment getTopQueryWithAds fileName maxNum showAll=0/1");
 		System.err.println("algorithm = ma/recommend/simple/decay/random/nma/lrctr/purelrctr");
 	}
 	
@@ -157,6 +296,7 @@ public class Syntax {
 			usage();
 			System.exit(-1);
 		}
+		miuiAdStoreServiceClient = ClientFactory.getClient(MiuiAdStoreService.Iface.class, 100000);
 		
 		if (command.equals("getZookeeperList")) {
 			s.getZookeeperList(environment);
@@ -179,6 +319,13 @@ public class Syntax {
 		else if (command.equals("getAllCtrScores") && args.length == 3) {
 			String algorithmName = args[2];
 			s.getAllCtrScores(algorithmName);
+		}
+		else if (command.equals("getTopQueryWithAds") && args.length == 5) {
+			String fileName = args[2];
+			int maxNum = Integer.parseInt(args[3]);
+			int showAll = Integer.parseInt(args[4]);
+	        System.out.println(environment + " zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
+			s.getTopQueryWithAds(fileName, maxNum, showAll == 1);
 		}
 		else {
 			usage();

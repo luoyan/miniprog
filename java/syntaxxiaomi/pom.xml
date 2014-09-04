@@ -40,7 +40,7 @@
         <dependency>
             <groupId>miui_ad</groupId>
             <artifactId>miui_ad_common</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.17</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-lang</groupId>
@@ -108,6 +108,30 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>miui_ad</groupId>
+            <artifactId>miui_ad_thrift</artifactId>
+            <version>0.0.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>miui_ad</groupId>
+                    <artifactId>miui_ad_dsp_thrift</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>miui_ad</groupId>
+            <artifactId>miui_ad_dsp_thrift</artifactId>
+            <version>0.0.9</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>thrift</artifactId>
+                    <groupId>org.apache.thrift</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
 	</dependencies>
 	<build>
 	
