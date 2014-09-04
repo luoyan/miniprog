@@ -23,15 +23,23 @@ import com.xiaomi.miui.ad.util.HttpHelper;
 
 public class MiuiAppStoreServiceLogParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger("consoleLogger");
+
 	private static TBase parseHttpRequest(MiuiLogScribeInfo miuiLogScribeInfo, String[] items) throws MalformedURLException {
 
 		if (items.length != 5)
 			return null;
 		String logType = items[4];
 		String[] columns = items[3].trim().split("\\|");
+		String searchResultByJson = null;
 		if (columns.length != 2) {
-			LOGGER.warn("bad format columns.length " + columns.length + " logType " + logType);
-			return null;
+			if (columns.length == 3 && logType.equals("appstore-api-search")) {
+				searchResultByJson = new String(
+						Base64.decodeBase64(columns[2]));
+			}
+			else {
+			    LOGGER.warn("bad format columns.length " + columns.length + " logType " + logType);
+			    return null;
+			}
 		}
 		long timestamp = Long.parseLong(columns[0]);
 		String itemLevel2 = new String(
@@ -61,6 +69,8 @@ public class MiuiAppStoreServiceLogParser {
 			return null;
 		long userId = Long.parseLong(itemLevel3Array[2].split(":")[1]);
 		miuiAppStoreLogHttpRequest.setUserId(userId);
+		if (searchResultByJson != null)
+		    miuiAppStoreLogHttpRequest.setSearchResultByJson(searchResultByJson);
 		return miuiAppStoreLogHttpRequest;
 	}
 	

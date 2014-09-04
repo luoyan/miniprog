@@ -9,4 +9,5 @@ struct MiuiAppStoreLogHttpRequest {
     6: string httpMethod;
     7: string httpMethodPath;
     8: i64 userId;
+    9: optional string searchResultByJson; 
 }

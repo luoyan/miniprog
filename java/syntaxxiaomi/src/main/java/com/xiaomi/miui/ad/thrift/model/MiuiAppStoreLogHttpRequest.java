@@ -38,6 +38,7 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
   private static final TField HTTP_METHOD_FIELD_DESC = new TField("httpMethod", TType.STRING, (short)6);
   private static final TField HTTP_METHOD_PATH_FIELD_DESC = new TField("httpMethodPath", TType.STRING, (short)7);
   private static final TField USER_ID_FIELD_DESC = new TField("userId", TType.I64, (short)8);
+  private static final TField SEARCH_RESULT_BY_JSON_FIELD_DESC = new TField("searchResultByJson", TType.STRING, (short)9);
 
   private MiuiLogScribeInfo scribeInfo;
   private long timestamp;
@@ -47,6 +48,7 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
   private String httpMethod;
   private String httpMethodPath;
   private long userId;
+  private String searchResultByJson;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
@@ -57,7 +59,8 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     HTTP_PARAMS((short)5, "httpParams"),
     HTTP_METHOD((short)6, "httpMethod"),
     HTTP_METHOD_PATH((short)7, "httpMethodPath"),
-    USER_ID((short)8, "userId");
+    USER_ID((short)8, "userId"),
+    SEARCH_RESULT_BY_JSON((short)9, "searchResultByJson");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -88,6 +91,8 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
           return HTTP_METHOD_PATH;
         case 8: // USER_ID
           return USER_ID;
+        case 9: // SEARCH_RESULT_BY_JSON
+          return SEARCH_RESULT_BY_JSON;
         default:
           return null;
       }
@@ -153,6 +158,8 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
         new FieldValueMetaData(TType.STRING)));
     tmpMap.put(_Fields.USER_ID, new FieldMetaData("userId", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.I64)));
+    tmpMap.put(_Fields.SEARCH_RESULT_BY_JSON, new FieldMetaData("searchResultByJson", TFieldRequirementType.OPTIONAL, 
+        new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(MiuiAppStoreLogHttpRequest.class, metaDataMap);
   }
@@ -221,6 +228,9 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
       this.httpMethodPath = other.httpMethodPath;
     }
     this.userId = other.userId;
+    if (other.isSetSearchResultByJson()) {
+      this.searchResultByJson = other.searchResultByJson;
+    }
   }
 
   public MiuiAppStoreLogHttpRequest deepCopy() {
@@ -239,6 +249,7 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     this.httpMethodPath = null;
     setUserIdIsSet(false);
     this.userId = 0;
+    this.searchResultByJson = null;
   }
 
   public MiuiLogScribeInfo getScribeInfo() {
@@ -434,6 +445,29 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     __isset_bit_vector.set(__USERID_ISSET_ID, value);
   }
 
+  public String getSearchResultByJson() {
+    return this.searchResultByJson;
+  }
+
+  public void setSearchResultByJson(String searchResultByJson) {
+    this.searchResultByJson = searchResultByJson;
+  }
+
+  public void unsetSearchResultByJson() {
+    this.searchResultByJson = null;
+  }
+
+  /** Returns true if field searchResultByJson is set (has been asigned a value) and false otherwise */
+  public boolean isSetSearchResultByJson() {
+    return this.searchResultByJson != null;
+  }
+
+  public void setSearchResultByJsonIsSet(boolean value) {
+    if (!value) {
+      this.searchResultByJson = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case SCRIBE_INFO:
@@ -500,6 +534,14 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
       }
       break;
 
+    case SEARCH_RESULT_BY_JSON:
+      if (value == null) {
+        unsetSearchResultByJson();
+      } else {
+        setSearchResultByJson((String)value);
+      }
+      break;
+
     }
   }
 
@@ -529,6 +571,9 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     case USER_ID:
       return new Long(getUserId());
 
+    case SEARCH_RESULT_BY_JSON:
+      return getSearchResultByJson();
+
     }
     throw new IllegalStateException();
   }
@@ -556,6 +601,8 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
       return isSetHttpMethodPath();
     case USER_ID:
       return isSetUserId();
+    case SEARCH_RESULT_BY_JSON:
+      return isSetSearchResultByJson();
     }
     throw new IllegalStateException();
   }
@@ -645,6 +692,15 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
         return false;
     }
 
+    boolean this_present_searchResultByJson = true && this.isSetSearchResultByJson();
+    boolean that_present_searchResultByJson = true && that.isSetSearchResultByJson();
+    if (this_present_searchResultByJson || that_present_searchResultByJson) {
+      if (!(this_present_searchResultByJson && that_present_searchResultByJson))
+        return false;
+      if (!this.searchResultByJson.equals(that.searchResultByJson))
+        return false;
+    }
+
     return true;
   }
 
@@ -691,6 +747,11 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     builder.append(present_userId);
     if (present_userId)
       builder.append(userId);
+
+    boolean present_searchResultByJson = true && (isSetSearchResultByJson());
+    builder.append(present_searchResultByJson);
+    if (present_searchResultByJson)
+      builder.append(searchResultByJson);
 
     return builder.toHashCode();
   }
@@ -783,6 +844,16 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetSearchResultByJson()).compareTo(typedOther.isSetSearchResultByJson());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSearchResultByJson()) {
+      lastComparison = TBaseHelper.compareTo(this.searchResultByJson, typedOther.searchResultByJson);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -871,6 +942,13 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 9: // SEARCH_RESULT_BY_JSON
+          if (field.type == TType.STRING) {
+            this.searchResultByJson = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -928,6 +1006,13 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     oprot.writeFieldBegin(USER_ID_FIELD_DESC);
     oprot.writeI64(this.userId);
     oprot.writeFieldEnd();
+    if (this.searchResultByJson != null) {
+      if (isSetSearchResultByJson()) {
+        oprot.writeFieldBegin(SEARCH_RESULT_BY_JSON_FIELD_DESC);
+        oprot.writeString(this.searchResultByJson);
+        oprot.writeFieldEnd();
+      }
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -992,6 +1077,16 @@ public class MiuiAppStoreLogHttpRequest implements TBase<MiuiAppStoreLogHttpRequ
     sb.append("userId:");
     sb.append(this.userId);
     first = false;
+    if (isSetSearchResultByJson()) {
+      if (!first) sb.append(", ");
+      sb.append("searchResultByJson:");
+      if (this.searchResultByJson == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.searchResultByJson);
+      }
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }
