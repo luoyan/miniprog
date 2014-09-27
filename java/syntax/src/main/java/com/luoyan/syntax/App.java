@@ -133,6 +133,9 @@ public class App
 	        testEnumType();
 	        testStringBuffer();
 	        a.testInterface();
+	        int nA = 6;
+	        int nB = 8;
+	        System.out.println(nA + "\t" + nB);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

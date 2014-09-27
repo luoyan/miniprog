@@ -311,6 +311,9 @@ public class MiuiAdStoreServiceLogParser {
 					} else {
 						String[] itemLevel2Array = itemLevel2.split("\t");
 						logType = itemLevel2Array[0];
+						if (logType.equals("APP_STORE")) {
+							LOGGER.debug("APP_STORE line [" + line + "]");
+						}
 						LogHandler logHandler = logHandlerMap.get(logType);
 						if (logHandler == null || logHandler.getTabParser() == null) {
 							LOGGER.debug("unknown logType " + logType + "itemLevel2 [\n" + itemLevel2 + "\n");

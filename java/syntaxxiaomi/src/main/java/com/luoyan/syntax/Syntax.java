@@ -132,6 +132,32 @@ public class Syntax {
 		return idAppNameMap;
 	}
 	
+	private void printIdPackageAppNameMap() throws TException, CatchableException {
+		int offset = 0;
+		int batchNum = 1000;
+		int count = 0;
+		appStoreBackendServiceProxy = new AppStoreBackendServiceProxy();
+		int batchResultCount = batchNum;
+		Map<String, String> idAppNameMap = new HashMap<String, String>();
+		while (batchResultCount == batchNum) {
+            List<AppData> appDataList = appStoreBackendServiceProxy.getAppList(offset, batchNum);
+            batchResultCount = appDataList.size();
+            offset += batchNum;
+            //System.out.println("offset " + offset);
+            for (AppData appData : appDataList) {
+            	String displayName = appData.getAppInfo().getDisplayName();
+				JSONObject jsonObject = JSONObject
+						.fromObject(displayName);
+				if (jsonObject.containsKey("zh_CN")) {
+					displayName = jsonObject.getString("zh_CN");
+				}
+            	System.out.println(appData.getAppInfo().getPackageName() + "\t" + appData.getAppInfo().getAppId() + "\t" + displayName);
+            	count ++;
+            	//idAppNameMap.put("" + appData.getAppInfo().getAppId(), appData.getAppInfo().getDisplayName());
+            }
+		}
+	}
+	
     private void getAppDownloadNum() throws IOException, TException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    String s;
@@ -326,6 +352,9 @@ public class Syntax {
 			int showAll = Integer.parseInt(args[4]);
 	        System.out.println(environment + " zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
 			s.getTopQueryWithAds(fileName, maxNum, showAll == 1);
+		}
+		else if (command.equals("printIdPackageAppNameMap")) {
+			s.printIdPackageAppNameMap();
 		}
 		else {
 			usage();

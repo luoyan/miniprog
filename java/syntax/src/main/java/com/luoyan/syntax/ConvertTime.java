@@ -18,7 +18,7 @@ public class ConvertTime {
 
 			long unixMilliSeconds = Long.parseLong(s);
 			Date date = new Date(unixMilliSeconds); // *1000 is to convert seconds to milliseconds
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // the format of your date
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S"); // the format of your date
 			
 			String formattedDate = sdf.format(date);
 			System.out.println(formattedDate);
