@@ -136,6 +136,8 @@ public class App
 	        int nA = 6;
 	        int nB = 8;
 	        System.out.println(nA + "\t" + nB);
+	        boolean b = false;
+	        System.out.println("false " + b);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

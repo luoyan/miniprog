@@ -17,7 +17,6 @@ kingsoft1 hadoop 42.62.41.232 62717038
 kingsoft1_root root 42.62.41.232 L%YKYmZ(WX
 ucloud1 hadoop 14.18.207.195 62717038
 ucloud2 hadoop 113.108.221.247 62717038
-relay luoyan1 relay.xiaomi.com 072b00ef2e
 EOF
 usage()
 {
