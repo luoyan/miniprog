@@ -33,6 +33,9 @@ public interface PageStatsDAO {
     @SQL("SELECT " + ALL_FIELDS + " FROM " + TABLE + " WHERE DateTime >= :1 and DateTime <= :2 and TypeId in (:3) and Dimension in (:4) and TimeDimension = :5 order by DateTime")
     public List<PageStatsData> getAllBetweenDateByTypesAndDimensions(Date startDate, Date endDate, List<String> TypeIdList, List<String> DimensionList, int TimeDimension);
     
+    @SQL("SELECT " + ALL_FIELDS + " FROM " + TABLE + " WHERE DateTime >= :1 and DateTime <= :2 and TypeId in (:3) and TimeDimension = :4 order by DateTime")
+    public List<PageStatsData> getAllBetweenDateByTypes(Date startDate, Date endDate, List<String> TypeIdList, int TimeDimension);
+    
     @SQL("select Date from " + TABLE + " WHERE TypeId in (:1) and Dimension in (:2) and TimeDimension = :3 order by DateTime desc limit 1;")
     public Date getRecentDate(List<String> TypeIdList, List<String> DimensionList, int TimeDimension);
     
