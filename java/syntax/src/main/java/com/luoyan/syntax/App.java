@@ -95,6 +95,56 @@ public class App
     		System.out.println("env " + env.name());
     	}
     }
+
+    private String extendsTypeList(String typeList) {
+    	String[] items = typeList.split("\\|");
+    	//System.out.println("items.length " + items.length);
+    	for (String item : items) {
+    		//System.out.println("item " + item);
+    	}
+    	//if (items.length <= 1)
+    	//	return typeList;
+    	List<String> joinedTypeListArrayPrev = new ArrayList<String>();
+    	List<String> joinedTypeListArray = null;
+    	String[] typesPrev = items[0].split(","); 
+    	for (String type : typesPrev) {
+    		joinedTypeListArrayPrev.add(type);
+    	}
+    	for (int i = 1; i < items.length; i++) {
+    		if (items[i].length() > 0) {
+    			joinedTypeListArray = new ArrayList<String>();
+    			String[] types = items[i].split(",");
+    			/*
+    			for (String type : joinedTypeListArrayPrev) {
+    				System.out.println("A : " + type);
+    			}
+    			for (String type : types) {
+    				System.out.println("B : " + type);
+    			}*/
+    			for (int j = 0;j < types.length;j++) {
+    				for (String typePrev : joinedTypeListArrayPrev) {
+    					String type = typePrev + "|" + types[j];
+    					//System.out.println("i = " + i + " " + type);
+    					joinedTypeListArray.add(type);
+    				}
+    			}
+    			joinedTypeListArrayPrev = joinedTypeListArray;
+    		}
+    	}
+    	String finalTypeList = "";
+    	for (int i = 0; i < joinedTypeListArrayPrev.size();i++) {
+    		if (i > 0)
+    			finalTypeList = finalTypeList + ",";
+    		finalTypeList = finalTypeList + joinedTypeListArrayPrev.get(i);
+    	}
+    	return finalTypeList;
+    }
+    
+    private void testExtendsTypeList(String typeList) {
+        //System.out.println("before extendsTypeList [" + typeList + "]");
+        String newTypeList = extendsTypeList(typeList);
+        System.out.println("after extendsTypeList [" + typeList + "] -> [" + newTypeList + "]");
+    }
     
     public static void main( String[] args ) throws ParseException
     {
@@ -105,12 +155,13 @@ public class App
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
         String str=sdf.format(d);
         System.out.println("The date is : "+str);
+        a.testExtendsTypeList("a");
+        a.testExtendsTypeList("a,c|b,d,e");
+        a.testExtendsTypeList("a,c|");
+        a.testExtendsTypeList("a|b,d|f,g|h,i,j");
         
 		try {
 			/*
-			Class<?> clazz = Class.forName("com.luoyan.syntax.App");
-			java.lang.reflect.Constructor<?> ctor = clazz.getConstructor(Integer.class);
-			Object object = ctor.newInstance(new Object[] { 1 });*/
 			Class c;
 			c = Class.forName("com.luoyan.syntax.App");
 	        Class[] parameterTypes={int.class};
@@ -138,6 +189,22 @@ public class App
 	        System.out.println(nA + "\t" + nB);
 	        boolean b = false;
 	        System.out.println("false " + b);
+	        String[] positionsStrArray = {
+	        		"\"\"",
+	        		"\"0,16,1,6,22,7,59,58,26,46,15\"",
+	        		"[a,b]",
+	        		"[a]",
+	        		"[]",
+	        		"\"a\"",
+	        };
+	        for (String positionsStr : positionsStrArray) {
+	            String[] positions = positionsStr.split("\\[|\\]|\\,");
+	            System.out.println("(" + positionsStr + ") positions length " + positions.length);
+	        }
+	        System.out.println("1 = " + Boolean.parseBoolean("1"));
+	        System.out.println("0 = " + Boolean.parseBoolean("0"));
+	        System.out.println("true = " + Boolean.parseBoolean("true"));
+	        System.out.println("false = " + Boolean.parseBoolean("false"));*/
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
