@@ -49,7 +49,7 @@ public class Syntax {
     private static final Logger LOGGER = LoggerFactory.getLogger("consoleLogger");
     private static MiuiAdStoreService.Iface miuiAdStoreServiceClient;
     @Autowired
-    private ClusterRedisCacheBiz clusterRedisCacheBiz;
+    private ClusterRedisCacheBiz clusterRedisCacheBiz = new ClusterRedisCacheBiz();
     
     private Map<String, String> adIdMap = new HashMap<String, String>();
 

@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Created by alexfang on 2014/8/5.
  */
-@Service
+//@Service
 public class RedisClusterClient {
     private final Logger LOGGER = LoggerFactory.getLogger(RedisClusterClient.class);
     private JedisCluster readJedisCluster = null;

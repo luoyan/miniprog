@@ -9,10 +9,10 @@ import java.util.Set;
 /**
  * Created by alexfang on 2014/8/5.
  */
-@Service
+//@Service
 public class ClusterRedisCacheBiz {
-    @Autowired
-    private RedisClusterClient redisClusterClient;
+    //@Autowired
+    private RedisClusterClient redisClusterClient = new RedisClusterClient();
 
 
     public Set<String> getSet(String keyPrefix, String key) {
