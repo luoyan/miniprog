@@ -30,6 +30,8 @@ import com.xiaomi.marketing.exception.CatchableException;
 import com.xiaomi.miliao.thrift.ClientFactory;
 import com.xiaomi.miliao.zookeeper.EnvironmentType;
 import com.xiaomi.miliao.zookeeper.ZKFacade;
+//import com.xiaomi.miui.ad.query.biz.ClusterRedisCacheBiz;
+//import com.xiaomi.miui.ad.query.common.ConstantHelper;
 import com.xiaomi.miui.ad.thrift.model.AppStat;
 import com.xiaomi.miui.ad.thrift.model.BiddingInfo;
 import com.xiaomi.miui.ad.thrift.model.BiddingStatus;
@@ -46,8 +48,9 @@ import org.springframework.stereotype.Service;
 public class Syntax {
     private static final Logger LOGGER = LoggerFactory.getLogger("consoleLogger");
     private static MiuiAdStoreService.Iface miuiAdStoreServiceClient;
+    @Autowired
+    private ClusterRedisCacheBiz clusterRedisCacheBiz;
     
-
     private Map<String, String> adIdMap = new HashMap<String, String>();
 
     @Autowired
@@ -309,11 +312,19 @@ public class Syntax {
         System.out.println("recommendAdStr " + recommendAdStr);
     }
     
+    public void getRedisString(String keyPrefix, String key) {
+        String bdRecommendSearchAdsJsonStr = clusterRedisCacheBiz.getString(
+        		keyPrefix,
+        		key);
+        System.out.println("bdRecommendSearchAdsJsonStr " + bdRecommendSearchAdsJsonStr);
+    }
+    
     private static void usage() {
         System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes/getManualRecommendFeatureList]");
         System.err.println("args envirenment getAllCtrScores algrithm");
         System.err.println("args envirenment getTopQueryWithAds fileName maxNum showAll=0/1");
         System.err.println("algorithm = ma/recommend/simple/decay/random/nma/lrctr/purelrctr");
+        System.err.println("args envirenment getRedisString keyPrefix key");
     }
     
     public static void main(String[] args) throws TException, CatchableException, IOException {
@@ -361,6 +372,14 @@ public class Syntax {
         }
         else if (command.equals("printIdPackageAppNameMap")) {
             s.printIdPackageAppNameMap();
+        }
+        else if (command.equals("getAllSearchAdKeyWord")) {
+            s.getAllSearchAdKeyWord();
+        }
+        else if (command.equals("getRedisString") && args.length == 4) {
+        	String keyPrefix = args[2];
+        	String key = args[3];
+            s.getRedisString(keyPrefix, key);
         }
         else {
             usage();

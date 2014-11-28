@@ -404,4 +404,144 @@ public class PageStatsData {
     {
         return this.bPV == 0 ? 0 : (this.bPVAction * 1.0 / this.bPV);
     }
+    
+    public double getRevenue() {
+    	return this.getAdActionRevenue() + this.getAdClickRevenue() + this.getAdImpressionRevenue();
+    }
+    
+    public double get(String field) {
+    	if (field.equals("PV")) {
+    		return this.PV;
+    	}
+    	else if (field.equals("Click")) {
+    		return this.Click;
+    	}
+    	else if (field.equals("Action")) {
+    		return this.Action;
+    	}
+    	else if (field.equals("bPV")) {
+    		return this.bPV;
+    	}
+    	else if (field.equals("bPVClick")) {
+    		return this.bPVClick;
+    	}
+    	else if (field.equals("bPVAction")) {
+    		return this.bPVAction;
+    	}
+    	else if (field.equals("Impression")) {
+    		return this.Impression;
+    	}
+    	else if (field.equals("AdClick")) {
+    		return this.AdClick;
+    	}
+    	else if (field.equals("AdAction")) {
+    		return this.AdAction;
+    	}
+    	else if (field.equals("AdClickRevenue")) {
+    		return this.AdClickRevenue;
+    	}
+    	else if (field.equals("AdActionRevenue")) {
+    		return this.AdActionRevenue;
+    	}
+    	else if (field.equals("AdImpressionRevenue")) {
+    		return this.AdImpressionRevenue;
+    	}
+    	else if (field.equals("Budget")) {
+    		return this.Budget;
+    	}
+    	else if (field.equals("VV")) {
+    		return this.VV;
+    	}
+    	else if (field.equals("UT")) {
+    		return this.UT;
+    	}
+    	else if (field.equals("bVV")) {
+    		return this.bVV;
+    	}
+    	else if (field.equals("ValidImpression")) {
+    		return this.ValidImpression;
+    	}
+    	else if (field.equals("SupportAdRate")) {
+    		return this.SupportAdRate;
+    	}
+    	else if (field.equals("AchievedRatio")) {
+    		return this.AchievedRatio;
+    	}
+    	else if (field.equals("JoinedCustomerNum")) {
+    		return this.JoinedCustomerNum;
+    	}
+    	else if (field.equals("ConsumedCustomerNum")) {
+    		return this.ConsumedCustomerNum;
+    	}
+    	else if (field.equals("ConsumedCustomerNum")) {
+    		return this.ConsumedCustomerNum;
+    	}
+    	else if (field.equals("ConsumedDiscount")) {
+    		return this.ConsumedDiscount;
+    	}
+    	else if (field.equals("VPR")) {
+    		return this.getVPR();
+    	}
+    	else if (field.equals("AUT")) {
+    		return this.getAUT();
+    	}
+    	else if (field.equals("VIR")) {
+    		return this.getVIR();
+    	}
+    	else if (field.equals("ConsumeRatio")) {
+    		return this.getConsumeRatio();
+    	}
+    	else if (field.equals("ComprehensiveCPA")) {
+    		return this.getComprehensiveCPA();
+    	}
+    	else if (field.equals("Coverage")) {
+    		return this.getCoverage();
+    	}
+    	else if (field.equals("Depth")) {
+    		return this.getDepth();
+    	}
+    	else if (field.equals("CTR")) {
+    		return this.getCTR();
+    	}
+    	else if (field.equals("Conversion")) {
+    		return this.getConversion();
+    	}
+    	else if (field.equals("IY")) {
+    		return this.getIY();
+    	}
+    	else if (field.equals("CY")) {
+    		return this.getCY();
+    	}
+    	else if (field.equals("AY")) {
+    		return this.getAY();
+    	}
+    	else if (field.equals("CPI")) {
+    		return this.getCPI();
+    	}
+    	else if (field.equals("CPI")) {
+    		return this.getCPI();
+    	}
+    	else if (field.equals("CPA")) {
+    		return this.getCPA();
+    	}
+    	else if (field.equals("RPM")) {
+    		return this.getRPM();
+    	}
+    	else if (field.equals("PCR")) {
+    		return this.getPCR();
+    	}
+    	else if (field.equals("bPCR")) {
+    		return this.getBiddedPCR();
+    	}
+    	else if (field.equals("PAR")) {
+    		return this.getPAR();
+    	}
+    	else if (field.equals("bPAR")) {
+    		return this.getBiddedPAR();
+    	}
+    	else if (field.equals("Revenue")) {
+    		return this.getRevenue();
+    	}
+    	return 0;
+    }
 }

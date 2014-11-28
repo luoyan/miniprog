@@ -164,7 +164,10 @@ public class QueryDemo {
         String jsonString = ThriftHelper.thriftToJsonString(clientInfoV3);
         System.out.println("clientInfoV3 " + jsonString);
         System.out.println("isSupportSearchAd(clientInfoV3) " + isSupportSearchAd(clientInfoV3));
-        String [] queryList = {"乐视","下厨房", "掌上公交"};
+        //String [] queryList = {"乐视","下厨房", "掌上公交", "请吃饭", "福彩", "全民西游"};
+        //String [] queryList = {"请吃饭", "福彩", "全民西游", "爱代驾"};
+        //String [] queryList = {"离线地图", "pptv"};
+        String [] queryList = {"全民西游", "美腿", "miracast"};
 		for (String query : queryList) {
 			param.setKeyword(query);
 			param.setOffset(0);

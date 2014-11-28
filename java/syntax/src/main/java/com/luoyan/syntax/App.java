@@ -155,6 +155,18 @@ public class App
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
         String str=sdf.format(d);
         System.out.println("The date is : "+str);
+        String dataStrList="";
+        System.out.println("dataStrList len " + dataStrList.length());
+        String[] dataList = dataStrList.split("\t");
+        System.out.println("dataList len " + dataList.length);
+        String typeIdInfo = "total_total_cpd_total|total_total_cpd_total|| ";
+		String[] items = typeIdInfo.split("\\|");
+        System.out.println("items len " + items.length);
+        String imeiStr1 = "";
+        String imeiStr2 = "abc";
+        System.out.println("imeiStr1 " + imeiStr1.isEmpty());
+        System.out.println("imeiStr2 " + imeiStr2.isEmpty());
+        
         a.testExtendsTypeList("a");
         a.testExtendsTypeList("a,c|b,d,e");
         a.testExtendsTypeList("a,c|");
