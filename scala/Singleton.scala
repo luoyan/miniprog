@@ -8,10 +8,15 @@ object MarkerFactory {
     private val markers = Map(
         "red" -> new Marker("red"),
         "blue" -> new Marker("blue"),
-        "green" -> new Marker("green"),
+        "green" -> new Marker("green")
     )
-
+    /*
+    private val markers = Map("red" -> "haha red")
+    */
     def getMarker(color : String) = if (markers.contains(color)) markers(color) else null
+    /*
+    def getMarker(color : String) = "hello " + color
+    */
     
 }
 
