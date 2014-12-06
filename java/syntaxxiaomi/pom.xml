@@ -40,13 +40,18 @@
         <dependency>
             <groupId>miui_ad</groupId>
             <artifactId>miui_ad_common</artifactId>
-            <version>0.0.17</version>
+            <version>0.0.51</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-lang</groupId>
                     <artifactId>commons-lang</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>miui_ad</groupId>
+            <artifactId>miui_ad_thrift</artifactId>
+            <version>0.0.24</version>
         </dependency>
         <dependency>
             <groupId>com.xiaomi.appstore</groupId>

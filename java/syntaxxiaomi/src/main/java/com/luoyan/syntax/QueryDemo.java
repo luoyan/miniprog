@@ -40,7 +40,8 @@ import com.xiaomi.miui.ad.util.ABTestUtils;
 import com.xiaomi.miui.ad.util.ThriftHelper;
 
 public class QueryDemo {
-    private static final String IMEI = "d08c5e09c81b66a8b32cd1c72518ae75";
+    //private static final String IMEI = "d08c5e09c81b66a8b32cd1c72518ae75";
+    private static final String IMEI = "45226aa24b72ce0ccc4ff73eefe2e26f";
     private static final String TRIGGER_ID = "987";
     //private static final ExperimentServiceProxy experimentServiceProxy = new ExperimentServiceProxy();
     private static final int DEFAULT_AD_RETURN_NO = 10;
@@ -116,7 +117,7 @@ public class QueryDemo {
     }
     */
     
-    public static void getSearchAdResult() throws TException, NumberFormatException, IOException {
+    public static void getSearchAdResult(String imei) throws TException, NumberFormatException, IOException {
         final MiuiAdQueryService.Iface miuiAdQueryServiceClient = ClientFactory.getClient(MiuiAdQueryService.Iface.class, 1000000);
 
         ClientInfo clientInfo = new ClientInfo();
@@ -142,7 +143,7 @@ public class QueryDemo {
         deviceInfo.setScreenDensity("1080p");
         deviceInfo.setScreenResolution("1920*1080");
         UserInfo userInfo = new UserInfo();
-        userInfo.setImei(IMEI);
+        userInfo.setImei(imei);
         userInfo.setUserid("1");
         userInfo.setAndroidId("1");
         userInfo.setMac("54ab68ed");
@@ -190,24 +191,27 @@ public class QueryDemo {
     }
     
 	private static void usage() {
-		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getSearchAdResult/getAds]");
+		System.err.println("args envirenment=[onebox/staging/shangdi] command=[getSearchAdResult/getAds] [imeimd5=" + IMEI + "]");
 	}
 	
     public static void main(String[] args) throws TException, InterruptedException, CatchableException, NumberFormatException, IOException {
         ZKFacade.getZKSettings().setEnviromentType(EnvironmentType.STAGING);
-		if (args.length != 2) {
+		if (args.length < 2) {
 			usage();
 			System.exit(-1);
 		}
 		String environment = args[0];
 		String command = args[1];
+		String imei = IMEI;
+		if (args.length == 3)
+			imei = args[2];
 		if (!Utils.setEnvironment(environment)) {
 			usage();
 			System.exit(-1);
 		}
 		System.out.println(environment + " zookeeper list : [" + ZKFacade.getZKSettings().getZKServers() + "]");
 		if (command.equals("getSearchAdResult")) {
-			getSearchAdResult();
+			getSearchAdResult(imei);
 		}
 		else if (command.equals("getAds")) {
 			//getAds();

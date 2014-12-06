@@ -39,6 +39,7 @@ import com.xiaomi.miui.ad.thrift.model.Constants;
 import com.xiaomi.miui.ad.thrift.model.CtrScore;
 import com.xiaomi.miui.ad.thrift.model.RecommendAd;
 import com.xiaomi.miui.ad.thrift.service.MiuiAdStoreService;
+import com.xiaomi.miui.ad.util.AndroidCoder;
 import com.xiaomi.miui.analytics.util.factory.RoseBeanFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -319,12 +320,35 @@ public class Syntax {
         System.out.println("bdRecommendSearchAdsJsonStr " + bdRecommendSearchAdsJsonStr);
     }
     
+    public String getImeiMd5(String imei) {
+    	String imeiMd5 = AndroidCoder.encodeMD5(imei);
+    	System.out.println("origin " + imei + " md5 " + imeiMd5);
+    	return imeiMd5;
+    }
+    
+    public void addImeiToWhiteList(String imei, int type) throws TException {
+
+        MiuiAdStoreService.Iface client = ClientFactory.getClient(MiuiAdStoreService.Iface.class,
+                1000000);
+        client.addImeiToWhitelist(imei, type, false);
+    }
+    
+    public void deleteImeiFromWhiteList(String imei, int type) throws TException {
+
+        MiuiAdStoreService.Iface client = ClientFactory.getClient(MiuiAdStoreService.Iface.class,
+                1000000);
+        client.deleteImeiFromWhitelist(imei, type, false);
+    }
+    
     private static void usage() {
         System.err.println("args envirenment=[onebox/staging/shangdi] command=[getZookeeperList/getBiddingInfoList/getAppList/getAllPositionTypes/getManualRecommendFeatureList]");
         System.err.println("args envirenment getAllCtrScores algrithm");
         System.err.println("args envirenment getTopQueryWithAds fileName maxNum showAll=0/1");
         System.err.println("algorithm = ma/recommend/simple/decay/random/nma/lrctr/purelrctr");
         System.err.println("args envirenment getRedisString keyPrefix key");
+        System.err.println("args envirenment getImeiMd5 imei");
+        System.err.println("args envirenment addImeiToWhiteList imei type (3=non,4=cosine,5=bd,other=default)");
+        System.err.println("args envirenment deleteImeiFromWhiteList imei type (3=non,4=cosine,5=bd,other=default)");
     }
     
     public static void main(String[] args) throws TException, CatchableException, IOException {
@@ -380,6 +404,20 @@ public class Syntax {
         	String keyPrefix = args[2];
         	String key = args[3];
             s.getRedisString(keyPrefix, key);
+        }
+        else if (command.equals("getImeiMd5") && args.length == 3) {
+        	String imei = args[2];
+            s.getImeiMd5(imei);
+        }
+        else if (command.equals("addImeiToWhiteList") && args.length == 4) {
+        	String imei = args[2];
+        	int type = Integer.parseInt(args[3]);
+            s.addImeiToWhiteList(imei, type);
+        }
+        else if (command.equals("deleteImeiFromWhiteList") && args.length == 4) {
+        	String imei = args[2];
+        	int type = Integer.parseInt(args[3]);
+            s.deleteImeiFromWhiteList(imei, type);
         }
         else {
             usage();
