@@ -173,6 +173,33 @@ public class App
         a.testExtendsTypeList("a|b,d|f,g|h,i,j");
         
 		try {
+			String pvStatType = "FeaturedPosition_0_cn.hourroom.app";
+			items = pvStatType.split("_");
+			String packageName = pvStatType.substring("FeaturedPosition_".length() + items[1].length() + 1);
+			System.out.println("FeaturedPosition_.length() " + "FeaturedPosition_".length());
+			System.out.println("items[1].length() " + items[1].length());
+			System.out.println("packageName " + packageName);
+	        Date newVersionDate = null;
+	        Date date = null;
+	        try {
+				newVersionDate = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse("2014-12-23");
+				date = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse("2014-12-13");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        System.out.println(" before " + date.before(newVersionDate));
+	        String typeId = "V2_1_a__c_d";//term [0-4] null
+	        String[] terms = (typeId + "_End").split("_");
+	        System.out.println("terms.length " + terms.length);
+	        for (int i = 1;i < terms.length - 1;i++) {
+	        	System.out.println("terms [" + (i-1) + "]\t" + terms[i]);
+	        	
+	        }
+	        String positionsStr = "";
+	        String[] positionsStrArray = positionsStr.split("\\[|\\]|\\,");
+	        System.out.println("positionsStr.length " + positionsStr.length());
+	        System.out.println("positionsStrArray.length " + positionsStrArray.length);
 			/*
 			Class c;
 			c = Class.forName("com.luoyan.syntax.App");
