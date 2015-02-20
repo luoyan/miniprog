@@ -34,12 +34,24 @@ class Table(object):
             logger.debug('query error : %s'%(e))
             return None
         return cursor
+    
+    def queryCouple(cls, name):
+        try:
+            cursor = cls.coll.find_one({'couple': name})
+        except Exception,e:
+            logger.debug('query error : %s'%(e))
+            return None
+        return cursor
 
     def queryParents(cls, name):
         try:
             cursor = cls.query(name)
+            isCouple = False
             if not cursor:
-                return None, None
+                cursor = cls.queryCouple(name)
+                isCouple = True
+                if not cursor:
+                    return None, None
             father = None
             mother = None
             cursorScan = cls.scan()
