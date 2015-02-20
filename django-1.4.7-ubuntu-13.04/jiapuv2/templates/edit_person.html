@@ -15,16 +15,15 @@
 </head>
 <body>
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-4">
       <form>
         <div class="form-group">
           <label>本人</label>
-          <label>{{person}}</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+          <label>{{family.name}}</label>
         </div>
         <div class="form-group">
           <label for="inputFather">父亲</label>
-          <input type="email" class="form-control" id="inputFather" placeholder="爸爸">
+          <input type="email" class="form-control" id="inputFather" placeholder="爸爸" value="{family.father}">
         </div>
         <div class="form-group">
           <label for="inputMother">母亲</label>
