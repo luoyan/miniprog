@@ -23,24 +23,30 @@
           <td><a href="get_person?person={{family.father}}&loginName={{loginName}}">{{family.father}}</a></td>
         </tr>
         {% endif %}
+        {% if family.mother %}
         <tr>
           <td>母亲</td>
           <td><a href="get_person?person={{family.mother}}&loginName={{loginName}}">{{family.mother}}</a></td>
         </tr>
+        {% endif %}
         <tr>
           <td>本人</td>
           <td><a href="get_person?person={{family.name}}&loginName={{loginName}}">{{family.name}}</a></td>
         </tr>
+        {% if family.couple %}
         <tr>
           <td>配偶</td>
           <td><a href="get_person?person={{family.couple}}&loginName={{loginName}}">{{family.couple}}</a></td>     
         </tr>
+        {% endif %}
+        {% if family.children %}
         {% for child in family.children %}
         <tr>
           <td>子女</td>
           <td><a href="get_person?person={{child}}&loginName={{loginName}}">{{child}}</a></td>
         </tr>
         {% endfor %}
+        {% endif %}
       </table>
     </div>
   </div>
