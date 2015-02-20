@@ -58,14 +58,14 @@ def list(request):
     tree_node_dict = utils.build_tree(table)
     cursor = table.scan()
     person_list = []
-    src = u'罗琰'
+    loginName = request.GET.get('loginName', u'罗琰')
     for item in cursor:
         person_list.append(item)
         name = item['name']
-        name_list = utils.get_relationship_name(tree_node_dict, src, name)
+        name_list = utils.get_relationship_name(tree_node_dict, loginName, name)
         info = utils.name_list_to_info(name_list)
         item['relationship'] = info
-    c = template.Context({'person_list' : person_list, 'person' : src})
+    c = template.Context({'person_list' : person_list, 'loginName' : loginName})
     html = t.render(c)
     return HttpResponse(html)
 
@@ -73,7 +73,12 @@ def get_person(request):
     t = get_template('person.html')
     table = Table('family', 'person')
     person = request.GET.get('person', 'luoyan')
+    loginName = request.GET.get('loginName', 'luoyan')
     cursor = table.query(person)
+    isCouple = False
+    if not cursor:
+        cursor = table.queryCouple(person)
+        isCouple = True
     father, mother = table.queryParents(person)
 
     family = {}
@@ -91,7 +96,12 @@ def get_person(request):
         family['father'] = father
     if mother:
         family['mother'] = mother
+    if isCouple:
+        if cursor.has_key('name'):
+            family['couple'] = cursor['name']
+        if cursor.has_key('couple'):
+            family['name'] = cursor['couple']
     #return HttpResponse(json.dumps(family), content_type="application/json")
-    c = template.Context({'family' : family})
+    c = template.Context({'family' : family, 'loginName' : loginName})
     html = t.render(c)
     return HttpResponse(html)
