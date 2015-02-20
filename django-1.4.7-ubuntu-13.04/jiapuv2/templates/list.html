@@ -25,12 +25,12 @@
             <td class="success">称呼</td>
             <td class="success">姓名</td>
           </tr>
-          % for item in person_list:
+          {% for item in person_list}
           <tr class="active">
-            <td class="active">${item['relationship']}</td>
-            <td class="active">${item['name']}</td>
+            <td class="active">{{item.relationship}}</td>
+            <td class="active">{{item.name}}</td>
           </tr>
-          % endfor
+          {% endfor}
         </table>
       </div>
     </div>
