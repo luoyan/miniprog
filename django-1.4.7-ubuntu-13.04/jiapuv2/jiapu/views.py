@@ -30,11 +30,8 @@ from comm_lib import utils
 #from jiapuv2.settings import mongoConn
 # Create your views here.
 def search(request):
-    #table = mongoConn['family']['person']
     table = Table('family', 'person')
     #tree_node_dict = utils.build_tree(table)
-    #import pdb
-    #pdb.set_trace()
     person = request.GET.get('person', 'luoyan')
     cursor = table.query(person)
     father, mother = table.queryParents(person)
@@ -55,9 +52,21 @@ def search(request):
     if mother:
         family['mother'] = mother
     return HttpResponse(json.dumps(family), content_type="application/json")
-    #        t = get_template('index.html')
-    #        c = template.Context({})
-    #            html = t.render(c)
-    #                return HttpResponse(html)
-# Create your views here.
 
+def list(request):
+    t = get_template('list.html')
+    table = Table('family', 'person')
+    tree_node_dict = utils.build_tree(table)
+    cursor = table.scan()
+    person_list = []
+    relationship_dict = {}
+    src = u'罗琰'
+    for item in cursor:
+        person_list.append(item)
+        name = item['name']
+        name_list = utils.get_relationship_name(tree_node_dict, src, name)
+        info = utils.name_list_to_info(name_list)
+        item['relationship'] = info
+    c = template.Context({'person_list' : person_list, 'relationship_dict' : relationship_dict})
+    html = t.render(c)
+    return HttpResponse(html)
