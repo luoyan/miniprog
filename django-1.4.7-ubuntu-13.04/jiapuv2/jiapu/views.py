@@ -59,7 +59,6 @@ def list(request):
     tree_node_dict = utils.build_tree(table)
     cursor = table.scan()
     person_list = []
-    relationship_dict = {}
     src = u'罗琰'
     for item in cursor:
         person_list.append(item)
@@ -67,6 +66,6 @@ def list(request):
         name_list = utils.get_relationship_name(tree_node_dict, src, name)
         info = utils.name_list_to_info(name_list)
         item['relationship'] = info
-    c = template.Context({'person_list' : person_list, 'relationship_dict' : relationship_dict})
+    c = template.Context({'person_list' : person_list})
     html = t.render(c)
     return HttpResponse(html)
