@@ -8,14 +8,14 @@
   <meta name="author" content="">
   <link rel="icon" href="favicon.ico">
 
-  <title>模板</title>
+  <title>{{loginName}}的亲戚</title>
 
   <!-- Bootstrap core CSS -->
   <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="row">
-    <div class="col-md-1"></div>
+    <div class="col-md-1"><a href="list&loginName={{loginName}}">{{loginName}}的全部亲戚</a></div>
     <div class="col-md-1"></div>
   </div>
   <div class="row">
@@ -23,24 +23,24 @@
       <table class="table table-striped">
         <tr>
           <td>父亲</td>
-          <td><a href="get_person?person={{family.father}}">{{family.father}}</a></td>
+          <td><a href="get_person?person={{family.father}}&loginName={{loginName}}">{{family.father}}</a></td>
         </tr>
         <tr>
           <td>母亲</td>
-          <td><a href="get_person?person={{family.mother}}">{{family.mother}}</a></td>
+          <td><a href="get_person?person={{family.mother}}&loginName={{loginName}}">{{family.mother}}</a></td>
         </tr>
         <tr>
           <td>本人</td>
-          <td><a href="get_person?person={{family.name}}">{{family.name}}</a></td>
+          <td><a href="get_person?person={{family.name}}&loginName={{loginName}}">{{family.name}}</a></td>
         </tr>
         <tr>
           <td>配偶</td>
-          <td><a href="get_person?person={{family.couple}}">{{family.couple}}</a></td>     
+          <td><a href="get_person?person={{family.couple}}&loginName={{loginName}}">{{family.couple}}</a></td>     
         </tr>
         {% for child in family.children %}
         <tr>
           <td>子女</td>
-          <td><a href="get_person?person={{child}}">{{child}}</a></td>
+          <td><a href="get_person?person={{child}}&loginName={{loginName}}">{{child}}</a></td>
         </tr>
         {% endfor %}
       </table>
