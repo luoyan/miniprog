@@ -7,7 +7,6 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="icon" href="favicon.ico">
-
   <title>模板</title>
 
   <!-- Bootstrap core CSS -->
@@ -22,15 +21,16 @@
     <div class="col-md-8">
       <div class="table-responsive">
         <table class="table">
-          <tr class="active">
-            <td class="active">父亲</td>
-            <td class="active">罗建华</td>
-          </tr>
           <tr class="success">
-            <td class="active">母亲</td>
-            <td class="active">余华飞</td>
+            <td class="success">称呼</td>
+            <td class="success">姓名</td>
           </tr>
-          <tr class="info">...</tr>
+          % for item in person_list:
+          <tr class="active">
+            <td class="active">${item['relationship']}</td>
+            <td class="active">${item['name']}</td>
+          </tr>
+          % endfor
         </table>
       </div>
     </div>
