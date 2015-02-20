@@ -15,15 +15,14 @@
 </head>
 <body>
   <div class="row">
-    <div class="col-md-2"><a href="list&loginName={{loginName}}">{{loginName}}的全部亲戚</a></div>
-  </div>
-  <div class="row">
     <div class="col-md-8">
       <table class="table table-striped">
+        {% if {{family.father}} %}
         <tr>
           <td>父亲</td>
           <td><a href="get_person?person={{family.father}}&loginName={{loginName}}">{{family.father}}</a></td>
         </tr>
+        {% endif %}
         <tr>
           <td>母亲</td>
           <td><a href="get_person?person={{family.mother}}&loginName={{loginName}}">{{family.mother}}</a></td>
@@ -44,5 +43,8 @@
         {% endfor %}
       </table>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2"><a href="list&loginName={{loginName}}">{{loginName}}的全部亲戚</a></div>
   </div>
 </body>
