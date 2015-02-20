@@ -31,7 +31,6 @@ from comm_lib import utils
 # Create your views here.
 def search(request):
     table = Table('family', 'person')
-    #tree_node_dict = utils.build_tree(table)
     person = request.GET.get('person', 'luoyan')
     cursor = table.query(person)
     father, mother = table.queryParents(person)
@@ -66,6 +65,33 @@ def list(request):
         name_list = utils.get_relationship_name(tree_node_dict, src, name)
         info = utils.name_list_to_info(name_list)
         item['relationship'] = info
-    c = template.Context({'person_list' : person_list})
+    c = template.Context({'person_list' : person_list, 'person' : src})
+    html = t.render(c)
+    return HttpResponse(html)
+
+def get_person(request):
+    t = get_template('person.html')
+    table = Table('family', 'person')
+    person = request.GET.get('person', 'luoyan')
+    cursor = table.query(person)
+    father, mother = table.queryParents(person)
+
+    family = {}
+    if not cursor:
+        return HttpResponse(json.dumps(family), content_type="application/json")
+
+    family['name'] = cursor['name']
+    if cursor.has_key('children'):
+        family['children'] = cursor['children']
+    if cursor.has_key('couple'):
+        family['couple'] = cursor['couple']
+    if cursor.has_key('gender'):
+        family['gender'] = cursor['gender']
+    if father:
+        family['father'] = father
+    if mother:
+        family['mother'] = mother
+    #return HttpResponse(json.dumps(family), content_type="application/json")
+    c = template.Context({'family' : family})
     html = t.render(c)
     return HttpResponse(html)
