@@ -11,7 +11,7 @@
   <title>模板</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="row">
@@ -23,24 +23,24 @@
       <table class="table table-striped">
         <tr>
           <td>父亲</td>
-          <td>{{family.father}}</td>
+          <td><a href="get_person?person={{family.father}}">{{family.father}}</a></td>
         </tr>
         <tr>
           <td>母亲</td>
+          <td><a href="get_person?person={{family.mother}}">{{family.mother}}</a></td>
           <td>{{family.mother}}</td>
         </tr>
         <tr>
           <td>本人</td>
-          <td>{{family.name}}</td>
+          <td><a href="get_person?person={{family.name}}">{{family.name}}</a></td>
         </tr>
         <tr>
           <td>配偶</td>
-          <td>{{family.couple}}</td>
-        </tr>
+          <td><a href="get_person?person={{family.couple}childouple}child      </tr>
         {% for child in family.children %}
         <tr>
           <td>子女</td>
-          <td>{{child}}</td>
+          <td><a href="get_person?person={{child}}">{{child}}</a></td>
         </tr>
         {% endfor %}
       </table>
