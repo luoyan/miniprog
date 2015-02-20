@@ -27,7 +27,7 @@
           {% for item in person_list %}
           <tr>
             <td>{{item.relationship}}</td>
-            <td>{{item.name}}</td>
+            <td><a href="get_person?person={{item.name}}"></a>{{item.name}}</td>
           </tr>
           {% endfor %}
         </table>

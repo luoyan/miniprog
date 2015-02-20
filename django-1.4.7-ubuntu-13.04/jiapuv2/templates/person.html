@@ -20,19 +20,30 @@
   </div>
   <div class="row">
     <div class="col-md-8">
-      <div class="table-responsive">
-        <table class="table">
-          <tr class="active">
-            <td class="active">父亲</td>
-            <td class="active">罗建华</td>
-          </tr>
-          <tr class="success">
-            <td class="active">母亲</td>
-            <td class="active">余华飞</td>
-          </tr>
-          <tr class="info">...</tr>
-        </table>
-      </div>
+      <table class="table table-striped">
+        <tr>
+          <td>父亲</td>
+          <td>{{family.father}}</td>
+        </tr>
+        <tr>
+          <td>母亲</td>
+          <td>{{family.mother}}</td>
+        </tr>
+        <tr>
+          <td>本人</td>
+          <td>{{family.name}}</td>
+        </tr>
+        <tr>
+          <td>配偶</td>
+          <td>{{family.couple}}</td>
+        </tr>
+        {% for child in family.children %}
+        <tr>
+          <td>子女</td>
+          <td>{{child}}</td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
   </div>
 </body>
