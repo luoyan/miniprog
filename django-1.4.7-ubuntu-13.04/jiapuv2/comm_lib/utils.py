@@ -206,7 +206,7 @@ def build_tree(table):
                 child = node.children[i]
                 if tree_node_dict.has_key(child):
                     node.child_nodes.append(tree_node_dict[child])
-                    print ('name ' + node.name + ' gender ' + str(node.gender) + ' child append ' + child).encode('utf8')
+                    #print ('name ' + node.name + ' gender ' + str(node.gender) + ' child append ' + child).encode('utf8')
                     if not tree_node_dict[child].parents[node.gender]:
                         tree_node_dict[child].parents[node.gender] = node
                     child_node = tree_node_dict[child]
@@ -215,7 +215,7 @@ def build_tree(table):
                         for child in node.children:
                             if child != child_node.name:
                                 if tree_node_dict.has_key(child):
-                                    print ('append sibling ' + child).encode('utf8')
+                                    #print ('append sibling ' + child).encode('utf8')
                                     child_node.siblings.append(tree_node_dict[child])
                 else:
                     print ('error no child info ' + child).encode('utf8')
@@ -681,10 +681,11 @@ def prehandle_relationship_define(relationship_define):
                         item3 = {'define' : new_define, 'level' : 1, 'name': item['name']}
                         new_relationship_define.append(item3)
     for item in new_relationship_define:
-        print ('define ' + item['define'] + ' level ' + str(item['level'])).encode('utf8')
+        #print ('define ' + item['define'] + ' level ' + str(item['level'])).encode('utf8')
         if item.has_key('name'):
             for name in item['name']:
-                print ('name ' + name).encode('utf8')
+                pass
+                #print ('name ' + name).encode('utf8')
     return new_relationship_define
 
 def get_relationship_name(tree_node_dict, src, dest):

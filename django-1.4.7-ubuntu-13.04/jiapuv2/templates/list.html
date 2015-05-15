@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="favicon.ico">
+  <title>{{loginName}}的亲戚</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+        <table class="table table-striped">
+          <tr>
+            <th>{{loginName}}应该称呼</th>
+            <th>姓名</th>
+          </tr>
+          {% for item in person_list %}
+          <tr>
+            <td>{{item.relationship}}</td>
+            <td><a href="get_person?person={{item.name}}&loginName={{loginName}}">{{item.name}}</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+    </div>
+  </div>
+</body>

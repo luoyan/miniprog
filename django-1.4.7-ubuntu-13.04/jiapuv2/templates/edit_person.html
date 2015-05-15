@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="favicon.ico">
+
+  <title>{{loginName}}的亲戚</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="row">
+    <div class="col-md-4">
+      <form action="save_person" method="post" name="form1" id="form1">
+        <div class="form-group">
+          <label>本人</label>
+          <label>{{family.name}}</label>
+          <input type="hidden" class="form-control" id="inputPerson" name="inputPerson" placeholder="爸爸" value="{{family.name}}">
+        </div>
+        <div class="form-group">
+          <label for="inputFather">父亲</label>
+          <input type="email" class="form-control" id="inputFather" name="inputFather" placeholder="爸爸" value="{{family.father}}">
+        </div>
+        <div class="form-group">
+          <label for="inputMother">母亲</label>
+          <input type="email" class="form-control" id="inputMother" name="inputMother" placeholder="妈妈" value="{{family.mother}}">
+        </div>
+        <div class="form-group">
+          <label for="inputCouple">配偶</label>
+          <input type="email" class="form-control" id="inputCouple" name="inputCouple" placeholder="配偶" value="{{family.couple}}">
+        </div>
+        <div class="form-group">
+          <label for="inputChildren">子女</label>
+          <input type="email" class="form-control" id="inputChildren" name="inputChildren" placeholder="子女" value="{{family.childrenStr}}">
+        </div>
+        <button type="submit" class="btn btn-default">保存</button>
+        <button type="button" class="btn btn-default">取消</button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2"><a href="list?loginName={{loginName}}">{{loginName}}的全部亲戚</a></div>
+  </div>
+</body>
