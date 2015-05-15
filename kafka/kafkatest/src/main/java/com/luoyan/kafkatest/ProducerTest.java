@@ -37,7 +37,7 @@ public class ProducerTest {
 		Producer<String, String> producer = new Producer<String, String>(config);
 		for (int i = 0; i < messageNum; i++) {
 			producer.send(new KeyedMessage<String, String>(topicName, i + "test"));
-			// System.out.println("send topic test [test" + i + "]");
+			System.out.println("send topic test [test" + i + "]");
 			LOGGER.debug("send topic test2 [" + i + "test]");
 		}
 

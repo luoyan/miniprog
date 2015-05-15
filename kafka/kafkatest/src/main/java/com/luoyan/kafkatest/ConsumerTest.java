@@ -39,13 +39,16 @@ public class ConsumerTest extends Thread {
 		this.topic = topic;
 	}
 
-	private static ConsumerConfig createConsumerConfig() {
-		Properties props = new Properties();
-		props.put("zookeeper.connect", zookeeperAddress);
-		props.put("group.id", groupId);
-		props.put("zookeeper.session.timeout.ms", "400000");
-		props.put("zookeeper.sync.time.ms", "200");
-		props.put("auto.commit.interval.ms", "1000");
+    private static ConsumerConfig createConsumerConfig() {
+		Properties props = new Properties();	
+
+        props.put("zookeeper.connect", zookeeperAddress);
+        props.put("group.id", groupId);
+        props.put("zookeeper.session.timeout.ms", "400000");
+        props.put("zookeeper.sync.time.ms", "200");
+        props.put("auto.commit.interval.ms", "1000");
+        props.put("rebalance.backoff.ms", "10000");
+        props.put("zookeeper.session.timeout.ms", "10000");
 
 		return new ConsumerConfig(props);
 
@@ -59,13 +62,18 @@ public class ConsumerTest extends Thread {
 		KafkaStream<byte[], byte[]> stream = consumerMap.get(topic).get(0);
 		ConsumerIterator<byte[], byte[]> it = stream.iterator();
 		LOGGER.debug("start loop");
+		System.out.println("start loop");
 		String content = null;
-		while (it.hasNext())
+		int i = 0;
+		while (it.hasNext()) {
 			// LOGGER.debug("hasNext");
 			// System.out.println(new String(it.next().message()));
 			content = new String(it.next().message());
+		    System.out.println("loop " + i);
 		    System.out.println("consumer get [" + content + "]");
+		    i = i + 1;
 			LOGGER.debug("consumer get [" + content + "]");
+		}
 		LOGGER.debug("end loop");
 	}
 }

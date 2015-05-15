@@ -16,9 +16,10 @@ public class ConvertDate {
 	    while ((s = in.readLine()) != null && s.length() != 0) {
 	    	//System.out.println(s);
 	    	String dateStr = s;
-	    	Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS", Locale.CHINA).parse(dateStr);
+	    	Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(dateStr);
 	    	long time = date.getTime();
 	    	System.out.println(time);
+	    	System.out.println(System.currentTimeMillis());
 	    }
 	}
 }

@@ -25,6 +25,7 @@ public class CheckInListActivity extends ListActivity {
 		"http://www.miui.com/forum.php",
 		"http://geek.miui.com/",
 		"http://weekly.mioffice.cn/myreport",
+		"http://zc-stage1-miui-ad01.bj:8090/razorflow/dashboard_quickstart/index.html",
 		};
 	private WebView webview;
  
