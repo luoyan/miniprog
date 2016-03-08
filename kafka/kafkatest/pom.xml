@@ -90,6 +90,10 @@
 							<mainClass>com.luoyan.kafkatest.ConsumerTest</mainClass>
 							<name>ConsumerTest.sh</name>
 						</program>
+						<program>
+							<mainClass>com.luoyan.kafkatest.ProducerFromFile</mainClass>
+							<name>ProducerFromFile.sh</name>
+						</program>
 					</programs>
 				</configuration>
 			</plugin>

@@ -77,6 +77,11 @@
             <classifier>jdk15</classifier>
         </dependency>
         <dependency>
+            <groupId>com.xiaomi.data.user</groupId>
+            <artifactId>user_profile_common</artifactId>
+            <version>0.2-release</version>
+        </dependency>
+        <dependency>
             <groupId>com.xiaomi.miliao</groupId>
             <artifactId>miliao-serviceapi</artifactId>
             <version>1.0.3-SNAPSHOT</version>
@@ -276,6 +281,14 @@
                         <program>
                             <mainClass>com.xiaomi.miui.ad.log.LogParser</mainClass>
                             <name>LogParser.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.luoyan.syntax.SendHttpRequest</mainClass>
+                            <name>SendHttpRequest.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.luoyan.syntax.JavaDecode</mainClass>
+                            <name>JavaDecode.sh</name>
                         </program>
                     </programs>
 				</configuration>
