@@ -7,4 +7,11 @@
         android:id="@+id/webView1"
         android:layout_width="match_parent"  
         android:layout_height="match_parent" />
+    	<com.zxinsight.MWImageView
+    	    android:layout_width="match_parent"
+    	    android:layout_height="130dp"
+    	    android:layout_marginTop="70dp"
+    	    android:scaleType="fitXY"
+    	    android:id="@+id/mw_banner"
+    	    />
 </LinearLayout>
