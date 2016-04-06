@@ -34,17 +34,7 @@
         <appender-ref ref="fileAppender"/>
         <appender-ref ref="consoleAppender"/>
     </logger>
-	<!-- 
-    <appender class="com.xiaomi.web.miliao.access.log4j.AccessAppender" name = "scribeAppender">
-        <param name="encoding" value="utf-8"/>
-        <param name="scribeHost" value="${scribeHost}"/>
-        <param name="scribePort" value="${scribePort}"/>
-        <param name="scribeCategory" value="${scribeCategory}"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="\t%d{yyyy-MM-dd HH:mm:ss}\t%m%n"/>
-        </layout>
-        <param name="showIp" value="true" ></param>
-    </appender> -->
+	
     <logger name="LgHandlerBoltTest" additivity="false">
         <level value="${log4j_level}"/>
         <appender-ref ref="fileAppender2"/>

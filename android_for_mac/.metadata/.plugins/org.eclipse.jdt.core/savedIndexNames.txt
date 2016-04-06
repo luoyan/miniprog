@@ -1,6 +1,0 @@
-INDEX VERSION 1.126+/Users/fool/miniprog/android_for_mac/.metadata/.plugins/org.eclipse.jdt.core
-1665298754.index
-1460200243.index
-1816486640.index
-518288494.index
-600270860.index
