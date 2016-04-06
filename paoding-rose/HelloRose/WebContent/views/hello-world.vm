@@ -1,4 +1,0 @@
-<html>
-        <head></head>
-        <body>#msg("hello"), it's $date.format("yy-MM-dd HH:mm:ss", $now)</body>
-</html>

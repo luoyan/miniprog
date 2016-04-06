@@ -1,2 +1,0 @@
-host relay.xiaomi.com
-passwd 072b00ef2e
