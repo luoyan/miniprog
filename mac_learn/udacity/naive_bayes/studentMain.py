@@ -29,12 +29,18 @@ bumpy_slow = [features_train[ii][1] for ii in range(0, len(features_train)) if l
 
 # You will need to complete this function imported from the ClassifyNB script.
 # Be sure to change to that code tab to complete this quiz.
-#from sklearn.naive import GaussianNB
-#clf = GaussianNB()
-clf = classify(features_train, labels_train)
+import sys
+if len(sys.argv) < 2:
+    print >> sys.stderr, sys.argv[0] + " nb/lr/dtc/svm"
+    sys.exit(-1)
+method = sys.argv[1]
+clf = classify(features_train, labels_train, method)
 
 
 
 ### draw the decision boundary with the text points overlaid
 prettyPicture(clf, features_test, labels_test)
+file_name = method + ".test.png"
 output_image("test.png", "png", open("test.png", "rb").read())
+import os
+os.rename("test.png", file_name)
