@@ -16,6 +16,16 @@ def classify(features_train, labels_train, method):
         clf = LinearRegression()
         clf.fit(features_train, labels_train)
         return clf
+    elif method == 'logicr':
+        from sklearn.linear_model import LogisticRegression
+        clf = LogisticRegression()
+        clf.fit(features_train, labels_train)
+        return clf
+    elif method == 'knn':
+        from sklearn.neighbors import KNeighborsClassifier
+        clf = KNeighborsClassifier()
+        clf.fit(features_train, labels_train)
+        return clf
     elif method == 'dtc':
         from sklearn import tree
         clf = tree.DecisionTreeClassifier()

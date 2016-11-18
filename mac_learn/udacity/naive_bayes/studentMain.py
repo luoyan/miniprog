@@ -30,8 +30,8 @@ bumpy_slow = [features_train[ii][1] for ii in range(0, len(features_train)) if l
 # You will need to complete this function imported from the ClassifyNB script.
 # Be sure to change to that code tab to complete this quiz.
 import sys
-if len(sys.argv) < 2:
-    print >> sys.stderr, sys.argv[0] + " nb/lr/dtc/svm"
+if len(sys.argv) < 2 or sys.argv[1] not in ['knn', 'nb', 'lr', 'dtc', 'svm', 'logicr']:
+    print >> sys.stderr, sys.argv[0] + " nb/lr/dtc/svm/logicr/knn"
     sys.exit(-1)
 method = sys.argv[1]
 clf = classify(features_train, labels_train, method)
