@@ -36,5 +36,10 @@ def classify(features_train, labels_train, method):
         clf = SVC()
         clf.fit(features_train, labels_train)
         return clf
+    elif method == 'mlp':
+        from sklearn.neural_network import MLPClassifier
+        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+        clf.fit(features_train, labels_train)
+        return clf
     return None
     
