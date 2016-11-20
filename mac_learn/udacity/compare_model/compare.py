@@ -8,7 +8,9 @@ def train_classifier(clf, X_train, y_train):
     end = time()
     
     # Print the results
-    print "Trained model in {:.4f} seconds".format(end - start)
+    #print "Trained model in {:.4f} seconds".format(end - start)
+    use_time = end - start
+    return use_time
 
     
 def predict_labels(clf, features, target):
@@ -20,22 +22,27 @@ def predict_labels(clf, features, target):
     end = time()
     
     # 输出并返回结果
-    print "Made predictions in {:.4f} seconds.".format(end - start)
-    return f1_score(target.values, y_pred, pos_label='yes')
+    #print "Made predictions in {:.4f} seconds.".format(end - start)
+    use_time = end - start
+    print "target\t" + str(len(target.values)) + "\t" + str(len(y_pred))
+    return f1_score(target.values, y_pred, pos_label='yes'), use_time
 
 
 def train_predict(clf, X_train, y_train, X_test, y_test):
     ''' 用一个分类器训练和预测，并输出F1值 '''
     
     # 输出分类器名称和训练集大小
-    print "Training a {} using a training set size of {}. . .".format(clf.__class__.__name__, len(X_train))
+    #print "Training a {} using a training set size of {}. . .".format(clf.__class__.__name__, len(X_train))
     
     # 训练一个分类器
-    train_classifier(clf, X_train, y_train)
+    train_use_time = train_classifier(clf, X_train, y_train)
     
     # 输出训练和测试的预测结果
-    print "F1 score for training set: {:.4f}.".format(predict_labels(clf, X_train, y_train))
-    print "F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test))
+    #print "F1 score for training set: {:.4f}.".format(predict_labels(clf, X_train, y_train))
+    #print "F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test))
+    train_f1, train_predict_use_time = predict_labels(clf, X_train, y_train)
+    test_f1, test_predict_use_time = predict_labels(clf, X_test, y_test)
+    return clf.__class__.__name__, len(X_train), train_use_time, train_f1, train_predict_use_time, test_f1, test_predict_use_time
 # 载入所需要的库
 import numpy as np
 import pandas as pd
@@ -138,7 +145,9 @@ y_train_300 = 300
 # TODO：对每一个分类器和每一个训练集大小运行'train_predict' 
 # train_predict(clf, X_train, y_train, X_test, y_test)
 clf_list = [clf_A, clf_B, clf_C]
+print "clf_name\tX_train_len\ttrain_use_time\ttrain_f1\ttrain_predict_use_time\ttest_f1\ttest_predict_use_time"
 for i in xrange(3):
     train_size = 100 * (i + 1)
     for j in xrange(3):
-        train_predict(clf_list[j], X_train[0:train_size], y_train[0:train_size], X_test, y_test)
+        clf_name, X_train_len, train_use_time, train_f1, train_predict_use_time, test_f1, test_predict_use_time = train_predict(clf_list[j], X_train[0:train_size], y_train[0:train_size], X_test, y_test)
+        print clf_name + "\t" + str(X_train_len) + '\t' + str(train_use_time) + "\t" + str(train_f1) + "\t" + str(train_predict_use_time) + "\t"+ str(test_f1) + "\t" + str(test_predict_use_time)
