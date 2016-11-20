@@ -24,7 +24,6 @@ def predict_labels(clf, features, target):
     # 输出并返回结果
     #print "Made predictions in {:.4f} seconds.".format(end - start)
     use_time = end - start
-    print "target\t" + str(len(target.values)) + "\t" + str(len(y_pred))
     return f1_score(target.values, y_pred, pos_label='yes'), use_time
 
 
